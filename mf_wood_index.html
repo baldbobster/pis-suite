@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mainefactured Framing — Wood-Frame Comparison</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;background:#f5f5f5;color:#111;min-height:100vh}
+  header{background:#111;padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
+  .logo{font-size:22px;font-weight:700;color:#2D9CDB;letter-spacing:.05em}
+  .logo span{color:#fff;font-size:12px;font-weight:400;margin-left:10px;opacity:.6;letter-spacing:.1em;text-transform:uppercase}
+  .hright{font-size:11px;color:#666}
+  .main{display:grid;grid-template-columns:1fr 320px;gap:20px;padding:20px;max-width:1240px;margin:0 auto}
+  .card{background:#fff;border-radius:10px;border:1px solid #e5e5e5;padding:20px}
+  label{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#888;display:block;margin-bottom:4px}
+  input,select,textarea{width:100%;height:34px;padding:0 10px;font-size:13px;border:1px solid #ddd;border-radius:6px;background:#fff;color:#111;outline:none;transition:border-color .15s}
+  input:focus,select:focus,textarea:focus{border-color:#2D9CDB}
+  input[readonly]{background:#fafafa;color:#666;cursor:not-allowed}
+  textarea{height:56px;padding:8px 10px;resize:vertical}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+  .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px}
+  .g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-top:12px}
+  .sh{border-bottom:2px solid #2D9CDB;padding-bottom:4px;margin:20px 0 10px;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#333;display:flex;justify-content:space-between;align-items:flex-end}
+  .pfx{display:flex}.pfx em{height:34px;display:flex;align-items:center;padding:0 8px;font-size:12px;font-style:normal;color:#888;background:#f9f9f9;border:1px solid #ddd;border-right:none;border-radius:6px 0 0 6px}.pfx input{border-radius:0 6px 6px 0;flex:1}
+  .sfx{display:flex}.sfx input{border-radius:6px 0 0 6px;flex:1}.sfx em{height:34px;display:flex;align-items:center;padding:0 8px;font-size:12px;font-style:normal;color:#888;background:#f9f9f9;border:1px solid #ddd;border-left:none;border-radius:0 6px 6px 0}
+  .dimbox{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;padding:12px;background:#f9f9f9;border-radius:8px;border:1px solid #eee;text-align:center}
+  .dv{font-size:15px;font-weight:600;color:#2D9CDB}.dl{font-size:10px;color:#999;margin-top:2px}
+  .tog{font-size:10px;padding:3px 10px;border-radius:6px;border:1px solid #ddd;color:#888;background:transparent;cursor:pointer;margin-top:8px;margin-right:6px}
+  .tog.on{border-color:#2D9CDB;color:#2D9CDB;background:#EBF5FB}
+  .badge{display:inline-block;font-size:9px;padding:2px 7px;border-radius:10px;background:#EBF5FB;border:1px solid #b8dcf0;color:#2D9CDB;font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-left:6px;vertical-align:middle}
+  .badge.user{background:#fff5e6;border-color:#ffd699;color:#cc7700}
+  .infobox{background:#f9f9f9;border-left:3px solid #2D9CDB;padding:10px 12px;margin-top:10px;font-size:11px;color:#555;line-height:1.5}
+  .source-note{font-size:10px;color:#999;margin-top:6px;font-style:italic}
+  /* RIGHT PANEL */
+  .right{position:sticky;top:20px;align-self:start}
+  .rhead{border-bottom:3px solid #2D9CDB;padding-bottom:10px;margin-bottom:12px}
+  .rtag{font-size:10px;padding:2px 8px;border-radius:12px;background:#EBF5FB;border:1px solid #b8dcf0;color:#2a7a2a;margin-right:4px;margin-top:5px;display:inline-block}
+  .li{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;padding:5px 0;border-bottom:1px solid #f0f0f0;font-size:12px}
+  .lih{font-size:10px;color:#aaa;text-transform:uppercase;font-weight:600}.tr{text-align:right}
+  .tblock{background:#f9f9f9;border-radius:8px;border:1px solid #eee;padding:10px 12px;margin-top:10px}
+  .mblock{border-radius:8px;border:2px solid #2D9CDB;padding:12px;margin-top:10px}
+  .pblock{border-radius:8px;border:2px solid #2D9CDB;background:#EBF5FB;padding:12px;margin-top:10px;display:none}
+  /* COMPARISON BLOCK */
+  .cblock{border-radius:8px;border:2px solid #111;padding:12px;margin-top:14px;background:#fafafa}
+  .cblock-title{font-size:10px;color:#111;text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+  .cgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center}
+  .ccell{padding:4px}
+  .ccell-lbl{font-size:9px;color:#888;text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}
+  .ccell-val{font-size:14px;font-weight:700;color:#111;line-height:1.1}
+  .ccell-sub{font-size:10px;color:#666;margin-top:2px}
+  .ccell.delta{background:#fff;border-radius:6px;padding:6px}
+  .ccell.delta.savings .ccell-val{color:#2a7a2a}
+  .ccell.delta.premium .ccell-val{color:#c00}
+  .cblock-empty{font-size:11px;color:#888;text-align:center;padding:6px;font-style:italic}
+  .sbtn{width:100%;height:38px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;margin-top:10px;border:none;transition:opacity .15s}
+  .sbtn:hover{opacity:.88}
+  .sn{background:#F97316;color:#fff}
+  .sp{background:#fff;border:1px solid #ddd!important;color:#555;font-weight:500}
+  .snew{background:transparent;border:1px solid #ddd!important;color:#888;font-size:12px}
+  .msg{font-size:11px;margin-top:8px;text-align:center;padding:7px 10px;border-radius:6px;display:none}
+  .msok{background:#EBF5FB;border:1px solid #b8dcf0;color:#2a7a2a}
+  .msw{background:#fffbf0;border:1px solid #f0d080;color:#7a5a00}
+  .mse{background:#fff0f0;border:1px solid #f0c8c8;color:#7a2a2a}
+  .foot{font-size:10px;color:#bbb;text-align:center;margin-top:12px;line-height:1.6}
+  /* TOAST */
+  #toast{position:fixed;bottom:24px;right:24px;background:#111;color:#fff;padding:12px 18px;border-radius:8px;font-size:12px;display:none;z-index:1000;border-left:4px solid #2D9CDB;max-width:300px}
+  #toast.err{border-color:#e05050}
+  /* OVERLAY */
+  #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center}
+  #overlay.show{display:flex}
+  .obox{background:#fff;border-radius:12px;padding:28px;max-width:320px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+  .obox h3{font-size:15px;margin-bottom:8px}
+  .obox p{font-size:12px;color:#777;margin-bottom:22px;line-height:1.5}
+  .orow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .ocancel{height:36px;border-radius:8px;border:1px solid #ddd;background:transparent;color:#777;cursor:pointer;font-size:13px}
+  .oconfirm{height:36px;border-radius:8px;border:none;background:#2D9CDB;color:#fff;cursor:pointer;font-size:13px;font-weight:600}
+  /* PRINT */
+  @media print{
+    header,.right,#overlay,#toast{display:none!important}
+    .main{grid-template-columns:1fr;padding:0}
+    .card{border:none;padding:0}
+    #printArea{display:block!important}
+    body{background:#fff}
+  }
+  #printArea{display:none}
+
+  /* PRINT LAYOUT */
+  #printDoc{display:none;font-family:Arial,sans-serif;font-size:11pt;color:#111;padding:.6in .75in}
+  @media print{
+    header,.main,#overlay,#toast{display:none!important}
+    #printDoc{display:block!important}
+    body{background:#fff;margin:0;padding:0}
+    @page{size:letter;margin:0}
+  }
+  #printDoc .phdr{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #2D9CDB;padding-bottom:8px;margin-bottom:12px}
+  #printDoc .plogo{font-size:26pt;font-weight:700;color:#2D9CDB;line-height:1}
+  #printDoc .plogosub{font-size:7pt;color:#666;text-transform:uppercase;letter-spacing:.1em;margin-top:2px}
+  #printDoc .pright{text-align:right}
+  #printDoc .pproj{font-size:16pt;font-weight:700}
+  #printDoc .psub{font-size:9pt;color:#555;margin-top:3px}
+  #printDoc .pbadge{font-size:8pt;padding:2px 8px;border:1px solid #ccc;border-radius:4px;color:#555;margin-left:4px;display:inline-block;margin-top:4px}
+  #printDoc .pdims{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px;background:#f8f8f8;border-radius:4px;border:1px solid #ddd;margin-bottom:14px;text-align:center}
+  #printDoc .pdval{font-size:13pt;font-weight:700;color:#2D9CDB}
+  #printDoc .pdlbl{font-size:8pt;color:#888;margin-top:2px}
+  #printDoc .psec{font-size:8pt;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.1em;border-bottom:2px solid #2D9CDB;padding-bottom:3px;margin:14px 0 8px}
+  #printDoc table{width:100%;border-collapse:collapse;margin-bottom:14px}
+  #printDoc th{font-size:8pt;text-transform:uppercase;letter-spacing:.05em;color:#555;border-bottom:2px solid #2D9CDB;padding:5px 6px;text-align:left}
+  #printDoc th:not(:first-child){text-align:right}
+  #printDoc td{padding:4px 6px;font-size:10pt;border-bottom:1px solid #eee}
+  #printDoc td:not(:first-child){text-align:right}
+  #printDoc tr.ptot td{font-weight:700;border-top:2px solid #2D9CDB;border-bottom:none;background:#f8f8f8}
+  #printDoc .ptotbox{max-width:380px;margin:0 auto;padding:.7rem 1rem;border:2px solid #2D9CDB;border-radius:6px}
+  #printDoc .ptotgrid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.3rem}
+  #printDoc .pbigv{font-size:1.2rem;font-weight:700;color:#2D9CDB}
+  #printDoc .pbvsf{font-size:.75rem;color:#2D9CDB}
+  #printDoc .pcompbox{margin-top:.8rem;padding:.7rem 1rem;border:2px solid #111;border-radius:6px;background:#fafafa}
+  #printDoc .pcompgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;text-align:center;margin-top:.3rem}
+  #printDoc .pdisc{margin-top:.8rem;padding:.5rem .6rem;border:1px solid #c8e0c8;border-left:3px solid #2D9CDB;background:#f9f9f9;font-size:8pt;color:#666;line-height:1.5}
+  #printDoc .pfoot{display:flex;justify-content:space-between;font-size:8pt;color:#aaa;margin-top:.5rem;padding-top:.4rem;border-top:1px solid #ddd}
+
+</style>
+</head>
+<body>
+<!-- PASSWORD GATE -->
+<div id="gate" class="show" style="display:none;position:fixed;inset:0;background:#0B1C2E;z-index:9999;align-items:center;justify-content:center;flex-direction:column">
+  <div style="margin-bottom:16px">
+    <svg width="160" height="27" viewBox="0 0 200 34" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M191.132 1.16555C197.975 1.16555 200 6.36844 200 10.1104C200 13.9549 197.975 19.1065 191.132 19.1065H185.324V16.5435H191.132C196.54 16.5435 197.309 11.8276 197.309 10.1104C197.309 8.3932 196.548 3.72854 191.14 3.72854H185.324V1.16555H191.132Z" fill="white"/><path d="M173.1 3.92569V1.16555H183.549V3.92569H173.1Z" fill="white"/><path d="M173.1 11.6147V8.85451H182.169V11.6147H173.1Z" fill="white"/><path d="M173.1 19.3036V16.5435H183.549V19.3036H173.1Z" fill="white"/><path d="M164.558 1.16555C169.059 1.55985 170.439 4.60192 170.439 6.88298C170.439 9.84028 168.467 12.2061 166.2 12.699L170.734 19.1065H167.777L163.341 12.9947H160.508V19.1065H157.92V10.3332H164.788C167.531 10.2819 167.876 7.93381 167.876 6.88298C167.876 5.72965 167.383 4.02429 164.686 3.82711H157.92V1.16555H164.558Z" fill="white"/><path d="M147.088 16.8392C150.574 16.8392 151.419 13.5448 151.419 12.2889V1.16555H154.085V12.2889C154.085 15.262 152.265 19.4022 147.088 19.4022C141.911 19.4022 140.117 15.262 140.117 12.2889V1.16555H142.731V12.2889C142.731 13.5448 143.602 16.8392 147.088 16.8392Z" fill="white"/><path d="M132.881 19.3036H130.121V5.10861H132.881V19.3036Z" fill="white"/><path d="M137.613 3.92569V1.16555H125.586V3.92569H137.613Z" fill="white"/><path d="M123.714 3.24157L122.578 5.47137C121.604 4.34365 119.656 3.24157 117.657 3.24157C112.249 3.24157 111.455 8.39318 111.455 10.1104C111.455 11.8276 112.249 16.9536 117.657 16.9536C119.733 16.9536 121.578 15.8515 122.732 14.8006L123.714 17.1349C122.099 18.7496 120.579 19.3371 117.657 19.3371C110.814 19.3371 108.789 13.9549 108.789 10.1104C108.789 6.36842 110.814 0.90925 117.657 0.90925C120.733 0.90925 122.124 1.47311 123.714 3.24157Z" fill="white"/><path d="M99.0694 0.77124L90.4932 19.1065H93.2533L99.0694 6.48868L104.787 19.1065H107.646L99.0694 0.77124Z" fill="white"/><path d="M80.4384 19.3036V8.85451H89.5075V11.6147H83.1986V19.3036H80.4384Z" fill="white"/><path d="M80.4384 3.92569V1.16555H90.8876V3.92569H80.4384Z" fill="white"/><path d="M67.6235 3.92569V1.16555H78.0726V3.92569H67.6235Z" fill="white"/><path d="M67.6235 11.6147V8.85451H76.6925V11.6147H67.6235Z" fill="white"/><path d="M67.6235 19.3036V16.5435H78.0726V19.3036H67.6235Z" fill="white"/><path d="M49.4854 6.48868V19.1065H51.8513V8.85451L49.4854 6.48868Z" fill="white"/><path d="M49.4854 0.77124V4.51715L64.2719 19.5008V1.16555H61.7089V13.2905L49.4854 0.77124Z" fill="white"/><path d="M44.5566 19.1065H41.9936V1.16555H44.5566V19.1065Z" fill="white"/><path d="M30.4601 0.77124L21.884 19.1065H24.6441L30.4601 6.48868L36.1776 19.1065H39.0363L30.4601 0.77124Z" fill="white"/><path d="M2.95729 0.771243L2.36584 4.91146L9.95623 19.5008L17.5466 4.91146L16.9552 0.771243L9.95623 14.1776L2.95729 0.771243Z" fill="white"/><path d="M0 19.1065H2.56299L3.84448 10.7275L1.87295 7.27729L0 19.1065Z" fill="white"/><path d="M20.011 19.1065H17.448L16.1665 10.7275L18.1381 7.27729L20.011 19.1065Z" fill="white"/></svg>
+  </div>
+  <input id="pwInput" type="password" placeholder="Enter access password"
+    style="width:260px;height:42px;padding:0 16px;background:#162435;border:1px solid #F97316;color:#fff;border-radius:8px;font-size:14px;outline:none;text-align:center;margin-bottom:12px"
+    onkeydown="if(event.key==='Enter')checkPW()">
+  <button onclick="checkPW()" style="padding:10px 32px;background:#F97316;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">Enter</button>
+  <div id="pwErr" style="color:#e05050;font-size:12px;margin-top:10px;display:none">Incorrect password. Try again.</div>
+</div>
+
+<!-- PRINT DOCUMENT -->
+<div id="printDoc">
+  <div class="phdr">
+    <div>
+      <div class="plogo" style="font-size:14pt">MF</div>
+      <div class="plogosub">Mainefactured Framing &middot; Wood-Frame Comparison</div>
+    </div>
+    <div class="pright">
+      <div class="pproj" id="pName">—</div>
+      <div class="psub" id="pClient"></div>
+      <div id="pMeta"></div>
+    </div>
+  </div>
+  <div class="pdims" id="pDims"></div>
+  <div class="psec">Wood-Frame Budget Summary</div>
+  <table>
+    <thead><tr><th>Line Item</th><th>Low</th><th>High</th></tr></thead>
+    <tbody id="pRows"></tbody>
+    <tbody><tr class="ptot"><td id="pTotLbl">Total</td><td id="pTotL">—</td><td id="pTotH">—</td></tr></tbody>
+  </table>
+  <div style="max-width:380px;margin:0 auto">
+    <div class="ptotbox">
+      <div style="font-size:.65rem;color:#888;text-transform:uppercase;letter-spacing:.06em" id="pBoxLbl">Wood-Frame Budget Estimate</div>
+      <div class="ptotgrid">
+        <div><div style="font-size:.65rem;color:#888">Low</div><div class="pbigv" id="pML">—</div><div class="pbvsf" id="pMLsf">—</div></div>
+        <div><div style="font-size:.65rem;color:#888">High</div><div class="pbigv" id="pMH">—</div><div class="pbvsf" id="pMHsf">—</div></div>
+      </div>
+    </div>
+  </div>
+  <div id="pProjBox"></div>
+  <div id="pCompBox"></div>
+  <div class="pdisc"><strong>Wood-Frame Comparison Estimate — Important Notice</strong><br>This is a preliminary scope-to-scope comparison estimate of wood-frame construction costs against the cold-formed steel framing scope captured by the CFS Budget Builder. Wood-frame benchmarks are aggregated from RLB Quarterly Cost Report Q1 2026 (regional indices), RSMeans Building Construction Cost Data, and Mainefactured Framing project history. All figures are estimates only, subject to change based on final design, structural engineering review, market conditions, and confirmed scope. Lifecycle costs (carry, insurance, maintenance, schedule) are not included — see the Soft Cost Savings, Trade Savings, and Pro Forma modules for full lifecycle analysis.</div>
+  <div class="pfoot"><div>Mainefactured Framing &middot; Wood-Frame Comparison</div><div id="pYear"></div></div>
+</div>
+
+<header>
+  <div><svg width="160" height="27" style="display:block" viewBox="0 0 200 34" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M191.132 1.16555C197.975 1.16555 200 6.36844 200 10.1104C200 13.9549 197.975 19.1065 191.132 19.1065H185.324V16.5435H191.132C196.54 16.5435 197.309 11.8276 197.309 10.1104C197.309 8.3932 196.548 3.72854 191.14 3.72854H185.324V1.16555H191.132Z" fill="white"/><path d="M173.1 3.92569V1.16555H183.549V3.92569H173.1Z" fill="white"/><path d="M173.1 11.6147V8.85451H182.169V11.6147H173.1Z" fill="white"/><path d="M173.1 19.3036V16.5435H183.549V19.3036H173.1Z" fill="white"/><path d="M164.558 1.16555C169.059 1.55985 170.439 4.60192 170.439 6.88298C170.439 9.84028 168.467 12.2061 166.2 12.699L170.734 19.1065H167.777L163.341 12.9947H160.508V19.1065H157.92V10.3332H164.788C167.531 10.2819 167.876 7.93381 167.876 6.88298C167.876 5.72965 167.383 4.02429 164.686 3.82711H157.92V1.16555H164.558Z" fill="white"/><path d="M147.088 16.8392C150.574 16.8392 151.419 13.5448 151.419 12.2889V1.16555H154.085V12.2889C154.085 15.262 152.265 19.4022 147.088 19.4022C141.911 19.4022 140.117 15.262 140.117 12.2889V1.16555H142.731V12.2889C142.731 13.5448 143.602 16.8392 147.088 16.8392Z" fill="white"/><path d="M132.881 19.3036H130.121V5.10861H132.881V19.3036Z" fill="white"/><path d="M137.613 3.92569V1.16555H125.586V3.92569H137.613Z" fill="white"/><path d="M123.714 3.24157L122.578 5.47137C121.604 4.34365 119.656 3.24157 117.657 3.24157C112.249 3.24157 111.455 8.39318 111.455 10.1104C111.455 11.8276 112.249 16.9536 117.657 16.9536C119.733 16.9536 121.578 15.8515 122.732 14.8006L123.714 17.1349C122.099 18.7496 120.579 19.3371 117.657 19.3371C110.814 19.3371 108.789 13.9549 108.789 10.1104C108.789 6.36842 110.814 0.90925 117.657 0.90925C120.733 0.90925 122.124 1.47311 123.714 3.24157Z" fill="white"/><path d="M99.0694 0.77124L90.4932 19.1065H93.2533L99.0694 6.48868L104.787 19.1065H107.646L99.0694 0.77124Z" fill="white"/><path d="M80.4384 19.3036V8.85451H89.5075V11.6147H83.1986V19.3036H80.4384Z" fill="white"/><path d="M80.4384 3.92569V1.16555H90.8876V3.92569H80.4384Z" fill="white"/><path d="M67.6235 3.92569V1.16555H78.0726V3.92569H67.6235Z" fill="white"/><path d="M67.6235 11.6147V8.85451H76.6925V11.6147H67.6235Z" fill="white"/><path d="M67.6235 19.3036V16.5435H78.0726V19.3036H67.6235Z" fill="white"/><path d="M49.4854 6.48868V19.1065H51.8513V8.85451L49.4854 6.48868Z" fill="white"/><path d="M49.4854 0.77124V4.51715L64.2719 19.5008V1.16555H61.7089V13.2905L49.4854 0.77124Z" fill="white"/><path d="M44.5566 19.1065H41.9936V1.16555H44.5566V19.1065Z" fill="white"/><path d="M30.4601 0.77124L21.884 19.1065H24.6441L30.4601 6.48868L36.1776 19.1065H39.0363L30.4601 0.77124Z" fill="white"/><path d="M2.95729 0.771243L2.36584 4.91146L9.95623 19.5008L17.5466 4.91146L16.9552 0.771243L9.95623 14.1776L2.95729 0.771243Z" fill="white"/><path d="M0 19.1065H2.56299L3.84448 10.7275L1.87295 7.27729L0 19.1065Z" fill="white"/><path d="M20.011 19.1065H17.448L16.1665 10.7275L18.1381 7.27729L20.011 19.1065Z" fill="white"/></svg>
+  <span class="logo"><span>Wood-Frame Comparison</span></span></div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <a href="/mf_index.html" style="padding:5px 14px;border-radius:6px;border:0.5px solid #444;color:#aaa;font-size:11px;text-decoration:none">CFS Budget Builder</a>
+    <a href="/mf_savings.html" style="padding:5px 14px;border-radius:6px;border:0.5px solid #444;color:#aaa;font-size:11px;text-decoration:none">Soft Cost Savings</a>
+    <a href="/mf_trades.html" style="padding:5px 14px;border-radius:6px;border:0.5px solid #444;color:#aaa;font-size:11px;text-decoration:none">Trade Savings</a>
+    <a href="/mf_podium.html" style="padding:5px 14px;border-radius:6px;border:0.5px solid #444;color:#aaa;font-size:11px;text-decoration:none">Podium Analysis</a>
+    <a href="/mf_summary.html" style="padding:5px 14px;border-radius:6px;border:0.5px solid #444;color:#aaa;font-size:11px;text-decoration:none">System Summary</a>
+    <a href="/mf_caprate.html" style="padding:5px 14px;border-radius:6px;border:0.5px solid #444;color:#aaa;font-size:11px;text-decoration:none">Developer Pro Forma</a>
+    <div class="hright" style="margin-left:8px">Mainefactured Framing &nbsp;·&nbsp; Preliminary Estimates Only</div>
+  </div>
+</header>
+
+<div class="main">
+<!-- LEFT: INPUTS -->
+<div class="card">
+  <div class="sh">
+    <span>Wood-Frame Scope-to-Scope Comparison</span>
+    <button class="tog" onclick="confirmNew()">+ New Comparison</button>
+  </div>
+  <div class="infobox">
+    Mirrors the CFS Budget Builder scope (framing, decking, sheathing, fab, install) and re-prices it as wood-frame. Default values are aggregated benchmarks for garden-style mid-rise multifamily (1–7 stories, no podium). Toggle <strong>Adjust Assumptions</strong> below to override defaults with project-specific numbers.
+  </div>
+
+  <div class="sh"><span>Project Info</span></div>
+  <div class="g2">
+    <div><label>Project Name *</label><input id="projName" placeholder="e.g. Riverside Flats" oninput="calc();save()"></div>
+    <div><label>Client / Developer</label><input id="client" placeholder="Developer name" oninput="save()"></div>
+  </div>
+  <div class="g2">
+    <div><label>Contact Name</label><input id="cname" placeholder="Primary contact" oninput="save()"></div>
+    <div><label>Contact Email</label><input id="cemail" type="email" placeholder="email@company.com" oninput="save()"></div>
+  </div>
+  <div class="g3" style="margin-top:12px">
+    <div><label>Project Type</label>
+      <select id="ptype" onchange="save()">
+        <option>Multifamily</option><option>Hospitality</option><option>Senior / Assisted Living</option>
+        <option>Student Housing</option><option>Workforce Housing</option><option>Custom</option>
+      </select>
+    </div>
+    <div><label># Buildings</label><div class="sfx"><input id="nBldgs" type="number" value="1" min="1" oninput="calc();save()"><em>bldgs</em></div></div>
+    <div><label>Building Label</label><input id="bLabel" placeholder="Unit A, Bldg 1…" oninput="save()"></div>
+  </div>
+
+  <div class="sh"><span>Building Dimensions</span><span style="font-size:9px;font-weight:400;color:#999;text-transform:none;letter-spacing:0">Auto-loads from CFS Budget Builder if present</span></div>
+  <div class="g4">
+    <div><label>Length</label><div class="sfx"><input id="bL" type="number" value="200" oninput="calc();save()"><em>ft</em></div></div>
+    <div><label>Width</label><div class="sfx"><input id="bW" type="number" value="60" oninput="calc();save()"><em>ft</em></div></div>
+    <div><label>Total Height</label><div class="sfx"><input id="bH" type="number" value="40" oninput="calc();save()"><em>ft</em></div></div>
+    <div><label># Floors</label><input id="bF" type="number" value="4" oninput="calc();save()"></div>
+  </div>
+  <div class="g2" style="margin-top:12px">
+    <div><label>Opening Deduct</label><div class="sfx"><input id="oPct" type="number" value="10" oninput="calc();save()"><em>%</em></div></div>
+  </div>
+  <div class="dimbox">
+    <div><div class="dv" id="dFloor">—</div><div class="dl">Floor Area</div></div>
+    <div><div class="dv" id="dAvg">—</div><div class="dl">Avg Ht/Floor</div></div>
+    <div><div class="dv" id="dGross">—</div><div class="dl">Gross Wall</div></div>
+    <div><div class="dv" id="dNet">—</div><div class="dl">Net Sheathing</div></div>
+  </div>
+  <div style="margin-top:8px">
+    <button class="tog" id="btnOvr" onclick="toggleOvr()">Manual SF Override</button>
+    <button class="tog" id="btnShMan" onclick="toggleShMan()">Manual Sheathing SF</button>
+  </div>
+  <div id="ovrRow" style="display:none;margin-top:10px"><label>Manual Total SF</label><div class="sfx"><input id="manSF" type="number" value="0" oninput="calc();save()"><em>SF</em></div></div>
+  <div id="shManRow" style="display:none;margin-top:10px"><label>Manual Sheathing SF</label><div class="sfx"><input id="shManSF" type="number" value="0" oninput="calc();save()"><em>SF</em></div></div>
+
+  <div class="sh">
+    <span>Wood System &amp; Assumptions <span class="badge" id="benchBadge">RLB-Aligned Benchmark</span></span>
+    <button class="tog" id="btnAdj" onclick="toggleAdjust()">Adjust Assumptions</button>
+  </div>
+  <div class="g2">
+    <div><label>Construction Method</label>
+      <select id="woodMethod" onchange="applyMethodDefaults();calc();save()">
+        <option value="stick">Stick-Built (field framed) — default</option>
+        <option value="panelized">Panelized Wood (factory-built)</option>
+      </select>
+    </div>
+    <div><label>Region Profile</label>
+      <select id="region" onchange="save()">
+        <option value="garden">Garden-Style Mid-Rise (1–7 stories, no podium)</option>
+        <option value="podium">Mid-Rise over Podium</option>
+        <option value="custom">Custom / Other</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="sh"><span>Lumber &amp; Wood Materials</span></div>
+  <div class="g2">
+    <div><label>Dimensional + Engineered Lumber</label><div class="pfx"><em>$</em><input id="lumber" type="number" value="11.00" step=".25" readonly oninput="calc();save()"><em style="border-left:none;border-right:1px solid #ddd;border-radius:0 6px 6px 0">/ SF</em></div></div>
+    <div><label>Wood Subfloor (3/4&quot; T&amp;G plywood)</label><div class="pfx"><em>$</em><input id="dkCost" type="number" value="3.00" step=".1" readonly oninput="calc();save()"><em style="border-left:none;border-right:1px solid #ddd;border-radius:0 6px 6px 0">/ SF</em></div></div>
+  </div>
+  <div class="g2">
+    <div><label>Sheathing Type</label>
+      <select id="shType" onchange="save()">
+        <option>7/16&quot; OSB (standard)</option>
+        <option>1/2&quot; OSB</option>
+        <option>5/8&quot; OSB (taller wall)</option>
+        <option>ZIP System</option>
+        <option>Custom</option>
+      </select>
+    </div>
+    <div><label>OSB Sheathing</label><div class="pfx"><em>$</em><input id="shCost" type="number" value="1.20" step=".05" readonly oninput="calc();save()"><em style="border-left:none;border-right:1px solid #ddd;border-radius:0 6px 6px 0">/ SF</em></div></div>
+  </div>
+
+  <div class="sh"><span>Other Costs</span></div>
+  <div class="g4">
+    <div><label>Lumber Delivery (lump)</label><div class="pfx"><em>$</em><input id="ship" type="number" value="25000" readonly oninput="calc();save()"></div></div>
+    <div><label>Equipment / SF</label><div class="pfx"><em>$</em><input id="equip" type="number" value="0.55" step=".05" readonly oninput="calc();save()"></div></div>
+    <div><label>Misc / SF</label><div class="pfx"><em>$</em><input id="misc" type="number" value="0.85" step=".05" readonly oninput="calc();save()"></div></div>
+    <div><label>Engineering / SF</label><div class="pfx"><em>$</em><input id="eng" type="number" value="0.40" step=".05" readonly oninput="calc();save()"></div></div>
+  </div>
+
+  <div class="sh"><span>Fabrication &amp; Field Framing</span></div>
+  <div class="g4">
+    <div><label>Fab Low / SF</label><div class="pfx"><em>$</em><input id="fabL" type="number" value="0" step=".5" readonly oninput="calc();save()"></div></div>
+    <div><label>Fab High / SF</label><div class="pfx"><em>$</em><input id="fabH" type="number" value="0" step=".5" readonly oninput="calc();save()"></div></div>
+    <div><label>Field Framing Low / SF</label><div class="pfx"><em>$</em><input id="instL" type="number" value="6.50" step=".5" readonly oninput="calc();save()"></div></div>
+    <div><label>Field Framing High / SF</label><div class="pfx"><em>$</em><input id="instH" type="number" value="9.50" step=".5" readonly oninput="calc();save()"></div></div>
+  </div>
+  <div class="source-note" id="methodNote">Stick-built default: zero fab cost, all labor in field. Panelized adds factory fab and reduces field labor.</div>
+
+  <div style="margin-top:12px">
+    <label>Regional Labor Adjustment</label>
+    <select id="labor" onchange="calc();save()">
+      <option value="0">Baseline — AZ, TX, NM, NV, TN, SC, GA, FL (0%)</option>
+      <option value="12">Low — UT, CO, VA, OH, MI, IN, WI, PA (+12%)</option>
+      <option value="22">Medium — OR, IL, MN, MD, NJ, CT (+22%)</option>
+      <option value="32">High — WA, MA, NY Upstate (+32%)</option>
+      <option value="40">Very High — CA (+40%)</option>
+      <option value="45">Very High — NYC (+45%)</option>
+      <option value="55">Very High — HI (+55%)</option>
+    </select>
+    <div id="laborNote" style="font-size:10px;color:#888;margin-top:3px;display:none"></div>
+  </div>
+
+  <div class="sh"><span>Markup</span></div>
+  <div style="max-width:150px"><label>Markup %</label><div class="sfx"><input id="mkup" type="number" value="22" readonly oninput="calc();save()"><em>%</em></div></div>
+
+  <div class="sh"><span>Notes</span></div>
+  <textarea id="notes" placeholder="Project assumptions, market notes, scope deviations…" oninput="save()"></textarea>
+
+  <div class="source-note" style="margin-top:14px;border-top:1px solid #eee;padding-top:10px">
+    <strong>Source &amp; Methodology:</strong> Wood-frame benchmarks aggregated from RLB Quarterly Cost Report Q1 2026 (regional indices), RSMeans Building Construction Cost Data, and Mainefactured Framing field-validated wood-frame project history. Reflects light-frame stick-built construction for garden-style mid-rise multifamily (1–7 stories, no podium). Comparable to the framing scope captured by the CFS Budget Builder. Lifecycle costs (carry, insurance, maintenance) excluded — see Soft Cost Savings, Trade Savings, and Pro Forma modules for full lifecycle analysis.
+  </div>
+</div>
+
+<!-- RIGHT: SUMMARY PANEL -->
+<div class="right card">
+  <div class="rhead">
+    <div style="display:flex;justify-content:space-between;align-items:baseline">
+      <span style="font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.08em">Wood-Frame Estimate</span>
+    </div>
+    <div id="rName" style="font-size:15px;font-weight:600;margin-top:4px">Untitled Project</div>
+    <div id="rClient" style="font-size:11px;color:#888;margin-top:2px"></div>
+    <div id="rTags" style="margin-top:6px"></div>
+  </div>
+
+  <div class="li lih"><span>Line Item</span><span class="tr">Low</span><span class="tr">High</span></div>
+  <div class="li"><span>Lumber</span><span class="tr" id="rSteel">—</span><span class="tr" id="rSteelH">—</span></div>
+  <div class="li"><span>Wood Subfloor</span><span class="tr" id="rDeck">—</span><span class="tr" id="rDeckH">—</span></div>
+  <div class="li"><span>OSB Sheathing</span><span class="tr" id="rSheath">—</span><span class="tr" id="rSheathH">—</span></div>
+  <div class="li"><span>Delivery</span><span class="tr" id="rShip">—</span><span class="tr" id="rShipH">—</span></div>
+  <div class="li"><span>Equipment</span><span class="tr" id="rEquip">—</span><span class="tr" id="rEquipH">—</span></div>
+  <div class="li"><span>Misc</span><span class="tr" id="rMisc">—</span><span class="tr" id="rMiscH">—</span></div>
+  <div class="li"><span>Engineering</span><span class="tr" id="rEng">—</span><span class="tr" id="rEngH">—</span></div>
+  <div class="li"><span>Fab &amp; Assembly</span><span class="tr" id="rFabL">—</span><span class="tr" id="rFabH">—</span></div>
+  <div class="li"><span>Field Framing</span><span class="tr" id="rInstL">—</span><span class="tr" id="rInstH">—</span></div>
+  <div class="li" id="rLaborRow" style="display:none;color:#aaa;font-style:italic">
+    <span id="rLaborLbl">Labor Adj.</span><span class="tr">incl.</span><span class="tr">incl.</span>
+  </div>
+
+  <div class="tblock">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:5px">
+      <span style="font-size:10px;color:#aaa">Base Total</span>
+      <span style="font-weight:600;text-align:right" id="rBase">—</span>
+      <span style="font-weight:600;text-align:right" id="rBaseH">—</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">
+      <span style="font-size:10px;color:#aaa">$/SF</span>
+      <span style="font-size:11px;text-align:right;color:#aaa" id="rBaseSF">—</span>
+      <span style="font-size:11px;text-align:right;color:#aaa" id="rBaseSFH">—</span>
+    </div>
+  </div>
+
+  <div class="mblock">
+    <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Wood-Frame Total — With <span id="rMkPct">22</span>% Markup</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div>
+        <div style="font-size:10px;color:#888">Low</div>
+        <div style="font-size:19px;font-weight:700;color:#111" id="rML">—</div>
+        <div style="font-size:11px;color:#2D9CDB" id="rMLsf">—</div>
+      </div>
+      <div>
+        <div style="font-size:10px;color:#888">High</div>
+        <div style="font-size:19px;font-weight:700;color:#2D9CDB" id="rMH">—</div>
+        <div style="font-size:11px;color:#2D9CDB" id="rMHsf">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pblock" id="projBlock">
+    <div style="font-size:10px;color:#2D9CDB;text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin-bottom:6px" id="projLbl">Project Total</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div><div style="font-size:10px;color:#888">Total Low</div><div style="font-size:16px;font-weight:700;color:#111" id="rPL">—</div></div>
+      <div><div style="font-size:10px;color:#888">Total High</div><div style="font-size:16px;font-weight:700;color:#2D9CDB" id="rPH">—</div></div>
+    </div>
+  </div>
+
+  <!-- COMPARISON BLOCK -->
+  <div class="cblock">
+    <div class="cblock-title">
+      <span>Wood vs. CFS — Same Scope</span>
+      <span style="font-size:9px;font-weight:400;color:#888;letter-spacing:0;text-transform:none" id="cMode">Per Building</span>
+    </div>
+    <div id="cCompare">
+      <div class="cblock-empty">Run the CFS Budget Builder for this project to populate the comparison.</div>
+    </div>
+  </div>
+
+  <button class="sbtn sn" onclick="doSaveNotion()">↑ Save to Notion</button>
+  <button class="sbtn sp" onclick="doPrint()" style="margin-top:8px">⎙ Print / PDF</button>
+  <button class="sbtn snew" onclick="confirmNew()">+ New Comparison</button>
+
+  <div class="msg msok" id="msgOk"></div>
+  <div class="msg msw" id="msgW"></div>
+  <div class="msg mse" id="msgE"></div>
+
+  <div class="foot">
+    Mainefactured Framing &middot; Wood-Frame Comparison<br>
+    Preliminary &mdash; Subject to Change<br>
+    <span style="font-size:10px;color:#bbb">© 2026 Mainefactured Framing / Prefab Consulting LLC. All rights reserved.</span>
+  </div>
+</div>
+</div>
+
+<!-- CONFIRM OVERLAY -->
+<div id="overlay">
+  <div class="obox">
+    <h3>Start a new comparison?</h3>
+    <p>Project info and dimensions will be cleared.<br>Wood benchmark defaults are restored.</p>
+    <div class="orow">
+      <button class="ocancel" onclick="cancelNew()">Cancel</button>
+      <button class="oconfirm" onclick="doNew()">Clear &amp; Start New</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
+const AZURE_FUNCTION_URL = 'https://ghv-budget-api-g0hagac9ccbqcbcu.centralus-01.azurewebsites.net/api/SaveBudget?code=d8dDntK2ew-3yB8-C-WRiSLbuuLrjv0p_X3M1hhGcm0xAzFuBCtB8w==';
+const STORAGE_KEY = 'mf-wood-form-v1';
+const PIS_KEY = 'mf-pis-wood';
+const CFS_PIS_KEY = 'mf-pis-budget';
+
+// ─── BENCHMARK DEFAULTS ───────────────────────────────────────────────────────
+// Stick-built and panelized defaults for garden-style mid-rise multifamily.
+// Sources: RLB Q1 2026 regional indices, RSMeans, MF field history.
+const BENCHMARKS = {
+  stick: {
+    lumber: 11.00, dkCost: 3.00, shCost: 1.20,
+    ship: 25000, equip: 0.55, misc: 0.85, eng: 0.40,
+    fabL: 0, fabH: 0, instL: 6.50, instH: 9.50,
+    mkup: 22
+  },
+  panelized: {
+    lumber: 11.00, dkCost: 3.00, shCost: 1.20,
+    ship: 35000, equip: 0.65, misc: 0.85, eng: 0.55,
+    fabL: 2.50, fabH: 4.00, instL: 4.00, instH: 6.00,
+    mkup: 22
+  }
+};
+const DEFAULT_FIELDS = Object.keys(BENCHMARKS.stick);
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let useOvr = false, useShMan = false, adjustOpen = false;
+const dateStr = () => new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'});
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+const gv = id => parseFloat(document.getElementById(id).value) || 0;
+const sv = id => document.getElementById(id).value || '';
+const fmt = n => '$' + Math.round(n).toLocaleString();
+const fmtSF = n => Math.round(n).toLocaleString() + ' SF';
+const fmtPSF = n => isFinite(n) && n > 0 ? '$' + n.toFixed(2) + '/SF' : '—';
+const fmtPct = n => (n>=0 ? '+' : '') + n.toFixed(1) + '%';
+const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+
+function toast(msg, err) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = err ? 'err' : '';
+  t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 3500);
+}
+
+function showMsg(type, msg) {
+  ['Ok','W','E'].forEach(t => document.getElementById('msg'+t).style.display = 'none');
+  const el = document.getElementById('msg'+type);
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 4000);
+}
+
+// ─── METHOD DEFAULTS ──────────────────────────────────────────────────────────
+function applyMethodDefaults() {
+  const m = sv('woodMethod');
+  const b = BENCHMARKS[m] || BENCHMARKS.stick;
+  DEFAULT_FIELDS.forEach(f => {
+    const el = document.getElementById(f);
+    if (el) el.value = b[f];
+  });
+  document.getElementById('methodNote').textContent = m === 'panelized'
+    ? 'Panelized: factory fab cost added, field labor reduced. Closer cost structure to CFS.'
+    : 'Stick-built default: zero fab cost, all labor in field. Panelized adds factory fab and reduces field labor.';
+}
+
+// ─── TOGGLES ──────────────────────────────────────────────────────────────────
+function toggleOvr() {
+  useOvr = !useOvr;
+  document.getElementById('ovrRow').style.display = useOvr ? 'block' : 'none';
+  document.getElementById('btnOvr').className = 'tog' + (useOvr ? ' on' : '');
+  calc();
+}
+function toggleShMan() {
+  useShMan = !useShMan;
+  document.getElementById('shManRow').style.display = useShMan ? 'block' : 'none';
+  document.getElementById('btnShMan').className = 'tog' + (useShMan ? ' on' : '');
+  calc();
+}
+function toggleAdjust() {
+  adjustOpen = !adjustOpen;
+  DEFAULT_FIELDS.forEach(f => {
+    const el = document.getElementById(f);
+    if (el) {
+      if (adjustOpen) el.removeAttribute('readonly');
+      else el.setAttribute('readonly', 'readonly');
+    }
+  });
+  document.getElementById('btnAdj').className = 'tog' + (adjustOpen ? ' on' : '');
+  document.getElementById('btnAdj').textContent = adjustOpen ? 'Lock to Benchmark' : 'Adjust Assumptions';
+  const badge = document.getElementById('benchBadge');
+  if (adjustOpen) { badge.textContent = 'User-Adjusted'; badge.className = 'badge user'; }
+  else { badge.textContent = 'RLB-Aligned Benchmark'; badge.className = 'badge'; }
+  if (!adjustOpen) applyMethodDefaults();
+  calc();
+}
+
+function confirmNew() { document.getElementById('overlay').className = 'show'; }
+function cancelNew()  { document.getElementById('overlay').className = ''; }
+function doNew() {
+  cancelNew();
+  ['projName','client','cname','cemail','bLabel','notes'].forEach(id => document.getElementById(id).value = '');
+  ['nBldgs','bL','bW','bH','bF','oPct','manSF','shManSF'].forEach((id,i) => {
+    document.getElementById(id).value = [1,200,60,40,4,10,0,0][i];
+  });
+  document.getElementById('woodMethod').value = 'stick';
+  applyMethodDefaults();
+  useOvr = useShMan = false;
+  document.getElementById('ovrRow').style.display = 'none';
+  document.getElementById('shManRow').style.display = 'none';
+  document.getElementById('btnOvr').className = 'tog';
+  document.getElementById('btnShMan').className = 'tog';
+  ['msgOk','msgW','msgE'].forEach(id => document.getElementById(id).style.display = 'none');
+  calc(); save();
+}
+
+// ─── AUTO-LOAD FROM CFS BUDGET BUILDER ────────────────────────────────────────
+function loadFromCFS() {
+  try {
+    const raw = localStorage.getItem(CFS_PIS_KEY);
+    if (!raw) return false;
+    const d = JSON.parse(raw);
+    // Only auto-fill fields that aren't already set in this form
+    if (!sv('projName') && d.projName) document.getElementById('projName').value = d.projName;
+    if (!sv('client') && d.client) document.getElementById('client').value = d.client;
+    if (d.ptype && !document.getElementById('ptype').dataset.userSet) document.getElementById('ptype').value = d.ptype;
+    ['bL','bW','bH','bF','nBldgs','labor'].forEach(f => {
+      if (d[f] !== undefined && d[f] !== '' && d[f] !== null) {
+        const el = document.getElementById(f);
+        if (el && !el.dataset.userSet) el.value = d[f];
+      }
+    });
+    return true;
+  } catch(e) { return false; }
+}
+
+// ─── CALCULATION ──────────────────────────────────────────────────────────────
+function calc() {
+  const L=gv('bL'), W=gv('bW'), H=gv('bH'), F=Math.max(1,gv('bF')), op=gv('oPct');
+  const flSF = L*W*F, gw = 2*(L+W)*H, nw = gw*(1-op/100);
+  const tSF  = useOvr ? (gv('manSF') || flSF) : flSF;
+  const shSF = useShMan ? gv('shManSF') : nw;
+  const la = gv('labor'), lm = 1 + la/100;
+  const lumC = tSF * gv('lumber');
+  const dkC  = tSF * gv('dkCost');
+  const shC  = shSF * gv('shCost');
+  const shpC = gv('ship');
+  const eqC  = tSF * gv('equip');
+  const miC  = tSF * gv('misc');
+  const enC  = tSF * gv('eng');
+  const fL   = tSF * gv('fabL') * lm;
+  const fH   = tSF * gv('fabH') * lm;
+  const iL   = tSF * gv('instL') * lm;
+  const iH   = tSF * gv('instH') * lm;
+  const totL = lumC+dkC+shC+shpC+eqC+miC+enC+fL+iL;
+  const totH = lumC+dkC+shC+shpC+eqC+miC+enC+fH+iH;
+  const mk = gv('mkup');
+  const mL = totL*(1+mk/100), mH = totH*(1+mk/100);
+  const nb = Math.max(1, Math.round(gv('nBldgs')));
+
+  // dims
+  set('dFloor', fmtSF(flSF)); set('dAvg', (H/F).toFixed(1)+' ft');
+  set('dGross', fmtSF(gw));   set('dNet',  fmtSF(nw));
+
+  // summary header
+  set('rName', sv('projName') || 'Untitled Project');
+  set('rClient', sv('client'));
+  set('rMkPct', mk);
+  document.getElementById('rTags').innerHTML =
+    '<span class="rtag">'+sv('ptype')+'</span>'+
+    '<span class="rtag">'+fmtSF(tSF)+'</span>'+
+    '<span class="rtag">'+Math.round(F)+' fl</span>'+
+    '<span class="rtag">'+(sv('woodMethod')==='panelized'?'Panelized':'Stick-Built')+'</span>';
+
+  // line items
+  set('rSteel',fmt(lumC)); set('rSteelH',fmt(lumC));
+  set('rDeck', fmt(dkC));  set('rDeckH', fmt(dkC));
+  set('rSheath',fmt(shC)); set('rSheathH',fmt(shC));
+  set('rShip', fmt(shpC)); set('rShipH', fmt(shpC));
+  set('rEquip',fmt(eqC));  set('rEquipH',fmt(eqC));
+  set('rMisc', fmt(miC));  set('rMiscH', fmt(miC));
+  set('rEng',  fmt(enC));  set('rEngH',  fmt(enC));
+  set('rFabL', fmt(fL));   set('rFabH',  fmt(fH));
+  set('rInstL',fmt(iL));   set('rInstH', fmt(iH));
+
+  const lr = document.getElementById('rLaborRow');
+  if (la > 0) {
+    lr.style.display = 'grid';
+    set('rLaborLbl', 'Labor Adj. (+'+la+'%)');
+    document.getElementById('laborNote').textContent = '+'+la+'% on Fab & Field Framing only';
+    document.getElementById('laborNote').style.display = 'block';
+  } else {
+    lr.style.display = 'none';
+    document.getElementById('laborNote').style.display = 'none';
+  }
+
+  set('rBase', fmt(totL)); set('rBaseH', fmt(totH));
+  set('rBaseSF', fmtPSF(totL/tSF)); set('rBaseSFH', fmtPSF(totH/tSF));
+  set('rML', fmt(mL)); set('rMH', fmt(mH));
+  set('rMLsf', fmtPSF(mL/tSF)); set('rMHsf', fmtPSF(mH/tSF));
+
+  const pb = document.getElementById('projBlock');
+  if (nb > 1) {
+    pb.style.display = 'block';
+    set('projLbl', 'Project Total — '+nb+' Buildings'+(sv('bLabel') ? ' · '+sv('bLabel') : ''));
+    set('rPL', fmt(mL*nb)); set('rPH', fmt(mH*nb));
+  } else {
+    pb.style.display = 'none';
+  }
+
+  // store for save/print
+  window._c = {L,W,H,F,op,tSF,shSF,gw,nw,lumC,dkC,shC,shpC,eqC,miC,enC,fL,fH,iL,iH,totL,totH,mL,mH,mk,nb,la,lm};
+  renderComparison();
+  pisSync();
+}
+
+// ─── COMPARISON RENDERING ─────────────────────────────────────────────────────
+function renderComparison() {
+  const c = window._c;
+  if (!c) return;
+  const cont = document.getElementById('cCompare');
+  let cfs = null;
+  try {
+    const raw = localStorage.getItem(CFS_PIS_KEY);
+    if (raw) cfs = JSON.parse(raw);
+  } catch(e){}
+
+  if (!cfs || !cfs.mL || !cfs.mH) {
+    cont.innerHTML = '<div class="cblock-empty">Run the CFS Budget Builder for this project to populate the comparison.</div>';
+    return;
+  }
+
+  // Use averages for clean comparison (low + high) / 2
+  const woodAvg = (c.mL + c.mH) / 2;
+  const cfsAvg  = (parseFloat(cfs.mL) + parseFloat(cfs.mH)) / 2;
+  const cfsPSF  = cfs.tSF ? cfsAvg / parseFloat(cfs.tSF) : null;
+  const woodPSF = woodAvg / c.tSF;
+  const delta   = cfsAvg - woodAvg;
+  const deltaPct = woodAvg > 0 ? (delta / woodAvg) * 100 : 0;
+
+  const woodIsCheaper = delta > 0;
+  const deltaClass = woodIsCheaper ? 'premium' : 'savings';
+  const deltaLabel = woodIsCheaper ? 'CFS Premium' : 'CFS Savings';
+  const deltaSign = delta >= 0 ? '+' : '−';
+  const dollarText = deltaSign + '$' + Math.abs(Math.round(delta)).toLocaleString();
+
+  document.getElementById('cMode').textContent = c.nb > 1 ? 'Per Building' : 'Project Total';
+
+  cont.innerHTML =
+    '<div class="cgrid">'+
+      '<div class="ccell"><div class="ccell-lbl">Wood</div><div class="ccell-val">'+fmt(woodAvg)+'</div><div class="ccell-sub">'+fmtPSF(woodPSF)+'</div></div>'+
+      '<div class="ccell"><div class="ccell-lbl">CFS</div><div class="ccell-val">'+fmt(cfsAvg)+'</div><div class="ccell-sub">'+(cfsPSF?fmtPSF(cfsPSF):'—')+'</div></div>'+
+      '<div class="ccell delta '+deltaClass+'"><div class="ccell-lbl">'+deltaLabel+'</div><div class="ccell-val">'+dollarText+'</div><div class="ccell-sub">'+fmtPct(Math.abs(deltaPct))+'</div></div>'+
+    '</div>'+
+    '<div style="font-size:10px;color:#888;margin-top:8px;line-height:1.4">'+
+      '<strong>Same scope, two ways.</strong> Wood-frame hard cost on the framing scope only. Lifecycle savings (carry, insurance, schedule, maintenance) appear in the Soft Cost Savings, Trade Savings, and Pro Forma modules.'+
+    '</div>';
+}
+
+// ─── LOCAL STORAGE ────────────────────────────────────────────────────────────
+const FORM_FIELDS = ['projName','client','cname','cemail','ptype','nBldgs','bLabel','bL','bW','bH','bF','oPct','manSF','shManSF','woodMethod','region','shType','lumber','dkCost','shCost','ship','equip','misc','eng','fabL','fabH','instL','instH','labor','mkup','notes'];
+
+function save() {
+  try {
+    const d = {};
+    FORM_FIELDS.forEach(f => { const el=document.getElementById(f); if(el) d[f] = el.value; });
+    d.useOvr = useOvr; d.useShMan = useShMan; d.adjustOpen = adjustOpen;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(d));
+  } catch(e){}
+}
+
+function restore() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    const d = JSON.parse(raw);
+    FORM_FIELDS.forEach(f => { if (document.getElementById(f) && d[f] !== undefined) document.getElementById(f).value = d[f]; });
+    if (d.useOvr)   { useOvr=true;   document.getElementById('ovrRow').style.display='block';   document.getElementById('btnOvr').className='tog on'; }
+    if (d.useShMan) { useShMan=true; document.getElementById('shManRow').style.display='block'; document.getElementById('btnShMan').className='tog on'; }
+    if (d.adjustOpen) {
+      adjustOpen = true;
+      DEFAULT_FIELDS.forEach(f => { const el=document.getElementById(f); if(el) el.removeAttribute('readonly'); });
+      document.getElementById('btnAdj').className = 'tog on';
+      document.getElementById('btnAdj').textContent = 'Lock to Benchmark';
+      const badge = document.getElementById('benchBadge');
+      badge.textContent = 'User-Adjusted'; badge.className = 'badge user';
+    }
+    return true;
+  } catch(e){ return false; }
+}
+
+// ─── PIS CROSS-PAGE SYNC ──────────────────────────────────────────────────────
+function showSyncToast(msg) {
+  let t = document.getElementById('pisToast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'pisToast';
+    t.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#F97316;color:#fff;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.style.opacity = '0', 2500);
+}
+
+function pisSync() {
+  try {
+    const c = window._c;
+    if (!c) return;
+    const d = {
+      _page:'wood', _ts:Date.now(),
+      projName: sv('projName'), client: sv('client'), ptype: sv('ptype'),
+      method: sv('woodMethod'),
+      tSF: c.tSF, floors: c.F, nb: c.nb,
+      totL: c.totL, totH: c.totH, mL: c.mL, mH: c.mH,
+      mkup: c.mk, labor: c.la
+    };
+    localStorage.setItem(PIS_KEY, JSON.stringify(d));
+    showSyncToast('✓ Wood Comparison saved to Summary');
+  } catch(e) { console.warn('pisSync error:', e); }
+}
+
+// ─── BUILD PAYLOAD ────────────────────────────────────────────────────────────
+function buildPayload() {
+  const c = window._c;
+  if (!c) return null;
+  const laLabel = document.getElementById('labor').options[document.getElementById('labor').selectedIndex].text;
+  return {
+    system:         'wood',
+    method:         sv('woodMethod'),
+    projectName:    sv('projName'),
+    client:         sv('client') || 'N/A',
+    contactName:    sv('cname'),
+    contactEmail:   sv('cemail'),
+    projectType:    sv('ptype'),
+    region:         sv('region'),
+    totalSF:        Math.round(c.tSF),
+    floors:         c.F,
+    lengthFt:       c.L, widthFt: c.W, totalHeight: c.H,
+    avgFloorHeight: +(c.H/c.F).toFixed(1),
+    grossWall:      Math.round(c.gw),
+    netSheathing:   Math.round(c.shSF),
+    numBuildings:   c.nb,
+    buildingLabel:  sv('bLabel'),
+    lumberPerSF:    gv('lumber'),
+    lumberCost:     Math.round(c.lumC),
+    deckPerSF:      gv('dkCost'),
+    deckCost:       Math.round(c.dkC),
+    sheathType:     sv('shType'),
+    sheathCostPerSF:gv('shCost'),
+    sheathCost:     Math.round(c.shC),
+    shipping:       Math.round(c.shpC),
+    equipPerSF:     gv('equip'), equipCost: Math.round(c.eqC),
+    miscPerSF:      gv('misc'), miscCost: Math.round(c.miC),
+    engPerSF:       gv('eng'), engCost: Math.round(c.enC),
+    fabLowPerSF:    gv('fabL'), fabHighPerSF: gv('fabH'),
+    fabLow:         Math.round(c.fL), fabHigh: Math.round(c.fH),
+    instLowPerSF:   gv('instL'), instHighPerSF: gv('instH'),
+    instLow:        Math.round(c.iL), instHigh: Math.round(c.iH),
+    laborAdj:       c.la, laborLabel: laLabel,
+    markup:         c.mk,
+    baseLow:        Math.round(c.totL), baseHigh: Math.round(c.totH),
+    totalLow:       Math.round(c.mL), totalHigh: Math.round(c.mH),
+    lowPerSF:       +(c.mL/c.tSF).toFixed(2),
+    highPerSF:      +(c.mH/c.tSF).toFixed(2),
+    projectTotalLow:  c.nb > 1 ? Math.round(c.mL*c.nb) : null,
+    projectTotalHigh: c.nb > 1 ? Math.round(c.mH*c.nb) : null,
+    notes:          sv('notes') || 'None',
+    benchmarkSource: 'RLB Q1 2026 + RSMeans + MF Field Data',
+    date:           dateStr()
+  };
+}
+
+// ─── SAVE TO NOTION ───────────────────────────────────────────────────────────
+async function doSaveNotion() {
+  const nm = sv('projName');
+  if (!nm.trim()) { showMsg('E', 'Please enter a Project Name first.'); return; }
+  const payload = buildPayload();
+  if (!payload) return;
+
+  const btn = document.querySelector('.sn');
+  btn.textContent = '↑ Saving…';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(AZURE_FUNCTION_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    showMsg('Ok', '✓ Saved to Notion — ' + nm);
+    toast('Saved: ' + nm);
+  } catch(err) {
+    console.error(err);
+    showMsg('E', '✗ Save failed — Azure function may need wood-system support.');
+    toast('Save failed: ' + err.message, true);
+  } finally {
+    btn.textContent = '↑ Save to Notion';
+    btn.disabled = false;
+  }
+}
+
+// ─── PRINT / PDF ──────────────────────────────────────────────────────────────
+function doPrint() {
+  const c = window._c;
+  if (!c) { toast('Fill in the comparison first.', true); return; }
+  const la = gv('labor'), nb = c.nb;
+  const dateStr2 = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+
+  set('pName', sv('projName') || 'Untitled Project');
+  set('pClient', sv('client'));
+  set('pYear', '© ' + new Date().getFullYear() + ' Mainefactured Framing / Prefab Consulting LLC');
+  document.getElementById('pMeta').innerHTML =
+    '<span class="pbadge">'+sv('ptype')+'</span>'+
+    '<span class="pbadge">'+fmtSF(c.tSF)+'</span>'+
+    '<span class="pbadge">'+Math.round(c.F)+' Floors</span>'+
+    '<span class="pbadge">'+(sv('woodMethod')==='panelized'?'Panelized':'Stick-Built')+'</span>'+
+    '<span class="pbadge">'+dateStr2+'</span>';
+
+  document.getElementById('pDims').innerHTML =
+    '<div><div class="pdval">'+c.L+' × '+c.W+' ft</div><div class="pdlbl">Footprint</div></div>'+
+    '<div><div class="pdval">'+c.H+' ft</div><div class="pdlbl">Total Height</div></div>'+
+    '<div><div class="pdval">'+Math.round(c.gw).toLocaleString()+' SF</div><div class="pdlbl">Gross Wall</div></div>'+
+    '<div><div class="pdval">'+Math.round(c.shSF).toLocaleString()+' SF</div><div class="pdlbl">Net Sheathing</div></div>';
+
+  const rows = [
+    ['Lumber (Dimensional + Engineered)', fmt(c.lumC), fmt(c.lumC)],
+    ['Wood Subfloor', fmt(c.dkC), fmt(c.dkC)],
+    ['OSB Sheathing ('+sv('shType')+')', fmt(c.shC), fmt(c.shC)],
+    ['Lumber Delivery', fmt(c.shpC), fmt(c.shpC)],
+    ['Equipment', fmt(c.eqC), fmt(c.eqC)],
+    ['Misc', fmt(c.miC), fmt(c.miC)],
+    ['Engineering', fmt(c.enC), fmt(c.enC)],
+    ['Fabrication & Assembly', fmt(c.fL), fmt(c.fH)],
+    ['Field Framing', fmt(c.iL), fmt(c.iH)]
+  ];
+  if (la > 0) rows.push(['<em style="color:#999">Regional Labor Adj. ('+la+'%)</em>','<em style="color:#999">incl.</em>','<em style="color:#999">incl.</em>']);
+
+  document.getElementById('pRows').innerHTML = rows.map(r =>
+    '<tr><td>'+r[0]+'</td><td style="text-align:right">'+r[1]+'</td><td style="text-align:right">'+r[2]+'</td></tr>'
+  ).join('');
+
+  set('pTotLbl', 'Wood Total (w/ '+c.mk+'% Markup)');
+  set('pTotL', fmt(c.mL)); set('pTotH', fmt(c.mH));
+  set('pBoxLbl', nb > 1 ? 'Per Building Wood-Frame Estimate' : 'Wood-Frame Budget Estimate');
+  set('pML', fmt(c.mL)); set('pMH', fmt(c.mH));
+  set('pMLsf', fmtPSF(c.mL/c.tSF)); set('pMHsf', fmtPSF(c.mH/c.tSF));
+
+  document.getElementById('pProjBox').innerHTML = nb > 1
+    ? '<div style="max-width:380px;margin:.7rem auto 0;padding:.7rem 1rem;border:2px solid #2D9CDB;border-radius:6px;background:#EBF5FB"><div style="font-size:.65rem;color:#2D9CDB;text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:.4rem">Project Total — '+nb+' Buildings'+(sv('bLabel') ? ' · '+sv('bLabel') : '')+'</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem"><div><div style="font-size:.65rem;color:#888">Total Low</div><div style="font-size:1.1rem;font-weight:700">'+fmt(c.mL*nb)+'</div></div><div><div style="font-size:.65rem;color:#888">Total High</div><div style="font-size:1.1rem;font-weight:700;color:#2D9CDB">'+fmt(c.mH*nb)+'</div></div></div></div>'
+    : '';
+
+  // Comparison block in print
+  let cfs = null;
+  try {
+    const raw = localStorage.getItem(CFS_PIS_KEY);
+    if (raw) cfs = JSON.parse(raw);
+  } catch(e){}
+
+  if (cfs && cfs.mL && cfs.mH) {
+    const woodAvg = (c.mL + c.mH) / 2;
+    const cfsAvg  = (parseFloat(cfs.mL) + parseFloat(cfs.mH)) / 2;
+    const delta   = cfsAvg - woodAvg;
+    const deltaPct = woodAvg > 0 ? (delta / woodAvg) * 100 : 0;
+    const deltaSign = delta >= 0 ? '+' : '−';
+    const dollarText = deltaSign + '$' + Math.abs(Math.round(delta)).toLocaleString();
+    const deltaLabel = delta > 0 ? 'CFS Premium' : 'CFS Savings';
+    const deltaColor = delta > 0 ? '#c00' : '#2a7a2a';
+
+    document.getElementById('pCompBox').innerHTML =
+      '<div class="psec">Wood vs. CFS — Same Scope</div>'+
+      '<div class="pcompbox">'+
+        '<div class="pcompgrid">'+
+          '<div><div style="font-size:.65rem;color:#888;text-transform:uppercase">Wood</div><div style="font-size:1.05rem;font-weight:700;color:#111">'+fmt(woodAvg)+'</div></div>'+
+          '<div><div style="font-size:.65rem;color:#888;text-transform:uppercase">CFS</div><div style="font-size:1.05rem;font-weight:700;color:#111">'+fmt(cfsAvg)+'</div></div>'+
+          '<div><div style="font-size:.65rem;color:#888;text-transform:uppercase">'+deltaLabel+'</div><div style="font-size:1.05rem;font-weight:700;color:'+deltaColor+'">'+dollarText+'</div><div style="font-size:.7rem;color:#888;margin-top:1px">'+fmtPct(Math.abs(deltaPct))+'</div></div>'+
+        '</div>'+
+        '<div style="font-size:.7rem;color:#666;margin-top:.5rem;line-height:1.4">Same framing scope, two construction methods. Lifecycle savings (carry, insurance, schedule, maintenance) excluded — see Soft Cost Savings, Trade Savings, and Pro Forma.</div>'+
+      '</div>';
+  } else {
+    document.getElementById('pCompBox').innerHTML = '';
+  }
+
+  window.print();
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+function init() {
+  const restored = restore();
+  if (!restored) loadFromCFS();
+  applyMethodDefaults();
+  if (restored) {
+    // re-restore to overwrite the benchmark defaults with saved values
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const d = JSON.parse(raw);
+        FORM_FIELDS.forEach(f => { if (document.getElementById(f) && d[f] !== undefined) document.getElementById(f).value = d[f]; });
+      }
+    } catch(e){}
+  }
+  calc();
+}
+
+document.querySelectorAll('input,select,textarea').forEach(el => el.addEventListener('change', calc));
+
+// ─── PASSWORD GATE ────────────────────────────────────────────────────────────
+(function(){
+  const gate = document.getElementById('gate');
+  if(!gate) return;
+  gate.style.display = 'flex';
+  if(localStorage.getItem('mf_auth')==='1'){
+    gate.classList.remove('show');
+    gate.style.display = 'none';
+  } else {
+    document.body.style.overflow='hidden';
+    setTimeout(()=>{ const p=document.getElementById('pwInput'); if(p) p.focus(); },100);
+  }
+})();
+function checkPW(){
+  if(document.getElementById('pwInput').value==='MF2026'){
+    localStorage.setItem('mf_auth','1');
+    const gate=document.getElementById('gate');
+    gate.style.display='none';
+    document.body.style.overflow='';
+  } else {
+    document.getElementById('pwErr').style.display='block';
+    document.getElementById('pwInput').value='';
+    setTimeout(()=>document.getElementById('pwErr').style.display='none',3000);
+  }
+}
+
+// Auto-init on load
+document.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('mf_auth') === '1') {
+    init();
+  } else {
+    // Still init structurally, so when password is entered, the page is ready
+    init();
+  }
+});
+// Also init immediately in case DOMContentLoaded already fired
+if (document.readyState !== 'loading') init();
+</script>
+</body>
+</html>
