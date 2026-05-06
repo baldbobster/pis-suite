@@ -1,4 +1,4 @@
-yamlname: Deploy to Azure Static Website
+name: Deploy to Azure Static Website
 
 on:
   push:
