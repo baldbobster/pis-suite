@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mainefactured Framing — CFS Budget Builder</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;background:#f5f5f5;color:#111;min-height:100vh}
+  header{background:#111;padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
+  .logo{font-size:22px;font-weight:700;color:#2D9CDB;letter-spacing:.05em}
+  .logo span{color:#fff;font-size:12px;font-weight:400;margin-left:10px;opacity:.6;letter-spacing:.1em;text-transform:uppercase}
+  .hright{font-size:11px;color:#666}
+  .main{display:grid;grid-template-columns:1fr 300px;gap:20px;padding:20px;max-width:1200px;margin:0 auto}
+  .card{background:#fff;border-radius:10px;border:1px solid #e5e5e5;padding:20px}
+  label{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#888;display:block;margin-bottom:4px}
+  input,select,textarea{width:100%;height:34px;padding:0 10px;font-size:13px;border:1px solid #ddd;border-radius:6px;background:#fff;color:#111;outline:none;transition:border-color .15s}
+  input:focus,select:focus,textarea:focus{border-color:#2D9CDB}
+  textarea{height:56px;padding:8px 10px;resize:vertical}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+  .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px}
+  .g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-top:12px}
+  .sh{border-bottom:2px solid #2D9CDB;padding-bottom:4px;margin:20px 0 10px;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#333;display:flex;justify-content:space-between;align-items:flex-end}
+  .pfx{display:flex}.pfx em{height:34px;display:flex;align-items:center;padding:0 8px;font-size:12px;font-style:normal;color:#888;background:#f9f9f9;border:1px solid #ddd;border-right:none;border-radius:6px 0 0 6px}.pfx input{border-radius:0 6px 6px 0;flex:1}
+  .sfx{display:flex}.sfx input{border-radius:6px 0 0 6px;flex:1}.sfx em{height:34px;display:flex;align-items:center;padding:0 8px;font-size:12px;font-style:normal;color:#888;background:#f9f9f9;border:1px solid #ddd;border-left:none;border-radius:0 6px 6px 0}
+  .dimbox{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;padding:12px;background:#f9f9f9;border-radius:8px;border:1px solid #eee;text-align:center}
+  .dv{font-size:15px;font-weight:600;color:#2D9CDB}.dl{font-size:10px;color:#999;margin-top:2px}
+  .tog{font-size:10px;padding:3px 10px;border-radius:6px;border:1px solid #ddd;color:#888;background:transparent;cursor:pointer;margin-top:8px;margin-right:6px}
+  .tog.on{border-color:#2D9CDB;color:#2D9CDB;background:#EBF5FB}
+  /* RIGHT PANEL */
+  .right{position:sticky;top:20px;align-self:start}
+  .rhead{border-bottom:3px solid #2D9CDB;padding-bottom:10px;margin-bottom:12px}
+  .rtag{font-size:10px;padding:2px 8px;border-radius:12px;background:#EBF5FB;border:1px solid #b8dcf0;color:#2a7a2a;margin-right:4px;margin-top:5px;display:inline-block}
+  .li{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;padding:5px 0;border-bottom:1px solid #f0f0f0;font-size:12px}
+  .lih{font-size:10px;color:#aaa;text-transform:uppercase;font-weight:600}.tr{text-align:right}
+  .tblock{background:#f9f9f9;border-radius:8px;border:1px solid #eee;padding:10px 12px;margin-top:10px}
+  .mblock{border-radius:8px;border:2px solid #2D9CDB;padding:12px;margin-top:10px}
+  .pblock{border-radius:8px;border:2px solid #2D9CDB;background:#EBF5FB;padding:12px;margin-top:10px;display:none}
+  .sbtn{width:100%;height:38px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;margin-top:10px;border:none;transition:opacity .15s}
+  .sbtn:hover{opacity:.88}
+  .sn{background:#F97316;color:#fff}
+  .sp{background:#fff;border:1px solid #ddd!important;color:#555;font-weight:500}
+  .snew{background:transparent;border:1px solid #ddd!important;color:#888;font-size:12px}
+  .msg{font-size:11px;margin-top:8px;text-align:center;padding:7px 10px;border-radius:6px;display:none}
+  .msok{background:#EBF5FB;border:1px solid #b8dcf0;color:#2a7a2a}
+  .msw{background:#fffbf0;border:1px solid #f0d080;color:#7a5a00}
+  .mse{background:#fff0f0;border:1px solid #f0c8c8;color:#7a2a2a}
+  .foot{font-size:10px;color:#bbb;text-align:center;margin-top:12px;line-height:1.6}
+  /* TOAST */
+  #toast{position:fixed;bottom:24px;right:24px;background:#111;color:#fff;padding:12px 18px;border-radius:8px;font-size:12px;display:none;z-index:1000;border-left:4px solid #2D9CDB;max-width:300px}
+  #toast.err{border-color:#e05050}
+  /* OVERLAY */
+  #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center}
+  #overlay.show{display:flex}
+  .obox{background:#fff;border-radius:12px;padding:28px;max-width:320px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+  .obox h3{font-size:15px;margin-bottom:8px}
+  .obox p{font-size:12px;color:#777;margin-bottom:22px;line-height:1.5}
+  .orow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .ocancel{height:36px;border-radius:8px;border:1px solid #ddd;background:transparent;color:#777;cursor:pointer;font-size:13px}
+  .oconfirm{height:36px;border-radius:8px;border:none;background:#2D9CDB;color:#fff;cursor:pointer;font-size:13px;font-weight:600}
+  /* PRINT */
+  @media print{
+    header,.right,#overlay,#toast{display:none!important}
+    .main{grid-template-columns:1fr;padding:0}
+    .card{border:none;padding:0}
+    #printArea{display:block!important}
+    body{background:#fff}
+  }
+  #printArea{display:none}
+
+  /* ── PRINT LAYOUT ─────────────────────────────────────────────────────── */
+  #printDoc{display:none;font-family:Arial,sans-serif;font-size:11pt;color:#111;padding:.6in .75in}
+  @media print{
+    header,.main,#overlay,#toast{display:none!important}
+    #printDoc{display:block!important}
+    body{background:#fff;margin:0;padding:0}
+    @page{size:letter;margin:0}
+  }
+  #printDoc .phdr{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #2D9CDB;padding-bottom:8px;margin-bottom:12px}
+  #printDoc .plogo{font-size:26pt;font-weight:700;color:#2D9CDB;line-height:1}
+  #printDoc .plogosub{font-size:7pt;color:#666;text-transform:uppercase;letter-spacing:.1em;margin-top:2px}
+  #printDoc .pright{text-align:right}
+  #printDoc .pproj{font-size:16pt;font-weight:700}
+  #printDoc .psub{font-size:9pt;color:#555;margin-top:3px}
+  #printDoc .pbadge{font-size:8pt;padding:2px 8px;border:1px solid #ccc;border-radius:4px;color:#555;margin-left:4px;display:inline-block;margin-top:4px}
+  #printDoc .pdims{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px;background:#f8f8f8;border-radius:4px;border:1px solid #ddd;margin-bottom:14px;text-align:center}
+  #printDoc .pdval{font-size:13pt;font-weight:700;color:#2D9CDB}
+  #printDoc .pdlbl{font-size:8pt;color:#888;margin-top:2px}
+  #printDoc .psec{font-size:8pt;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.1em;border-bottom:2px solid #2D9CDB;padding-bottom:3px;margin:14px 0 8px}
+  #printDoc table{width:100%;border-collapse:collapse;margin-bottom:14px}
+  #printDoc th{font-size:8pt;text-transform:uppercase;letter-spacing:.05em;color:#555;border-bottom:2px solid #2D9CDB;padding:5px 6px;text-align:left}
+  #printDoc th:not(:first-child){text-align:right}
+  #printDoc td{padding:4px 6px;font-size:10pt;border-bottom:1px solid #eee}
+  #printDoc td:not(:first-child){text-align:right}
+  #printDoc tr.ptot td{font-weight:700;border-top:2px solid #2D9CDB;border-bottom:none;background:#f8f8f8}
+  #printDoc .ptotbox{max-width:380px;margin:0 auto;padding:.7rem 1rem;border:2px solid #2D9CDB;border-radius:6px}
+  #printDoc .ptotgrid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.3rem}
+  #printDoc .pbigv{font-size:1.2rem;font-weight:700;color:#2D9CDB}
+  #printDoc .pbvsf{font-size:.75rem;color:#2D9CDB}
+  #printDoc .pprojbox{max-width:380px;margin:.7rem auto 0;padding:.7rem 1rem;border:2px solid #2D9CDB;border-radius:6px;background:#EBF5FB}
+  #printDoc .pdisc{margin-top:.8rem;padding:.5rem .6rem;border:1px solid #c8e0c8;border-left:3px solid #2D9CDB;background:#f9f9f9;font-size:8pt;color:#666;line-height:1.5}
+  #printDoc .pfoot{display:flex;justify-content:space-between;font-size:8pt;color:#aaa;margin-top:.5rem;padding-top:.4rem;border-top:1px solid #ddd}
+
+
+  /* ── PROPOSAL PRINT ─────────────────────────────────────────────────────── */
+  #proposalDoc { display: none; }
+
+  @media print {
+    #proposalDoc { display: none !important; }
+    body.printing-proposal #printDoc  { display: none !important; }
+    body.printing-proposal header     { display: none !important; }
+    body.printing-proposal .main      { display: none !important; }
+    body.printing-proposal #overlay   { display: none !important; }
+    body.printing-proposal #toast     { display: none !important; }
+    body.printing-proposal #proposalDoc { display: block !important; }
+    body.printing-proposal { background: #fff; margin: 0; padding: 0; }
+    @page { size: letter; margin: 0; }
+    #proposalDoc .psig { page-break-inside: avoid; }
+    #proposalDoc .pbot { page-break-inside: avoid; }
+  }
+
+  #proposalDoc {
+    font-family: Arial, sans-serif;
+    font-size: 9.5pt;
+    color: #111;
+    padding: .55in .75in .45in .75in;
+    line-height: 1.45;
+  }
+
+  /* HEADER */
+  #proposalDoc .ph {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 3px solid #2D9CDB;
+    padding-bottom: 8px;
+    margin-bottom: 14px;
+  }
+  #proposalDoc .plogo { font-size: 22pt; font-weight: 700; color: #2D9CDB; line-height: 1; }
+  #proposalDoc .plogosub { font-size: 6.5pt; color: #666; text-transform: uppercase; letter-spacing: .12em; margin-top: 2px; }
+  #proposalDoc .pright { text-align: right; }
+  #proposalDoc .pdoclabel { font-size: 7.5pt; color: #999; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 3px; }
+  #proposalDoc .pproj { font-size: 14pt; font-weight: 700; color: #111; }
+  #proposalDoc .pclient { font-size: 8.5pt; color: #555; margin-top: 2px; }
+  #proposalDoc .pbadge { font-size: 7pt; padding: 1px 6px; border: 1px solid #ccc; border-radius: 3px; color: #666; margin-left: 3px; display: inline-block; margin-top: 4px; }
+
+  /* SECTION HEADERS */
+  #proposalDoc .psec {
+    font-size: 7.5pt; font-weight: 700; color: #555;
+    text-transform: uppercase; letter-spacing: .1em;
+    border-bottom: 2px solid #2D9CDB;
+    padding-bottom: 3px; margin: 12px 0 7px;
+  }
+
+  /* TEXT */
+  #proposalDoc .ptext { font-size: 9pt; color: #333; line-height: 1.6; }
+
+  /* DIMS BOX */
+  #proposalDoc .pdims {
+    display: grid; grid-template-columns: repeat(4,1fr);
+    gap: 6px; padding: 8px; background: #f8f8f8;
+    border-radius: 4px; border: 1px solid #e0e0e0; text-align: center;
+  }
+  #proposalDoc .pdval { font-size: 11pt; font-weight: 700; color: #2D9CDB; }
+  #proposalDoc .pdlbl { font-size: 7pt; color: #888; margin-top: 1px; }
+
+  /* SCOPE */
+  #proposalDoc .pscope-list { margin: 4px 0 0 16px; }
+  #proposalDoc .pscope-list li { font-size: 9pt; color: #333; line-height: 1.65; }
+
+  /* TOTALS BOX */
+  #proposalDoc .ptotbox {
+    border: 2px solid #2D9CDB; border-radius: 6px;
+    padding: 10px 16px; max-width: 380px; margin: 0 auto;
+  }
+  #proposalDoc .ptotlabel {
+    font-size: 6.5pt; color: #888; text-transform: uppercase;
+    letter-spacing: .08em; margin-bottom: 6px;
+  }
+  #proposalDoc .ptotgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  #proposalDoc .ptotlbl2 { font-size: 7pt; color: #888; }
+  #proposalDoc .ptotval { font-size: 16pt; font-weight: 700; color: #2D9CDB; line-height: 1.1; }
+  #proposalDoc .ptotsf  { font-size: 7.5pt; color: #2D9CDB; margin-top: 1px; }
+
+  /* MULTI-BUILDING TOTAL */
+  #proposalDoc .pprojbox {
+    border: 2px solid #2D9CDB; border-radius: 6px;
+    padding: 8px 16px; max-width: 380px; margin: 6px auto 0;
+    background: #EBF5FB;
+  }
+  #proposalDoc .pprojlbl { font-size: 6.5pt; color: #2D9CDB; text-transform: uppercase; font-weight: 700; letter-spacing: .08em; margin-bottom: 4px; }
+  #proposalDoc .pprojgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  #proposalDoc .pprojval { font-size: 13pt; font-weight: 700; color: #111; }
+
+  /* DISCLAIMER */
+  #proposalDoc .pdisc {
+    margin-top: 10px; padding: 6px 9px;
+    border: 1px solid #c8e0c8; border-left: 3px solid #2D9CDB;
+    background: #f9f9f9; font-size: 7.5pt; color: #666; line-height: 1.5;
+  }
+
+  /* BOTTOM BLOCK — signature + footer kept together */
+  #proposalDoc .pbot { margin-top: 14px; }
+  #proposalDoc .psig {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 36px;
+  }
+  #proposalDoc .psigline {
+    border-top: 1px solid #999; padding-top: 4px;
+    font-size: 7pt; color: #888; margin-top: 28px;
+  }
+  #proposalDoc .psigname { font-size: 8.5pt; color: #333; margin-top: 3px; line-height: 1.55; }
+  #proposalDoc .pfoot {
+    display: flex; justify-content: space-between;
+    font-size: 7pt; color: #aaa;
+    margin-top: 10px; padding-top: 4px;
+    border-top: 1px solid #e0e0e0;
+  }
+
+</style>
+</head>
+<body>
+<!-- PASSWORD GATE -->
+<div id="gate" class="show" style="display:none;position:fixed;inset:0;background:#0B1C2E;z-index:9999;align-items:center;justify-content:center;flex-direction:column">
+  <div style="margin-bottom:16px">
+    <svg width="160" height="27" viewBox="0 0 200 34" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M191.132 1.16555C197.975 1.16555 200 6.36844 200 10.1104C200 13.9549 197.975 19.1065 191.132 19.1065H185.324V16.5435H191.132C196.54 16.5435 197.309 11.8276 197.309 10.1104C197.309 8.3932 196.548 3.72854 191.14 3.72854H185.324V1.16555H191.132Z" fill="white"/>
+<path d="M173.1 3.92569V1.16555H183.549V3.92569H173.1Z" fill="white"/>
+<path d="M173.1 11.6147V8.85451H182.169V11.6147H173.1Z" fill="white"/>
+<path d="M173.1 19.3036V16.5435H183.549V19.3036H173.1Z" fill="white"/>
+<path d="M164.558 1.16555C169.059 1.55985 170.439 4.60192 170.439 6.88298C170.439 9.84028 168.467 12.2061 166.2 12.699L170.734 19.1065H167.777L163.341 12.9947H160.508V19.1065H157.92V10.3332H164.788C167.531 10.2819 167.876 7.93381 167.876 6.88298C167.876 5.72965 167.383 4.02429 164.686 3.82711H157.92V1.16555H164.558Z" fill="white"/>
+<path d="M147.088 16.8392C150.574 16.8392 151.419 13.5448 151.419 12.2889V1.16555H154.085V12.2889C154.085 15.262 152.265 19.4022 147.088 19.4022C141.911 19.4022 140.117 15.262 140.117 12.2889V1.16555H142.731V12.2889C142.731 13.5448 143.602 16.8392 147.088 16.8392Z" fill="white"/>
+<path d="M132.881 19.3036H130.121V5.10861H132.881V19.3036Z" fill="white"/>
+<path d="M137.613 3.92569V1.16555H125.586V3.92569H137.613Z" fill="white"/>
+<path d="M123.714 3.24157L122.578 5.47137C121.604 4.34365 119.656 3.24157 117.657 3.24157C112.249 3.24157 111.455 8.39318 111.455 10.1104C111.455 11.8276 112.249 16.9536 117.657 16.9536C119.733 16.9536 121.578 15.8515 122.732 14.8006L123.714 17.1349C122.099 18.7496 120.579 19.3371 117.657 19.3371C110.814 19.3371 108.789 13.9549 108.789 10.1104C108.789 6.36842 110.814 0.90925 117.657 0.90925C120.733 0.90925 122.124 1.47311 123.714 3.24157Z" fill="white"/>
+<path d="M99.0694 0.77124L90.4932 19.1065H93.2533L99.0694 6.48868L104.787 19.1065H107.646L99.0694 0.77124Z" fill="white"/>
+<path d="M80.4384 19.3036V8.85451H89.5075V11.6147H83.1986V19.3036H80.4384Z" fill="white"/>
+<path d="M80.4384 3.92569V1.16555H90.8876V3.92569H80.4384Z" fill="white"/>
+<path d="M67.6235 3.92569V1.16555H78.0726V3.92569H67.6235Z" fill="white"/>
+<path d="M67.6235 11.6147V8.85451H76.6925V11.6147H67.6235Z" fill="white"/>
+<path d="M67.6235 19.3036V16.5435H78.0726V19.3036H67.6235Z" fill="white"/>
+<path d="M49.4854 6.48868V19.1065H51.8513V8.85451L49.4854 6.48868Z" fill="white"/>
+<path d="M49.4854 0.77124V4.51715L64.2719 19.5008V1.16555H61.7089V13.2905L49.4854 0.77124Z" fill="white"/>
+<path d="M44.5566 19.1065H41.9936V1.16555H44.5566V19.1065Z" fill="white"/>
+<path d="M30.4601 0.77124L21.884 19.1065H24.6441L30.4601 6.48868L36.1776 19.1065H39.0363L30.4601 0.77124Z" fill="white"/>
+<path d="M2.95729 0.771243L2.36584 4.91146L9.95623 19.5008L17.5466 4.91146L16.9552 0.771243L9.95623 14.1776L2.95729 0.771243Z" fill="white"/>
+<path d="M0 19.1065H2.56299L3.84448 10.7275L1.87295 7.27729L0 19.1065Z" fill="white"/>
+<path d="M20.011 19.1065H17.448L16.1665 10.7275L18.1381 7.27729L20.011 19.1065Z" fill="white"/>
+<path d="M123.139 26.4011C123.553 26.4011 123.948 26.4691 124.325 26.605C124.702 26.7409 125.038 26.9385 125.335 27.1978C125.631 27.4572 125.863 27.7753 126.03 28.152L125.224 28.4485C124.989 28.01 124.69 27.692 124.325 27.4943C123.967 27.2967 123.575 27.1978 123.149 27.1978C122.716 27.1978 122.321 27.3028 121.963 27.5128C121.605 27.7228 121.32 28.0162 121.11 28.3929C120.907 28.7634 120.805 29.202 120.805 29.7084C120.805 30.2087 120.907 30.6473 121.11 31.024C121.314 31.4007 121.592 31.6941 121.944 31.9041C122.302 32.1141 122.701 32.219 123.139 32.2191C123.454 32.2191 123.751 32.1635 124.029 32.0523C124.307 31.9412 124.547 31.7867 124.751 31.5891C124.961 31.3915 125.125 31.1567 125.242 30.885V30.7385H126.178V30.9312C126.03 31.3265 125.807 31.6817 125.511 31.9967C125.221 32.3117 124.872 32.5617 124.464 32.747C124.063 32.9261 123.621 33.0158 123.139 33.0158C122.682 33.0158 122.253 32.9355 121.852 32.7749C121.456 32.6143 121.11 32.3888 120.814 32.0985C120.518 31.8021 120.286 31.4532 120.119 31.0517C119.952 30.6441 119.869 30.1963 119.869 29.7084C119.869 29.2267 119.952 28.7851 120.119 28.3836C120.286 27.976 120.518 27.624 120.814 27.3276C121.11 27.0311 121.456 26.8026 121.852 26.642C122.253 26.4814 122.682 26.4011 123.139 26.4011Z" fill="white"/>
+<path d="M126.178 30.3442H122.826V29.3584H126.178V30.3442Z" fill="white"/>
+<path d="M111.194 28.3385V33.0491H112.078V29.2217L111.194 28.3385Z" fill="white"/>
+<path d="M111.194 26.204V27.6024L116.715 33.1963V26.3512H115.758V30.8778L111.194 26.204Z" fill="white"/>
+<path d="M107.646 33.1043H106.66V26.4011H107.646V33.1043Z" fill="white"/>
+<path d="M97.2888 26.4011L97.0732 27.9104L99.8401 33.2286L102.607 27.9104L102.391 26.4011L99.8401 31.2882L97.2888 26.4011Z" fill="white"/>
+<path d="M96.2107 33.0849H97.145L97.6122 30.0305L96.8935 28.7728L96.2107 33.0849Z" fill="white"/>
+<path d="M103.505 33.0849H102.571L102.104 30.0305L102.823 28.7728L103.505 33.0849Z" fill="white"/>
+<path d="M90.5918 26.204L87.3388 33.1587H88.3858L90.5918 28.3727L92.7605 33.1587H93.8449L90.5918 26.204Z" fill="white"/>
+<path d="M82.6923 26.4011C84.3542 26.5467 84.8638 27.6699 84.8638 28.5122C84.8638 29.6041 84.1359 30.4776 83.2987 30.6596L84.973 33.0255H83.8811L82.2432 30.7688H81.1971V33.0255H80.2413V29.7861H82.7775C83.7901 29.7672 83.9175 28.9002 83.9175 28.5122C83.9175 28.0863 83.7355 27.4567 82.7397 27.3839H80.2413V26.4011H82.6923Z" fill="white"/>
+<path d="M73.5381 33.0485V29.1055H76.9604V30.147H74.5797V33.0485H73.5381Z" fill="white"/>
+<path d="M73.5381 27.4427V26.4011H77.4812V27.4427H73.5381Z" fill="white"/></svg>
+  </div>
+  <input id="pwInput" type="password" placeholder="Enter access password"
+    style="width:260px;height:42px;padding:0 16px;background:#162435;border:1px solid #F97316;color:#fff;border-radius:8px;font-size:14px;outline:none;text-align:center;margin-bottom:12px"
+    onkeydown="if(event.key==='Enter')checkPW()">
+  <button onclick="checkPW()" style="padding:10px 32px;background:#F97316;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">Enter</button>
+  <div id="pwErr" style="color:#e05050;font-size:12px;margin-top:10px;display:none">Incorrect password. Try again.</div>
+</div>
+
+
+
+<!-- CLIENT PROPOSAL DOCUMENT -->
+<div id="proposalDoc">
+  <div class="ph">
+    <div>
+      <div class="plogo" style="font-size:14pt">MF</div>
+      <div class="plogosub">Mainefactured Framing</div>
+    </div>
+    <div class="pright">
+      <div class="pdoclabel">Preliminary Budget Proposal</div>
+      <div class="pproj" id="prName">—</div>
+      <div class="pclient" id="prClient"></div>
+      <div id="prMeta"></div>
+    </div>
+  </div>
+
+  <div class="psec">Project Overview</div>
+  <div class="ptext" id="prIntro"></div>
+
+  <div class="psec">Building Dimensions</div>
+  <div class="pdims" id="prDims"></div>
+
+  <div class="psec">Scope of Work</div>
+  <ul class="pscope-list" id="prScope"></ul>
+
+  <div class="psec">Preliminary Budget Estimate</div>
+  <div class="ptext" style="margin-bottom:10px">Mainefactured Framing has prepared the following preliminary budget range for the cold-formed steel framing system based on the project parameters above. This estimate reflects current material market conditions, regional labor assumptions, and standard fabrication and installation parameters for this project type and geography.</div>
+
+  <div style="max-width:380px;margin:0 auto">
+    <div class="ptotbox">
+      <div class="ptotlabel" id="prBoxLbl">Project Budget Estimate</div>
+      <div class="ptotgrid">
+        <div><div class="ptotlbl2">Preliminary Low</div><div class="ptotval" id="prML">—</div><div class="ptotsf" id="prMLsf"></div></div>
+        <div><div class="ptotlbl2">Preliminary High</div><div class="ptotval" id="prMH">—</div><div class="ptotsf" id="prMHsf"></div></div>
+      </div>
+    </div>
+    <div id="prProjBox"></div>
+  </div>
+
+  <div class="pdisc">
+    <strong>Important Notice — Preliminary Estimate Only</strong><br>
+    This document presents a preliminary budget estimate only and is not a contract, bid, or commitment to perform work. All figures are subject to change based on final design documents, structural engineering review, site conditions, material market fluctuations, and confirmed scope. Final contract pricing will be established upon completion of the cold-formed steel system design by a licensed structural engineer and execution of a formal agreement.
+  </div>
+
+  <!-- Signature + footer in one unbreakable block -->
+  <div class="pbot">
+    <div class="psig">
+      <div>
+        
+      </div>
+      <div>
+        <div class="psigline">Accepted by</div>
+        <div class="psigname" id="prSigClient">—</div>
+      </div>
+    </div>
+    <div class="pfoot">
+      <div>Mainefactured Framing &nbsp;·&nbsp; Building Systems. Not Just Structures.</div>
+      <div id="prYear"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PRINT DOCUMENT — hidden until window.print() -->
+<div id="printDoc">
+  <div class="phdr">
+    <div>
+      <div class="plogo" style="font-size:14pt">MF</div>
+      <div class="plogosub">Mainefactured Framing</div>
+    </div>
+    <div class="pright">
+      <div class="pproj" id="pName">—</div>
+      <div class="psub" id="pClient"></div>
+      <div id="pMeta"></div>
+    </div>
+  </div>
+  <div class="pdims" id="pDims"></div>
+  <div class="psec">Budget Summary</div>
+  <table>
+    <thead><tr><th>Line Item</th><th>Low</th><th>High</th></tr></thead>
+    <tbody id="pRows"></tbody>
+    <tbody><tr class="ptot"><td id="pTotLbl">Total</td><td id="pTotL">—</td><td id="pTotH">—</td></tr></tbody>
+  </table>
+  <div style="max-width:380px;margin:0 auto">
+    <div class="ptotbox">
+      <div style="font-size:.65rem;color:#888;text-transform:uppercase;letter-spacing:.06em" id="pBoxLbl">Project Budget Estimate</div>
+      <div class="ptotgrid">
+        <div><div style="font-size:.65rem;color:#888">Low</div><div class="pbigv" id="pML">—</div><div class="pbvsf" id="pMLsf">—</div></div>
+        <div><div style="font-size:.65rem;color:#888">High</div><div class="pbigv" id="pMH">—</div><div class="pbvsf" id="pMHsf">—</div></div>
+      </div>
+    </div>
+  </div>
+  <div id="pProjBox"></div>
+  <div class="pdisc"><strong>Preliminary Estimate — Important Notice</strong><br>This is a preliminary budget estimate only. All figures are based on current material market conditions and regional labor assumptions and are subject to change. Final contract pricing will be provided upon completion of the cold-formed steel system design by a licensed structural engineer.</div>
+  <div class="pfoot"><div>Mainefactured Framing</div><div id="pYear"></div></div>
+</div>
+
+<header>
+  <div><svg width="160" height="27" style="display:block" viewBox="0 0 200 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M191.132 1.16555C197.975 1.16555 200 6.36844 200 10.1104C200 13.9549 197.975 19.1065 191.132 19.1065H185.324V16.5435H191.132C196.54 16.5435 197.309 11.8276 197.309 10.1104C197.309 8.3932 196.548 3.72854 191.14 3.72854H185.324V1.16555H191.132Z" fill="white"/>
+<path d="M173.1 3.92569V1.16555H183.549V3.92569H173.1Z" fill="white"/>
+<path d="M173.1 11.6147V8.85451H182.169V11.6147H173.1Z" fill="white"/>
+<path d="M173.1 19.3036V16.5435H183.549V19.3036H173.1Z" fill="white"/>
+<path d="M164.558 1.16555C169.059 1.55985 170.439 4.60192 170.439 6.88298C170.439 9.84028 168.467 12.2061 166.2 12.699L170.734 19.1065H167.777L163.341 12.9947H160.508V19.1065H157.92V10.3332H164.788C167.531 10.2819 167.876 7.93381 167.876 6.88298C167.876 5.72965 167.383 4.02429 164.686 3.82711H157.92V1.16555H164.558Z" fill="white"/>
+<path d="M147.088 16.8392C150.574 16.8392 151.419 13.5448 151.419 12.2889V1.16555H154.085V12.2889C154.085 15.262 152.265 19.4022 147.088 19.4022C141.911 19.4022 140.117 15.262 140.117 12.2889V1.16555H142.731V12.2889C142.731 13.5448 143.602 16.8392 147.088 16.8392Z" fill="white"/>
+<path d="M132.881 19.3036H130.121V5.10861H132.881V19.3036Z" fill="white"/>
+<path d="M137.613 3.92569V1.16555H125.586V3.92569H137.613Z" fill="white"/>
+<path d="M123.714 3.24157L122.578 5.47137C121.604 4.34365 119.656 3.24157 117.657 3.24157C112.249 3.24157 111.455 8.39318 111.455 10.1104C111.455 11.8276 112.249 16.9536 117.657 16.9536C119.733 16.9536 121.578 15.8515 122.732 14.8006L123.714 17.1349C122.099 18.7496 120.579 19.3371 117.657 19.3371C110.814 19.3371 108.789 13.9549 108.789 10.1104C108.789 6.36842 110.814 0.90925 117.657 0.90925C120.733 0.90925 122.124 1.47311 123.714 3.24157Z" fill="white"/>
+<path d="M99.0694 0.77124L90.4932 19.1065H93.2533L99.0694 6.48868L104.787 19.1065H107.646L99.0694 0.77124Z" fill="white"/>
+<path d="M80.4384 19.3036V8.85451H89.5075V11.6147H83.1986V19.3036H80.4384Z" fill="white"/>
+<path d="M80.4384 3.92569V1.16555H90.8876V3.92569H80.4384Z" fill="white"/>
+<path d="M67.6235 3.92569V1.16555H78.0726V3.92569H67.6235Z" fill="white"/>
+<path d="M67.6235 11.6147V8.85451H76.6925V11.6147H67.6235Z" fill="white"/>
+<path d="M67.6235 19.3036V16.5435H78.0726V19.3036H67.6235Z" fill="white"/>
+<path d="M49.4854 6.48868V19.1065H51.8513V8.85451L49.4854 6.48868Z" fill="white"/>
+<path d="M49.4854 0.77124V4.51715L64.2719 19.5008V1.16555H61.7089V13.2905L49.4854 0.77124Z" fill="white"/>
+<path d="M44.5566 19.1065H41.9936V1.16555H44.5566V19.1065Z" fill="white"/>
+<path d="M30.4601 0.77124L21.884 19.1065H24.6441L30.4601 6.48868L36.1776 19.1065H39.0363L30.4601 0.77124Z" fill="white"/>
+<path d="M2.95729 0.771243L2.36584 4.91146L9.95623 19.5008L17.5466 4.91146L16.9552 0.771243L9.95623 14.1776L2.95729 0.771243Z" fill="white"/>
+<path d="M0 19.1065H2.56299L3.84448 10.7275L1.87295 7.27729L0 19.1065Z" fill="white"/>
+<path d="M20.011 19.1065H17.448L16.1665 10.7275L18.1381 7.27729L20.011 19.1065Z" fill="white"/>
+<path d="M123.139 26.4011C123.553 26.4011 123.948 26.4691 124.325 26.605C124.702 26.7409 125.038 26.9385 125.335 27.1978C125.631 27.4572 125.863 27.7753 126.03 28.152L125.224 28.4485C124.989 28.01 124.69 27.692 124.325 27.4943C123.967 27.2967 123.575 27.1978 123.149 27.1978C122.716 27.1978 122.321 27.3028 121.963 27.5128C121.605 27.7228 121.32 28.0162 121.11 28.3929C120.907 28.7634 120.805 29.202 120.805 29.7084C120.805 30.2087 120.907 30.6473 121.11 31.024C121.314 31.4007 121.592 31.6941 121.944 31.9041C122.302 32.1141 122.701 32.219 123.139 32.2191C123.454 32.2191 123.751 32.1635 124.029 32.0523C124.307 31.9412 124.547 31.7867 124.751 31.5891C124.961 31.3915 125.125 31.1567 125.242 30.885V30.7385H126.178V30.9312C126.03 31.3265 125.807 31.6817 125.511 31.9967C125.221 32.3117 124.872 32.5617 124.464 32.747C124.063 32.9261 123.621 33.0158 123.139 33.0158C122.682 33.0158 122.253 32.9355 121.852 32.7749C121.456 32.6143 121.11 32.3888 120.814 32.0985C120.518 31.8021 120.286 31.4532 120.119 31.0517C119.952 30.6441 119.869 30.1963 119.869 29.7084C119.869 29.2267 119.952 28.7851 120.119 28.3836C120.286 27.976 120.518 27.624 120.814 27.3276C121.11 27.0311 121.456 26.8026 121.852 26.642C122.253 26.4814 122.682 26.4011 123.139 26.4011Z" fill="white"/>
+<path d="M126.178 30.3442H122.826V29.3584H126.178V30.3442Z" fill="white"/>
+<path d="M111.194 28.3385V33.0491H112.078V29.2217L111.194 28.3385Z" fill="white"/>
+<path d="M111.194 26.204V27.6024L116.715 33.1963V26.3512H115.758V30.8778L111.194 26.204Z" fill="white"/>
+<path d="M107.646 33.1043H106.66V26.4011H107.646V33.1043Z" fill="white"/>
+<path d="M97.2888 26.4011L97.0732 27.9104L99.8401 33.2286L102.607 27.9104L102.391 26.4011L99.8401 31.2882L97.2888 26.4011Z" fill="white"/>
+<path d="M96.2107 33.0849H97.145L97.6122 30.0305L96.8935 28.7728L96.2107 33.0849Z" fill="white"/>
+<path d="M103.505 33.0849H102.571L102.104 30.0305L102.823 28.7728L103.505 33.0849Z" fill="white"/>
+<path d="M90.5918 26.204L87.3388 33.1587H88.3858L90.5918 28.3727L92.7605 33.1587H93.8449L90.5918 26.204Z" fill="white"/>
+<path d="M82.6923 26.4011C84.3542 26.5467 84.8638 27.6699 84.8638 28.5122C84.8638 29.6041 84.1359 30.4776 83.2987 30.6596L84.973 33.0255H83.8811L82.2432 30.7688H81.1971V33.0255H80.2413V29.7861H82.7775C83.7901 29.7672 83.9175 28.9002 83.9175 28.5122C83.9175 28.0863 83.7355 27.4567 82.7397 27.3839H80.2413V26.4011H82.6923Z" fill="white"/>
+<path d="M73.5381 33.0485V29.1055H76.9604V30.147H74.5797V33.0485H73.5381Z" fill="white"/>
+<path d="M73.5381 27.4427V26.4011H77.4812V27.4427H73.5381Z" fill="white"/>
+</svg>
+<span class="logo"><span>CFS Budget Builder</span></span></div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <a href="/mf_savings.html" style="padding:5px 14px;border-radius:6px;border:0.5px solid #444;color:#aaa;font-size:11px;text-decoration:none">Soft Cost Savings</a>
+    <a href="/mf_trades.html" style="padding:5px 14px;border-radius:6px;border:0.5px solid #444;color:#aaa;font-size:11px;text-decoration:none">Trade Savings</a>
+    <a href="/mf_podium.html" style="padding:5px 14px;border-radius:6px;border:0.5px solid #444;color:#aaa;font-size:11px;text-decoration:none">Podium Analysis</a>
+    <a href="/mf_summary.html" style="padding:5px 14px;border-radius:6px;border:0.5px solid #444;color:#aaa;font-size:11px;text-decoration:none">System Summary</a>
+    <a href="/mf_caprate.html" style="padding:5px 14px;border-radius:6px;border:0.5px solid #444;color:#aaa;font-size:11px;text-decoration:none">Developer Pro Forma</a>
+    <div class="hright" style="margin-left:8px">Mainefactured Framing &nbsp;·&nbsp; Preliminary Estimates Only</div>
+  </div>
+</header>
+
+<div class="main">
+<!-- LEFT: INPUTS -->
+<div class="card">
+  <div class="sh">
+    <span>Project Info</span>
+    <button class="tog" onclick="confirmNew()">+ New Budget</button>
+  </div>
+  <div class="g2">
+    <div><label>Project Name *</label><input id="projName" placeholder="e.g. Riverside Flats" oninput="calc();save()"></div>
+    <div><label>Client / Developer</label><input id="client" placeholder="Developer name" oninput="save()"></div>
+  </div>
+  <div class="g2">
+    <div><label>Contact Name</label><input id="cname" placeholder="Primary contact" oninput="save()"></div>
+    <div><label>Contact Email</label><input id="cemail" type="email" placeholder="email@company.com" oninput="save()"></div>
+  </div>
+  <div class="g3" style="margin-top:12px">
+    <div><label>Project Type</label>
+      <select id="ptype" onchange="save()">
+        <option>Multifamily</option><option>Hospitality</option><option>Senior / Assisted Living</option>
+        <option>Student Housing</option><option>Workforce Housing</option><option>Custom</option>
+      </select>
+    </div>
+    <div><label># Buildings</label><div class="sfx"><input id="nBldgs" type="number" value="1" min="1" oninput="calc();save()"><em>bldgs</em></div></div>
+    <div><label>Building Label</label><input id="bLabel" placeholder="Unit A, Bldg 1…" oninput="save()"></div>
+  </div>
+
+  <div class="sh"><span>Building Dimensions</span></div>
+  <div class="g4">
+    <div><label>Length</label><div class="sfx"><input id="bL" type="number" value="200" oninput="calc();save()"><em>ft</em></div></div>
+    <div><label>Width</label><div class="sfx"><input id="bW" type="number" value="60" oninput="calc();save()"><em>ft</em></div></div>
+    <div><label>Total Height</label><div class="sfx"><input id="bH" type="number" value="40" oninput="calc();save()"><em>ft</em></div></div>
+    <div><label># Floors</label><input id="bF" type="number" value="4" oninput="calc();save()"></div>
+  </div>
+  <div class="g2" style="margin-top:12px">
+    <div><label>Opening Deduct</label><div class="sfx"><input id="oPct" type="number" value="10" oninput="calc();save()"><em>%</em></div></div>
+  </div>
+  <div class="dimbox">
+    <div><div class="dv" id="dFloor">—</div><div class="dl">Floor Area</div></div>
+    <div><div class="dv" id="dAvg">—</div><div class="dl">Avg Ht/Floor</div></div>
+    <div><div class="dv" id="dGross">—</div><div class="dl">Gross Wall</div></div>
+    <div><div class="dv" id="dNet">—</div><div class="dl">Net Sheathing</div></div>
+  </div>
+  <div style="margin-top:8px">
+    <button class="tog" id="btnOvr" onclick="toggleOvr()">Manual SF Override</button>
+    <button class="tog" id="btnShMan" onclick="toggleShMan()">Manual Sheathing SF</button>
+  </div>
+  <div id="ovrRow" style="display:none;margin-top:10px"><label>Manual Total SF</label><div class="sfx"><input id="manSF" type="number" value="0" oninput="calc();save()"><em>SF</em></div></div>
+  <div id="shManRow" style="display:none;margin-top:10px"><label>Manual Sheathing SF</label><div class="sfx"><input id="shManSF" type="number" value="0" oninput="calc();save()"><em>SF</em></div></div>
+
+  <div class="sh"><span>CFS Steel</span></div>
+  <div class="g3">
+    <div><label>Lbs / SF</label><div class="sfx"><input id="lbs" type="number" value="10.5" step=".1" oninput="calc();save()"><em>lbs</em></div></div>
+    <div><label>Price / Lb</label><div class="pfx"><em>$</em><input id="sprice" type="number" value="0.75" step=".01" oninput="calc();save()"></div></div>
+    <div><label>Est. Tonnage</label><div id="tons" style="height:34px;display:flex;align-items:center;font-weight:600;color:#2D9CDB;font-size:15px">—</div></div>
+  </div>
+
+  <div class="sh"><span>Decking & Sheathing</span></div>
+  <div class="g2">
+    <div><label>Deck Type</label>
+      <select id="dkType" onchange="save()">
+        <option>1.5" Composite Deck</option><option>2" Composite Deck</option><option>3" Composite Deck</option>
+        <option>Plywood Subfloor</option><option>Custom</option>
+      </select>
+    </div>
+    <div><label>Deck Cost / SF</label><div class="pfx"><em>$</em><input id="dkCost" type="number" value="3.5" step=".1" oninput="calc();save()"></div></div>
+    <div><label>Sheath Type</label>
+      <select id="shType" onchange="save()">
+        <option>7/16" OSB</option><option>1/2" OSB</option><option>5/8" OSB</option>
+        <option>DensGlass / Glass Mat</option><option>ZIP System</option><option>Custom</option>
+      </select>
+    </div>
+    <div><label>Sheath Cost / SF</label><div class="pfx"><em>$</em><input id="shCost" type="number" value="1.25" step=".1" oninput="calc();save()"></div></div>
+  </div>
+
+  <div class="sh"><span>Other Costs</span></div>
+  <div class="g4">
+    <div><label>Shipping (lump)</label><div class="pfx"><em>$</em><input id="ship" type="number" value="75000" oninput="calc();save()"></div></div>
+    <div><label>Equipment / SF</label><div class="pfx"><em>$</em><input id="equip" type="number" value="1" step=".1" oninput="calc();save()"></div></div>
+    <div><label>Misc / SF</label><div class="pfx"><em>$</em><input id="misc" type="number" value="1" step=".1" oninput="calc();save()"></div></div>
+    <div><label>Engineering / SF</label><div class="pfx"><em>$</em><input id="eng" type="number" value="1.1" step=".1" oninput="calc();save()"></div></div>
+  </div>
+
+  <div class="sh"><span>Fabrication & Installation</span></div>
+  <div class="g4">
+    <div><label>Fab Low / SF</label><div class="pfx"><em>$</em><input id="fabL" type="number" value="3" step=".5" oninput="calc();save()"></div></div>
+    <div><label>Fab High / SF</label><div class="pfx"><em>$</em><input id="fabH" type="number" value="5" step=".5" oninput="calc();save()"></div></div>
+    <div><label>Install Low / SF</label><div class="pfx"><em>$</em><input id="instL" type="number" value="5" step=".5" oninput="calc();save()"></div></div>
+    <div><label>Install High / SF</label><div class="pfx"><em>$</em><input id="instH" type="number" value="7" step=".5" oninput="calc();save()"></div></div>
+  </div>
+  <div style="margin-top:12px">
+    <label>Regional Labor Adjustment</label>
+    <select id="labor" onchange="calc();save()">
+      <option value="0">Baseline — AZ, TX, NM, NV, TN, SC, GA, FL (0%)</option>
+      <option value="12">Low — UT, CO, VA, OH, MI, IN, WI, PA (+12%)</option>
+      <option value="22">Medium — OR, IL, MN, MD, NJ, CT (+22%)</option>
+      <option value="32">High — WA, MA, NY Upstate (+32%)</option>
+      <option value="40">Very High — CA (+40%)</option>
+      <option value="45">Very High — NYC (+45%)</option>
+      <option value="55">Very High — HI (+55%)</option>
+    </select>
+    <div id="laborNote" style="font-size:10px;color:#888;margin-top:3px;display:none"></div>
+  </div>
+
+  <div class="sh"><span>Markup</span></div>
+  <div style="max-width:150px"><label>Markup %</label><div class="sfx"><input id="mkup" type="number" value="25" oninput="calc();save()"><em>%</em></div></div>
+
+  <div class="sh"><span>Notes</span></div>
+  <textarea id="notes" placeholder="Site conditions, design stage, exclusions, steel market notes…" oninput="save()"></textarea>
+</div>
+
+<!-- RIGHT: SUMMARY PANEL -->
+<div class="right card">
+  <div class="rhead">
+    <div style="display:flex;justify-content:space-between;align-items:baseline">
+      
+      <span style="font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.08em">Budget Estimate</span>
+    </div>
+    <div id="rName" style="font-size:15px;font-weight:600;margin-top:4px">Untitled Project</div>
+    <div id="rClient" style="font-size:11px;color:#888;margin-top:2px"></div>
+    <div id="rTags" style="margin-top:6px"></div>
+  </div>
+
+  <div class="li lih"><span>Line Item</span><span class="tr">Low</span><span class="tr">High</span></div>
+  <div class="li"><span>CFS Steel</span><span class="tr" id="rSteel">—</span><span class="tr" id="rSteelH">—</span></div>
+  <div class="li"><span>Decking</span><span class="tr" id="rDeck">—</span><span class="tr" id="rDeckH">—</span></div>
+  <div class="li"><span>Sheathing</span><span class="tr" id="rSheath">—</span><span class="tr" id="rSheathH">—</span></div>
+  <div class="li"><span>Shipping</span><span class="tr" id="rShip">—</span><span class="tr" id="rShipH">—</span></div>
+  <div class="li"><span>Equipment</span><span class="tr" id="rEquip">—</span><span class="tr" id="rEquipH">—</span></div>
+  <div class="li"><span>Misc</span><span class="tr" id="rMisc">—</span><span class="tr" id="rMiscH">—</span></div>
+  <div class="li"><span>Engineering</span><span class="tr" id="rEng">—</span><span class="tr" id="rEngH">—</span></div>
+  <div class="li"><span>Fab & Assembly</span><span class="tr" id="rFabL">—</span><span class="tr" id="rFabH">—</span></div>
+  <div class="li"><span>Installation</span><span class="tr" id="rInstL">—</span><span class="tr" id="rInstH">—</span></div>
+  <div class="li" id="rLaborRow" style="display:none;color:#aaa;font-style:italic">
+    <span id="rLaborLbl">Labor Adj.</span><span class="tr">incl.</span><span class="tr">incl.</span>
+  </div>
+
+  <div class="tblock">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:5px">
+      <span style="font-size:10px;color:#aaa">Base Total</span>
+      <span style="font-weight:600;text-align:right" id="rBase">—</span>
+      <span style="font-weight:600;text-align:right" id="rBaseH">—</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">
+      <span style="font-size:10px;color:#aaa">$/SF</span>
+      <span style="font-size:11px;text-align:right;color:#aaa" id="rBaseSF">—</span>
+      <span style="font-size:11px;text-align:right;color:#aaa" id="rBaseSFH">—</span>
+    </div>
+  </div>
+
+  <div class="mblock">
+    <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">With <span id="rMkPct">25</span>% Markup</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div>
+        <div style="font-size:10px;color:#888">Low</div>
+        <div style="font-size:19px;font-weight:700;color:#111" id="rML">—</div>
+        <div style="font-size:11px;color:#2D9CDB" id="rMLsf">—</div>
+      </div>
+      <div>
+        <div style="font-size:10px;color:#888">High</div>
+        <div style="font-size:19px;font-weight:700;color:#2D9CDB" id="rMH">—</div>
+        <div style="font-size:11px;color:#2D9CDB" id="rMHsf">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pblock" id="projBlock">
+    <div style="font-size:10px;color:#2D9CDB;text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin-bottom:6px" id="projLbl">Project Total</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div><div style="font-size:10px;color:#888">Total Low</div><div style="font-size:16px;font-weight:700;color:#111" id="rPL">—</div></div>
+      <div><div style="font-size:10px;color:#888">Total High</div><div style="font-size:16px;font-weight:700;color:#2D9CDB" id="rPH">—</div></div>
+    </div>
+  </div>
+
+  <button class="sbtn sn" onclick="doSaveNotion()">↑ Save to Notion</button>
+  <button class="sbtn sp" onclick="doPrint()" style="margin-top:8px">⎙ Print / PDF</button>
+  <button class="sbtn sp" onclick="doProposal()" style="margin-top:6px;border-color:#2D9CDB!important;color:#2D9CDB">📄 Client Proposal</button>
+  <button class="sbtn snew" onclick="confirmNew()">+ New Budget</button>
+
+  <div class="msg msok" id="msgOk"></div>
+  <div class="msg msw" id="msgW"></div>
+  <div class="msg mse" id="msgE"></div>
+
+  <div class="foot">
+    Mainefactured Framing<br>
+    Preliminary — Subject to Change<br>
+    <span style="font-size:10px;color:#bbb">© 2026 Mainefactured Framing / Prefab Consulting LLC. All rights reserved. Unauthorized reproduction or distribution prohibited.</span>
+  </div>
+</div>
+</div>
+
+<!-- CONFIRM OVERLAY -->
+<div id="overlay">
+  <div class="obox">
+    <h3>Start a new budget?</h3>
+    <p>Project info and dimensions will be cleared.<br>Cost defaults are kept.</p>
+    <div class="orow">
+      <button class="ocancel" onclick="cancelNew()">Cancel</button>
+      <button class="oconfirm" onclick="doNew()">Clear & Start New</button>
+    </div>
+  <div style="text-align:center;margin:10px 0 4px">
+    <button onclick="sendToSummary()" style="height:38px;padding:0 24px;background:#F97316;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.03em">
+      ▶ Send to System Summary
+    </button>
+  </div>
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
+// Replace with your Azure Function URL after deployment
+const AZURE_FUNCTION_URL = 'https://ghv-budget-api-g0hagac9ccbqcbcu.centralus-01.azurewebsites.net/api/SaveBudget?code=d8dDntK2ew-3yB8-C-WRiSLbuuLrjv0p_X3M1hhGcm0xAzFuBCtB8w==';
+const STORAGE_KEY = 'ghv-budget-v6';
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let useOvr = false, useShMan = false;
+const dateStr = () => new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'});
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+const gv = id => parseFloat(document.getElementById(id).value) || 0;
+const sv = id => document.getElementById(id).value || '';
+const fmt = n => '$' + Math.round(n).toLocaleString();
+const fmtSF = n => Math.round(n).toLocaleString() + ' SF';
+const fmtPSF = n => isFinite(n) && n > 0 ? '$' + n.toFixed(2) + '/SF' : '—';
+const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+
+function toast(msg, err) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = err ? 'err' : '';
+  t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 3500);
+}
+
+function showMsg(type, msg) {
+  ['Ok','W','E'].forEach(t => document.getElementById('msg'+t).style.display = 'none');
+  const el = document.getElementById('msg'+type);
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 4000);
+}
+
+// ─── TOGGLES ──────────────────────────────────────────────────────────────────
+function toggleOvr() {
+  useOvr = !useOvr;
+  document.getElementById('ovrRow').style.display = useOvr ? 'block' : 'none';
+  document.getElementById('btnOvr').className = 'tog' + (useOvr ? ' on' : '');
+  calc();
+}
+function toggleShMan() {
+  useShMan = !useShMan;
+  document.getElementById('shManRow').style.display = useShMan ? 'block' : 'none';
+  document.getElementById('btnShMan').className = 'tog' + (useShMan ? ' on' : '');
+  calc();
+}
+function confirmNew() { document.getElementById('overlay').className = 'show'; }
+function cancelNew()  { document.getElementById('overlay').className = ''; }
+function doNew() {
+  cancelNew();
+  ['projName','client','cname','cemail','bLabel','notes'].forEach(id => document.getElementById(id).value = '');
+  ['nBldgs','bL','bW','bH','bF','oPct','manSF','shManSF'].forEach((id,i) => {
+    document.getElementById(id).value = [1,200,60,40,4,10,0,0][i];
+  });
+  useOvr = useShMan = false;
+  document.getElementById('ovrRow').style.display = 'none';
+  document.getElementById('shManRow').style.display = 'none';
+  document.getElementById('btnOvr').className = 'tog';
+  document.getElementById('btnShMan').className = 'tog';
+  ['msgOk','msgW','msgE'].forEach(id => document.getElementById(id).style.display = 'none');
+  calc(); save();
+}
+
+// ─── CALCULATION ──────────────────────────────────────────────────────────────
+function calc() {
+  const L=gv('bL'), W=gv('bW'), H=gv('bH'), F=Math.max(1,gv('bF')), op=gv('oPct');
+  const flSF = L*W*F, gw = 2*(L+W)*H, nw = gw*(1-op/100);
+  const tSF  = useOvr ? (gv('manSF') || flSF) : flSF;
+  const shSF = useShMan ? gv('shManSF') : nw;
+  const la = gv('labor'), lm = 1 + la/100;
+  const stC  = tSF * gv('lbs') * gv('sprice');
+  const dkC  = tSF * gv('dkCost');
+  const shC  = shSF * gv('shCost');
+  const shpC = gv('ship');
+  const eqC  = tSF * gv('equip');
+  const miC  = tSF * gv('misc');
+  const enC  = tSF * gv('eng');
+  const fL   = tSF * gv('fabL') * lm;
+  const fH   = tSF * gv('fabH') * lm;
+  const iL   = tSF * gv('instL') * lm;
+  const iH   = tSF * gv('instH') * lm;
+  const totL = stC+dkC+shC+shpC+eqC+miC+enC+fL+iL;
+  const totH = stC+dkC+shC+shpC+eqC+miC+enC+fH+iH;
+  const mk = gv('mkup');
+  const mL = totL*(1+mk/100), mH = totH*(1+mk/100);
+  const nb = Math.max(1, Math.round(gv('nBldgs')));
+
+  // dims
+  set('dFloor', fmtSF(flSF)); set('dAvg', (H/F).toFixed(1)+' ft');
+  set('dGross', fmtSF(gw));   set('dNet',  fmtSF(nw));
+  set('tons', (tSF*gv('lbs')/2000).toFixed(1)+' tons');
+
+  // summary header
+  set('rName', sv('projName') || 'Untitled Project');
+  set('rClient', sv('client'));
+  set('rMkPct', mk);
+  document.getElementById('rTags').innerHTML =
+    '<span class="rtag">'+sv('ptype')+'</span>'+
+    '<span class="rtag">'+fmtSF(tSF)+'</span>'+
+    '<span class="rtag">'+Math.round(F)+' fl</span>';
+
+  // line items
+  set('rSteel',fmt(stC)); set('rSteelH',fmt(stC));
+  set('rDeck', fmt(dkC)); set('rDeckH', fmt(dkC));
+  set('rSheath',fmt(shC)); set('rSheathH',fmt(shC));
+  set('rShip', fmt(shpC)); set('rShipH', fmt(shpC));
+  set('rEquip',fmt(eqC)); set('rEquipH',fmt(eqC));
+  set('rMisc', fmt(miC)); set('rMiscH', fmt(miC));
+  set('rEng',  fmt(enC)); set('rEngH',  fmt(enC));
+  set('rFabL', fmt(fL));  set('rFabH',  fmt(fH));
+  set('rInstL',fmt(iL));  set('rInstH', fmt(iH));
+
+  const lr = document.getElementById('rLaborRow');
+  if (la > 0) {
+    lr.style.display = 'grid';
+    set('rLaborLbl', 'Labor Adj. (+'+la+'%)');
+    document.getElementById('laborNote').textContent = '+'+la+'% on Fab & Install only';
+    document.getElementById('laborNote').style.display = 'block';
+  } else {
+    lr.style.display = 'none';
+    document.getElementById('laborNote').style.display = 'none';
+  }
+
+  set('rBase', fmt(totL)); set('rBaseH', fmt(totH));
+  set('rBaseSF', fmtPSF(totL/tSF)); set('rBaseSFH', fmtPSF(totH/tSF));
+  set('rML', fmt(mL)); set('rMH', fmt(mH));
+  set('rMLsf', fmtPSF(mL/tSF)); set('rMHsf', fmtPSF(mH/tSF));
+
+  const pb = document.getElementById('projBlock');
+  if (nb > 1) {
+    pb.style.display = 'block';
+    set('projLbl', 'Project Total — '+nb+' Buildings'+(sv('bLabel') ? ' · '+sv('bLabel') : ''));
+    set('rPL', fmt(mL*nb)); set('rPH', fmt(mH*nb));
+  } else {
+    pb.style.display = 'none';
+  }
+
+  // store for save/print
+  window._c = {L,W,H,F,op,tSF,shSF,gw,nw,stC,dkC,shC,shpC,eqC,miC,enC,fL,fH,iL,iH,totL,totH,mL,mH,mk,nb,la,lm};
+  pisSync();
+}
+
+// ─── LOCAL STORAGE ────────────────────────────────────────────────────────────
+const FIELDS = ['projName','client','cname','cemail','ptype','nBldgs','bLabel','bL','bW','bH','bF','oPct','manSF','shManSF','lbs','sprice','dkType','dkCost','shType','shCost','ship','equip','misc','eng','fabL','fabH','instL','instH','labor','mkup','notes'];
+
+function save() {
+  try {
+    const d = {};
+    FIELDS.forEach(f => d[f] = document.getElementById(f).value);
+    d.useOvr = useOvr; d.useShMan = useShMan;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(d));
+  } catch(e){}
+}
+
+function restore() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    FIELDS.forEach(f => { if (document.getElementById(f) && d[f] !== undefined) document.getElementById(f).value = d[f]; });
+    if (d.useOvr)   { useOvr=true;   document.getElementById('ovrRow').style.display='block';   document.getElementById('btnOvr').className='tog on'; }
+    if (d.useShMan) { useShMan=true; document.getElementById('shManRow').style.display='block'; document.getElementById('btnShMan').className='tog on'; }
+  } catch(e){}
+}
+
+// ─── BUILD PAYLOAD ────────────────────────────────────────────────────────────
+function buildPayload() {
+  const c = window._c;
+  if (!c) return null;
+  const laLabel = document.getElementById('labor').options[document.getElementById('labor').selectedIndex].text;
+  return {
+    projectName:    sv('projName'),
+    client:         sv('client') || 'N/A',
+    contactName:    sv('cname'),
+    contactEmail:   sv('cemail'),
+    projectType:    sv('ptype'),
+    totalSF:        Math.round(c.tSF),
+    floors:         c.F,
+    lengthFt:       c.L,
+    widthFt:        c.W,
+    totalHeight:    c.H,
+    avgFloorHeight: +(c.H/c.F).toFixed(1),
+    grossWall:      Math.round(c.gw),
+    openingDeduct:  c.op,
+    netSheathing:   Math.round(c.shSF),
+    numBuildings:   c.nb,
+    buildingLabel:  sv('bLabel'),
+    steelLbsPerSF:  gv('lbs'),
+    steelPricePerLb:gv('sprice'),
+    steelCost:      Math.round(c.stC),
+    deckType:       sv('dkType'),
+    deckCostPerSF:  gv('dkCost'),
+    deckCost:       Math.round(c.dkC),
+    sheathType:     sv('shType'),
+    sheathCostPerSF:gv('shCost'),
+    sheathCost:     Math.round(c.shC),
+    shipping:       Math.round(c.shpC),
+    equipPerSF:     gv('equip'),
+    equipCost:      Math.round(c.eqC),
+    miscPerSF:      gv('misc'),
+    miscCost:       Math.round(c.miC),
+    engPerSF:       gv('eng'),
+    engCost:        Math.round(c.enC),
+    fabLowPerSF:    gv('fabL'),
+    fabHighPerSF:   gv('fabH'),
+    fabLow:         Math.round(c.fL),
+    fabHigh:        Math.round(c.fH),
+    instLowPerSF:   gv('instL'),
+    instHighPerSF:  gv('instH'),
+    instLow:        Math.round(c.iL),
+    instHigh:       Math.round(c.iH),
+    laborAdj:       c.la,
+    laborLabel:     laLabel,
+    markup:         c.mk,
+    baseLow:        Math.round(c.totL),
+    baseHigh:       Math.round(c.totH),
+    totalLow:       Math.round(c.mL),
+    totalHigh:      Math.round(c.mH),
+    lowPerSF:       +(c.mL/c.tSF).toFixed(2),
+    highPerSF:      +(c.mH/c.tSF).toFixed(2),
+    projectTotalLow:  c.nb > 1 ? Math.round(c.mL*c.nb) : null,
+    projectTotalHigh: c.nb > 1 ? Math.round(c.mH*c.nb) : null,
+    notes:          sv('notes') || 'None',
+    date:           dateStr()
+  };
+}
+
+// ─── SAVE TO NOTION ───────────────────────────────────────────────────────────
+async function doSaveNotion() {
+  const nm = sv('projName');
+  if (!nm.trim()) { showMsg('E', 'Please enter a Project Name first.'); return; }
+  const payload = buildPayload();
+  if (!payload) return;
+
+  const btn = document.querySelector('.sn');
+  btn.textContent = '↑ Saving…';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(AZURE_FUNCTION_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    showMsg('Ok', '✓ Saved to Notion — ' + nm);
+    toast('Saved: ' + nm);
+    console.log('Notion save response:', data);
+  } catch(err) {
+    console.error(err);
+    showMsg('E', '✗ Save failed — check console or Azure Function URL.');
+    toast('Save failed: ' + err.message, true);
+  } finally {
+    btn.textContent = '↑ Save to Notion';
+    btn.disabled = false;
+  }
+}
+
+// ─── PRINT / PDF ──────────────────────────────────────────────────────────────
+function doPrint() {
+  const c = window._c;
+  if (!c) { toast('Fill in the budget first.', true); return; }
+  const la = gv('labor'), nb = c.nb;
+  const dateStr2 = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+
+  // Populate print doc
+  set('pName', sv('projName') || 'Untitled Project');
+  set('pClient', sv('client'));
+  set('pYear', '© ' + new Date().getFullYear() + ' Mainefactured Framing / Prefab Consulting LLC — All rights reserved. Unauthorized reproduction prohibited.');
+  document.getElementById('pMeta').innerHTML =
+    '<span class="pbadge">'+sv('ptype')+'</span>'+
+    '<span class="pbadge">'+fmtSF(c.tSF)+'</span>'+
+    '<span class="pbadge">'+Math.round(c.F)+' Floors</span>'+
+    '<span class="pbadge">'+dateStr2+'</span>';
+
+  document.getElementById('pDims').innerHTML =
+    '<div><div class="pdval">'+c.L+' × '+c.W+' ft</div><div class="pdlbl">Footprint</div></div>'+
+    '<div><div class="pdval">'+c.H+' ft</div><div class="pdlbl">Total Height</div></div>'+
+    '<div><div class="pdval">'+Math.round(c.gw).toLocaleString()+' SF</div><div class="pdlbl">Gross Wall</div></div>'+
+    '<div><div class="pdval">'+Math.round(c.shSF).toLocaleString()+' SF</div><div class="pdlbl">Net Sheathing</div></div>';
+
+  const rows = [
+    ['CFS Steel', fmt(c.stC), fmt(c.stC)],
+    ['Decking ('+sv('dkType')+')', fmt(c.dkC), fmt(c.dkC)],
+    ['Exterior Sheathing ('+sv('shType')+')', fmt(c.shC), fmt(c.shC)],
+    ['Shipping', fmt(c.shpC), fmt(c.shpC)],
+    ['Equipment', fmt(c.eqC), fmt(c.eqC)],
+    ['Misc', fmt(c.miC), fmt(c.miC)],
+    ['Engineering', fmt(c.enC), fmt(c.enC)],
+    ['Fabrication & Assembly', fmt(c.fL), fmt(c.fH)],
+    ['Installation', fmt(c.iL), fmt(c.iH)],
+  ];
+  if (la > 0) rows.push(['<em style="color:#999">Regional Labor Adj. ('+la+'%)</em>','<em style="color:#999">incl.</em>','<em style="color:#999">incl.</em>']);
+
+  document.getElementById('pRows').innerHTML = rows.map(r =>
+    '<tr><td>'+r[0]+'</td><td style="text-align:right">'+r[1]+'</td><td style="text-align:right">'+r[2]+'</td></tr>'
+  ).join('');
+
+  set('pTotLbl', 'Total (w/ '+c.mk+'% Markup)');
+  set('pTotL', fmt(c.mL)); set('pTotH', fmt(c.mH));
+  set('pBoxLbl', nb > 1 ? 'Per Building Budget Estimate' : 'Project Budget Estimate');
+  set('pML', fmt(c.mL)); set('pMH', fmt(c.mH));
+  set('pMLsf', fmtPSF(c.mL/c.tSF)); set('pMHsf', fmtPSF(c.mH/c.tSF));
+
+  document.getElementById('pProjBox').innerHTML = nb > 1
+    ? '<div class="pprojbox" style="max-width:380px;margin:.7rem auto 0"><div style="font-size:.65rem;color:#2D9CDB;text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:.4rem">Project Total — '+nb+' Buildings'+(sv('bLabel') ? ' · '+sv('bLabel') : '')+'</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem"><div><div style="font-size:.65rem;color:#888">Total Low</div><div style="font-size:1.1rem;font-weight:700">'+fmt(c.mL*nb)+'</div></div><div><div style="font-size:.65rem;color:#888">Total High</div><div style="font-size:1.1rem;font-weight:700;color:#2D9CDB">'+fmt(c.mH*nb)+'</div></div></div></div>'
+    : '';
+
+  window.print();
+}
+
+
+// ─── CLIENT PROPOSAL PRINT ────────────────────────────────────────────────────
+function doProposal() {
+  const c = window._c;
+  if (!c) { toast('Fill in the budget first.', true); return; }
+  const nm  = sv('projName') || 'Untitled Project';
+  const cl  = sv('client')  || '';
+  const cn  = sv('cname')   || '';
+  const nb  = c.nb;
+  const d2  = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  const laL = document.getElementById('labor').options[document.getElementById('labor').selectedIndex].text;
+
+  set('prName', nm);
+  set('prClient', cl ? cl + (cn ? '  ·  ' + cn : '') : cn);
+  set('prYear', '© ' + new Date().getFullYear() + ' Mainefactured Framing — Confidential');
+
+  document.getElementById('prMeta').innerHTML =
+    '<span class="pbadge">'+sv('ptype')+'</span>' +
+    '<span class="pbadge">'+fmtSF(c.tSF)+'</span>' +
+    '<span class="pbadge">'+Math.round(c.F)+' Floor'+(c.F!==1?'s':'')+'</span>' +
+    '<span class="pbadge">'+d2+'</span>';
+
+  const bStr = nb > 1
+    ? nb + ' buildings, each ' + c.L + ' × ' + c.W + ' ft, ' + Math.round(c.F) + '-story'
+    : 'a ' + c.L + ' × ' + c.W + ' ft, ' + Math.round(c.F) + '-story structure';
+  document.getElementById('prIntro').innerHTML =
+    'Mainefactured Framing has prepared this preliminary budget proposal for the <strong>' + nm + '</strong> project' +
+    (cl ? ' on behalf of <strong>' + cl + '</strong>' : '') + '. ' +
+    'The project consists of ' + bStr + ', totaling ' + c.tSF.toLocaleString() +
+    ' SF of cold-formed steel (CFS) framing utilizing a prefabricated panelized system. ' +
+    'This estimate reflects design-stage parameters and is intended to support budget planning and feasibility evaluation.';
+
+  document.getElementById('prDims').innerHTML =
+    '<div><div class="pdval">'+c.L+' × '+c.W+' ft</div><div class="pdlbl">Footprint</div></div>' +
+    '<div><div class="pdval">'+c.H+' ft</div><div class="pdlbl">Total Height</div></div>' +
+    '<div><div class="pdval">'+Math.round(c.gw).toLocaleString()+' SF</div><div class="pdlbl">Gross Wall Area</div></div>' +
+    '<div><div class="pdval">'+Math.round(c.shSF).toLocaleString()+' SF</div><div class="pdlbl">Net Sheathing SF</div></div>';
+
+  const items = [
+    'Prefabricated cold-formed steel (CFS) structural framing system',
+    'Factory-fabricated wall, floor, and roof panel assemblies',
+    'CFS steel material, fabrication, and assembly',
+    sv('dkType') + ' decking system',
+    sv('shType') + ' exterior sheathing',
+    'Shipping and logistics to project site',
+    'Engineering coordination support',
+  ];
+  if (c.iL > 0) items.push('Field installation of prefabricated CFS panel assemblies');
+  if (c.la > 0) items.push('Regional labor adjustment applied — ' + laL);
+  document.getElementById('prScope').innerHTML = items.map(i => '<li>' + i + '</li>').join('');
+
+  set('prBoxLbl', nb > 1 ? 'Per Building Budget Estimate' : 'Project Budget Estimate');
+  set('prML', fmt(c.mL)); set('prMH', fmt(c.mH));
+  set('prMLsf', fmtPSF(c.mL/c.tSF)); set('prMHsf', fmtPSF(c.mH/c.tSF));
+
+  document.getElementById('prProjBox').innerHTML = nb > 1
+    ? '<div class="pprojbox"><div class="pprojlbl">Project Total — '+nb+' Buildings'+(sv('bLabel')?' · '+sv('bLabel'):'')+'</div><div class="pprojgrid"><div><div class="ptotlbl2">Total Preliminary Low</div><div class="pprojval">'+fmt(c.mL*nb)+'</div></div><div><div class="ptotlbl2">Total Preliminary High</div><div class="pprojval" style="color:#2D9CDB">'+fmt(c.mH*nb)+'</div></div></div></div>'
+    : '';
+
+  document.getElementById('prSigClient').innerHTML = (cl||'Client') + (cn?'<br>'+cn:'') + '<br>&nbsp;';
+
+  document.body.classList.add('printing-proposal');
+  window.print();
+  document.body.classList.remove('printing-proposal');
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+restore();
+calc();
+document.querySelectorAll('input,select,textarea').forEach(el => el.addEventListener('change', calc));
+// ── PIS Cross-Page Sync ───────────────────────────────────────────────────────
+function showSyncToast(msg) {
+  let t = document.getElementById('pisToast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'pisToast';
+    t.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#F97316;color:#fff;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.style.opacity = '0', 2500);
+}
+function pisSync() {
+  try {
+    const d = {_page:'budget', _ts:Date.now()};
+    const ids = ['projName','client','ptype','bL','bW','bH','bF','labor','mkup','nBldgs'];
+    ids.forEach(id => { const el = document.getElementById(id); if(el) d[id] = el.value; });
+    if (window._c) {
+      d.tSF  = window._c.tSF;
+      d.floors = window._c.F;
+      d.totL = window._c.totL;
+      d.totH = window._c.totH;
+      d.mL   = window._c.mL;
+      d.mH   = window._c.mH;
+    }
+    localStorage.setItem('mf-pis-budget', JSON.stringify(d));
+    showSyncToast('✓ Budget Builder saved to Summary');
+  } catch(e) {
+    console.warn('pisSync error:', e);
+  }
+}
+
+// ── Send to Summary ───────────────────────────────────────────────────────────
+function sendToSummary() {
+  const p = new URLSearchParams();
+  const sv = id => { const e=document.getElementById(id); return e ? e.value : ''; };
+  const gv = id => { const e=document.getElementById(id); return e ? (parseFloat(e.value)||0) : 0; };
+  // Common fields
+  p.set('projName', sv('projName') || sv('rName') || '');
+  p.set('client',   sv('client')   || '');
+  p.set('ptype',    sv('ptype')    || 'multifamily');
+  // Page-specific SF source
+  if (window._c && window._c.tSF) {
+    p.set('sf', Math.round(window._c.tSF));
+    p.set('floors', Math.round(window._c.F || gv('floors') || 4));
+    p.set('labor', sv('labor') || '0');
+  } else {
+    p.set('sf',     gv('sf')     || 48000);
+    p.set('floors', gv('floors') || 4);
+    p.set('labor',  gv('laborAdj') || sv('laborAdj') || '0');
+  }
+  p.set('region', sv('region') || 'baseline');
+  p.set('years',  sv('years')  || '10');
+  p.set('from',   window.location.pathname.split('/').pop());
+  window.location.href = '/summary.html?' + p.toString();
+}
+
+// ── Password Gate ─────────────────────────────────────────────────────────────
+(function(){
+  const gate = document.getElementById('gate');
+  if(!gate) return;
+  gate.style.display = 'flex';
+  if(localStorage.getItem('mf_auth')==='1'){
+    gate.classList.remove('show');
+    gate.style.display = 'none';
+  } else {
+    document.body.style.overflow='hidden';
+    setTimeout(()=>{ const p=document.getElementById('pwInput'); if(p) p.focus(); },100);
+  }
+})();
+function checkPW(){
+  if(document.getElementById('pwInput').value==='MF2026'){
+    localStorage.setItem('mf_auth','1');
+    const gate=document.getElementById('gate');
+    gate.style.display='none';
+    document.body.style.overflow='';
+  } else {
+    document.getElementById('pwErr').style.display='block';
+    document.getElementById('pwInput').value='';
+    setTimeout(()=>document.getElementById('pwErr').style.display='none',3000);
+  }
+}
+
+// Auto-calculate on load so mf-pis- localStorage keys are always populated
+document.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('mf_auth') === '1') {
+    restore();
+    calc();
+  }
+});
+</script>
+</body>
+</html>

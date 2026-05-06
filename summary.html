@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GHV System Summary</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;background:#f5f5f5;color:#111;min-height:100vh}
+header{background:#111;padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:22px;font-weight:700;color:#3DB832}
+.logo span{color:#fff;font-size:12px;font-weight:400;margin-left:10px;opacity:.6;text-transform:uppercase;letter-spacing:.1em}
+nav a{padding:5px 14px;border-radius:6px;border:0.5px solid #444;color:#aaa;font-size:11px;text-decoration:none;margin-left:6px}
+nav a.active{border-color:#3DB832;color:#3DB832}
+.main{max-width:1100px;margin:0 auto;padding:20px}
+
+/* Banner */
+.banner-row{display:flex;gap:8px;align-items:stretch;margin-bottom:14px}
+#pisBanner{flex:1;background:#f5f5f5;border:1px solid #e0e0e0;border-radius:8px;padding:10px 14px;font-size:11px;line-height:1.8;min-height:38px;transition:all .3s}
+.refresh-btn{white-space:nowrap;padding:0 18px;background:#111;color:#3DB832;border:1px solid #3DB832;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;letter-spacing:.04em}
+.refresh-btn:hover{background:#1a2a1a}
+
+/* Project header card */
+.proj-card{background:#fff;border-radius:10px;border:1px solid #e5e5e5;padding:16px 20px;margin-bottom:14px;display:flex;gap:20px;align-items:center}
+.proj-field{flex:1}
+.proj-field label{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#888;display:block;margin-bottom:4px}
+.proj-field input{width:100%;height:32px;padding:0 10px;font-size:13px;border:1px solid #ddd;border-radius:6px;outline:none}
+.proj-field input:focus{border-color:#3DB832}
+.proj-meta{font-size:11px;color:#aaa;text-align:right;white-space:nowrap}
+
+/* Hero */
+.hero{background:#111;border-radius:10px;padding:24px;text-align:center;margin-bottom:14px}
+.hero-label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#3DB832;margin-bottom:8px}
+.hero-val{font-size:46px;font-weight:700;color:#3DB832;line-height:1}
+.hero-sub{font-size:11px;color:#666;margin-top:8px}
+
+/* Three tool panels */
+.tool-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px}
+.tool-panel{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:18px;position:relative}
+.tool-panel.budget {border-top:3px solid #3DB832}
+.tool-panel.savings{border-top:3px solid #2589b0}
+.tool-panel.trades {border-top:3px solid #7b3db8}
+.tp-name{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:14px}
+.tp-lbl{font-size:9px;color:#aaa;margin-bottom:2px;margin-top:8px}
+.tp-lbl:first-of-type{margin-top:0}
+.tp-val{font-size:22px;font-weight:700;color:#3DB832}
+.tp-val.dark{color:#111;font-size:17px}
+.tp-val.blue{color:#2589b0}
+.tp-val.purple{color:#7b3db8}
+.tp-sub{font-size:10px;color:#aaa;margin-top:3px}
+.tp-empty{font-size:12px;color:#ccc;font-style:italic;margin-top:8px}
+.tp-link{position:absolute;top:12px;right:12px;font-size:10px;color:#3DB832;text-decoration:none;border:0.5px solid #c8e6c8;padding:2px 8px;border-radius:4px}
+.tp-link.blue{color:#2589b0;border-color:#b0d4f0}
+.tp-link.purple{color:#7b3db8;border-color:#d4b0f0}
+
+/* Breakdown row */
+.breakdown{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:18px;margin-bottom:14px}
+.bk-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#555;border-bottom:2px solid #3DB832;padding-bottom:4px;margin-bottom:14px}
+.bk-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.bk-label{font-size:11px;color:#555;width:160px;flex-shrink:0}
+.bk-bar-wrap{flex:1;background:#f0f0f0;border-radius:4px;height:16px;overflow:hidden}
+.bk-bar{height:100%;border-radius:4px;transition:width .5s ease}
+.bk-amount{font-size:11px;font-weight:600;color:#111;width:90px;text-align:right;flex-shrink:0}
+
+/* System Advantages */
+.adv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px}
+.adv-card{background:#fff;border:1px solid #e5e5e5;border-radius:8px;padding:16px;border-left:3px solid #3DB832}
+.adv-title{font-size:12px;font-weight:700;color:#111;margin-bottom:6px}
+.adv-body{font-size:11px;color:#555;line-height:1.65}
+
+/* Print button */
+.print-row{text-align:center;margin:8px 0 4px}
+.print-btn{height:38px;padding:0 32px;background:#3DB832;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;letter-spacing:.04em}
+.print-btn:hover{background:#35a82b}
+.disc{font-size:10px;color:#aaa;text-align:center;line-height:1.5;padding:0 20px}
+
+/* Print */
+#printDoc{display:none}
+@media print{
+  header,.main,#gate{display:none!important}
+  #printDoc{display:block!important}
+  body{background:#fff;margin:0;padding:0}
+  @page{size:letter;margin:0}
+}
+#printDoc{font-family:Arial,sans-serif;font-size:9pt;color:#111;padding:.42in .62in .3in .62in}
+#printDoc .ph{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #3DB832;padding-bottom:6px;margin-bottom:9px}
+#printDoc .plogo{font-size:20pt;font-weight:700;color:#3DB832}
+#printDoc .plogosub{font-size:6pt;color:#666;text-transform:uppercase;letter-spacing:.12em;margin-top:1px}
+#printDoc .pright{text-align:right}
+#printDoc .ptitle{font-size:11pt;font-weight:700}
+#printDoc .psub{font-size:7.5pt;color:#555;margin-top:2px}
+#printDoc .psec{font-size:7pt;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.1em;border-bottom:1.5px solid #3DB832;padding-bottom:2px;margin:7px 0 5px}
+#printDoc .ptoolrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:7px}
+#printDoc .ptool{border:1px solid #e0e0e0;border-radius:5px;padding:6px 8px}
+#printDoc .ptool-name{font-size:6.5pt;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:3px}
+#printDoc .ptool-lbl{font-size:6pt;color:#aaa;margin-bottom:1px;margin-top:5px}
+#printDoc .ptool-val{font-size:12pt;font-weight:700;color:#3DB832}
+#printDoc .ptool-sub{font-size:6.5pt;color:#aaa;margin-top:1px}
+#printDoc .pcombined{border:2px solid #3DB832;border-radius:5px;padding:6px 10px;text-align:center;margin-bottom:7px}
+#printDoc .pcomb-lbl{font-size:6.5pt;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:2px}
+#printDoc .pcomb-val{font-size:17pt;font-weight:700;color:#3DB832}
+#printDoc .pcomb-sub{font-size:6.5pt;color:#888;margin-top:2px}
+#printDoc .padvgrid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+#printDoc .padv{border:1px solid #e0e0e0;border-left:3px solid #3DB832;padding:5px 7px;border-radius:0 5px 5px 0}
+#printDoc .padv-title{font-size:7pt;font-weight:700;color:#111;margin-bottom:2px}
+#printDoc .padv-body{font-size:6.5pt;color:#555;line-height:1.42}
+#printDoc .pdisc{margin-top:5px;padding:4px 7px;border:1px solid #c8e0c8;border-left:3px solid #3DB832;background:#f9f9f9;font-size:6pt;color:#666;line-height:1.4}
+#printDoc .pfoot{display:flex;justify-content:space-between;font-size:6pt;color:#aaa;margin-top:4px;padding-top:3px;border-top:1px solid #e0e0e0}
+
+/* Password Gate */
+#gate{display:none;position:fixed;inset:0;background:#111;z-index:9999;align-items:center;justify-content:center;flex-direction:column}
+#gate.show{display:flex}
+</style>
+</head>
+<body>
+
+<!-- PRINT DOC -->
+<div id="printDoc">
+  <div class="ph">
+    <div><div class="plogo">GHV</div><div class="plogosub">Global Haven Ventures · CFS Budget Tools</div></div>
+    <div class="pright">
+      <div class="ptitle" id="pProjName">System Value Summary</div>
+      <div class="psub" id="pClient"></div>
+      <div class="psub" id="pMeta"></div>
+    </div>
+  </div>
+  <div class="psec">Three-Tool Value Summary</div>
+  <div class="ptoolrow">
+    <div class="ptool" style="border-top:3px solid #3DB832">
+      <div class="ptool-name">📐 CFS Budget Estimate</div>
+      <div class="ptool-lbl">Preliminary Low</div>
+      <div style="font-size:11pt;font-weight:700;color:#111" id="pBudgLow">—</div>
+      <div class="ptool-lbl">Preliminary High</div>
+      <div class="ptool-val" id="pBudgHigh">—</div>
+      <div class="ptool-sub" id="pBudgSF"></div>
+    </div>
+    <div class="ptool" style="border-top:3px solid #2589b0">
+      <div class="ptool-name" style="color:#2589b0">💰 Soft Cost Savings</div>
+      <div class="ptool-lbl" id="pSavLbl">Total Savings</div>
+      <div class="ptool-val" style="color:#2589b0" id="pSavVal">—</div>
+      <div class="ptool-sub" id="pSavSub"></div>
+    </div>
+    <div class="ptool" style="border-top:3px solid #7b3db8">
+      <div class="ptool-name" style="color:#7b3db8">🔧 Trade Savings</div>
+      <div class="ptool-lbl">Project-Wide Total</div>
+      <div class="ptool-val" style="color:#7b3db8" id="pTradeVal">—</div>
+      <div class="ptool-sub" id="pTradeSub"></div>
+    </div>
+  </div>
+  <div class="pcombined">
+    <div class="pcomb-lbl">Combined Savings — Soft Costs + Trade Savings</div>
+    <div class="pcomb-val" id="pCombVal">—</div>
+    <div class="pcomb-sub" id="pCombSub"></div>
+  </div>
+  <div class="psec" id="pBreakdownSec" style="display:none">Savings Breakdown</div>
+  <div id="pBreakdownPrint" style="margin-bottom:7px"></div>
+  <div class="psec">System Advantages — Beyond the Numbers</div>
+  <div class="padvgrid" id="pAdvGrid"></div>
+  <div class="pdisc">All budget figures are preliminary estimates subject to change based on final design documents and structural engineering review. Savings figures are estimates based on field-validated industry data. Actual results vary by project, site, and market conditions. © 2026 Global Haven Ventures / Prefab Consulting LLC. All rights reserved.</div>
+  <div class="pfoot">
+    <div>Global Haven Ventures · Prefab Consulting LLC · Building Systems. Not Just Structures.</div>
+    <div id="pYear"></div>
+  </div>
+</div>
+
+<!-- PASSWORD GATE -->
+<div id="gate" class="show">
+  <div style="color:#3DB832;font-size:28px;font-weight:700;margin-bottom:8px">PIS</div>
+  <div style="color:#aaa;font-size:12px;margin-bottom:24px;letter-spacing:.1em;text-transform:uppercase">System Summary</div>
+  <input id="pwInput" type="password" placeholder="Enter access password"
+    style="width:260px;height:42px;padding:0 16px;background:#1a1a1a;border:1px solid #333;color:#fff;border-radius:8px;font-size:14px;outline:none;text-align:center"
+    onkeydown="if(event.key==='Enter')checkPW()">
+  <button onclick="checkPW()" style="margin-top:12px;padding:10px 32px;background:#3DB832;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">Enter</button>
+  <div id="pwErr" style="color:#e05050;font-size:12px;margin-top:10px;display:none">Incorrect password. Try again.</div>
+</div>
+
+<header>
+  <div><span class="logo">GHV</span><span class="logo"><span>System Summary</span></span></div>
+  <nav>
+    <a href="/index.html">CFS Budget Builder</a>
+    <a href="/savings.html">Soft Cost Savings</a>
+    <a href="/trades.html">Trade Savings</a>
+    <a href="/podium.html">Podium Analysis</a>
+    <a href="/summary.html" class="active">System Summary</a>
+  <a href="/caprate.html">Developer Pro Forma</a>
+  </nav>
+</header>
+
+<div class="main">
+
+  <!-- Banner -->
+  <div class="banner-row">
+    <div id="pisBanner"><span style="color:#aaa">Loading results from calculators…</span></div>
+    <button class="refresh-btn" onclick="pisLoad()">⟳ Refresh Results</button>
+  </div>
+
+  <!-- Project header -->
+  <div class="proj-card">
+    <div class="proj-field">
+      <label>Project Name</label>
+      <input type="text" id="projName" placeholder="Project name" oninput="updatePrint()">
+    </div>
+    <div class="proj-field">
+      <label>Client / Developer</label>
+      <input type="text" id="client" placeholder="Developer name" oninput="updatePrint()">
+    </div>
+    <div class="proj-meta" id="projMeta"></div>
+  </div>
+
+  <!-- Hero combined savings -->
+  <div class="hero">
+    <div class="hero-label">Combined Savings — Soft Costs + Trade Savings</div>
+    <div class="hero-val" id="heroVal">—</div>
+    <div class="hero-sub" id="heroSub">Run Budget Builder, Soft Cost Savings, and Trade Savings to populate this summary</div>
+  </div>
+
+  <!-- Three tool panels -->
+  <div class="tool-grid">
+    <div class="tool-panel budget">
+      <a href="/index.html" class="tp-link">Open ↗</a>
+      <div class="tp-name">📐 CFS Budget Estimate</div>
+      <div id="budgContent"><div class="tp-empty">Run Budget Builder first</div></div>
+    </div>
+    <div class="tool-panel savings">
+      <a href="/savings.html" class="tp-link blue">Open ↗</a>
+      <div class="tp-name">💰 Soft Cost Savings</div>
+      <div id="savContent"><div class="tp-empty">Run Soft Cost Savings first</div></div>
+    </div>
+    <div class="tool-panel trades">
+      <a href="/trades.html" class="tp-link purple">Open ↗</a>
+      <div class="tp-name">🔧 Trade Savings</div>
+      <div id="tradeContent"><div class="tp-empty">Run Trade Savings first</div></div>
+    </div>
+  </div>
+
+  <!-- Savings breakdown bars -->
+  <div class="breakdown" id="breakdownSection" style="display:none">
+    <div class="bk-title">Savings Breakdown</div>
+    <div id="breakdownRows"></div>
+  </div>
+
+  <!-- System Advantages -->
+  <div class="adv-grid">
+    <div class="adv-card">
+      <div class="adv-title">Insurance Availability — Not Just Cost</div>
+      <div class="adv-body">In California, the Gulf Coast, and other high-risk markets, the question is no longer what wood-frame insurance costs — it's whether you can get it. CFS isn't just cheaper to insure — in some markets it's the difference between a financeable project and one that can't close.</div>
+    </div>
+    <div class="adv-card">
+      <div class="adv-title">Lender & Equity Partner Confidence</div>
+      <div class="adv-body">Banks and equity partners are underwriting construction risk more aggressively than five years ago. A factory-controlled schedule, documented cost certainty, and a defined delivery window is a more bankable project. Some lenders are beginning to offer better terms on CFS projects specifically.</div>
+    </div>
+    <div class="adv-card">
+      <div class="adv-title">Asset Value at Disposition</div>
+      <div class="adv-body">The soft cost savings don't stop at year ten. A quieter, straighter, lower-maintenance building with a better insurance history commands a tighter cap rate at sale. Ten basis points on a $20M project is $200,000 in exit value. The framing decision made in preconstruction shows up in the disposition.</div>
+    </div>
+    <div class="adv-card">
+      <div class="adv-title">Schedule Certainty — Not Just Schedule Savings</div>
+      <div class="adv-body">The Trade Savings calculator quantifies what schedule compression saves the GC. It doesn't capture what a one-month delay costs a developer at today's rates — roughly $106,000 in carry on a $15M loan. Prefab CFS makes the schedule predictable, which is what your lender and equity partner actually care about.</div>
+    </div>
+    <div class="adv-card">
+      <div class="adv-title">Carbon & ESG</div>
+      <div class="adv-body">CFS is fully recyclable, requires no deforestation, and carries lower embodied carbon per structural unit than CMU. For projects accessing ESG-sensitive capital — pension funds, sovereign wealth, impact investors — this is a real and growing differentiator that wood and masonry cannot match.</div>
+    </div>
+    <div class="adv-card">
+      <div class="adv-title">Punch List & Certificate of Occupancy</div>
+      <div class="adv-body">Factory fabrication eliminates field variation. Straight walls, consistent dimensions, and pre-punched holes dramatically reduce the punch list at project completion. Faster punch list clearance means faster CO, faster lease-up, and servicing permanent debt instead of construction debt sooner.</div>
+    </div>
+  </div>
+
+  <div class="print-row">
+    <button class="print-btn" onclick="doPrint()">Print One-Page Summary</button>
+  </div>
+  <div class="disc" style="margin-top:8px">
+    All figures are estimates based on field-validated industry data. Actual results vary by project, site, and market conditions.<br>
+    © 2026 Global Haven Ventures · Prefab Consulting LLC · Building Systems. Not Just Structures.
+  </div>
+
+</div>
+
+<script>
+// ── Auth ──────────────────────────────────────────────────────────────────────
+function checkPW(){
+  if(document.getElementById('pwInput').value==='GHVtemp'){
+    localStorage.setItem('ghv_auth_v2','1');
+    document.getElementById('gate').classList.remove('show');
+    document.body.style.overflow='';
+    var nxt=new URLSearchParams(window.location.search).get('next');
+    if(nxt&&nxt.startsWith('/'))window.location.replace(nxt);
+    pisLoad();
+  } else {
+    document.getElementById('pwErr').style.display='block';
+    document.getElementById('pwInput').value='';
+    setTimeout(()=>document.getElementById('pwErr').style.display='none',3000);
+  }
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+const fmt  = n => '$' + Math.round(n).toLocaleString();
+const fmtK = n => n >= 1000000 ? '$' + (n/1000000).toFixed(2) + 'M' : '$' + Math.round(n).toLocaleString();
+
+// ── PIS Load — reads pre-computed results, no recalc needed ───────────────────
+function pisLoad() {
+  const banner = document.getElementById('pisBanner');
+  const loaded = [];
+
+  try {
+    // ── Budget Builder ────────────────────────────────────────────────────────
+    const bRaw = localStorage.getItem('pis-budget');
+    if (bRaw) {
+      const b = JSON.parse(bRaw);
+      if (b.projName) document.getElementById('projName').value = b.projName;
+      if (b.client)   document.getElementById('client').value   = b.client;
+
+      const hasBudget = b.mL || b.mH;
+      if (hasBudget) {
+        const sfStr  = b.tSF  ? Math.round(b.tSF).toLocaleString() + ' SF' : '';
+        const flStr  = b.floors ? Math.round(b.floors) + ' floors' : '';
+        const ptStr  = b.ptype || '';
+        document.getElementById('budgContent').innerHTML =
+          '<div class="tp-lbl">Preliminary Low</div>' +
+          '<div class="tp-val dark">' + fmt(b.mL||0) + '</div>' +
+          '<div class="tp-lbl" style="margin-top:8px">Preliminary High</div>' +
+          '<div class="tp-val">' + fmt(b.mH||0) + '</div>' +
+          '<div class="tp-sub" style="margin-top:6px">' + [sfStr,flStr,ptStr].filter(Boolean).join(' · ') + '</div>';
+
+        // Store for print
+        document.getElementById('pBudgLow').textContent  = fmt(b.mL||0);
+        document.getElementById('pBudgHigh').textContent = fmt(b.mH||0);
+        document.getElementById('pBudgSF').textContent   = [sfStr,flStr].filter(Boolean).join(' · ');
+
+        // Project meta
+        const meta = [sfStr, flStr, ptStr].filter(Boolean).join(' · ');
+        document.getElementById('projMeta').textContent = meta;
+        document.getElementById('pMeta').textContent    = meta;
+      }
+      loaded.push('Budget Builder');
+    }
+
+    // ── Soft Cost Savings ─────────────────────────────────────────────────────
+    const sRaw = localStorage.getItem('pis-savings');
+    let totalSave = 0;
+    let savBreakdown = {};
+    if (sRaw) {
+      const s = JSON.parse(sRaw);
+      totalSave = s.totalSave || 0;
+      savBreakdown = {
+        'Builders Risk': s.BR_save || 0,
+        'Carry Cost (Schedule)': s.CC_save || 0,
+        'Permanent Insurance': s.PI_save || 0,
+      };
+      const yrsLabel = (s.years||10) + '-Year Analysis';
+      document.getElementById('savContent').innerHTML =
+        '<div class="tp-lbl">Total Savings vs. Wood Frame</div>' +
+        '<div class="tp-val blue">' + fmt(totalSave) + '</div>' +
+        '<div class="tp-sub">' + yrsLabel + (s.rfLabel ? ' · ' + s.rfLabel : '') + '</div>' +
+        '<div class="tp-lbl" style="margin-top:8px">Builders Risk</div><div class="tp-val blue" style="font-size:14px">' + fmt(s.BR_save||0) + '</div>' +
+        '<div class="tp-lbl">Carry Cost (Schedule)</div><div class="tp-val blue" style="font-size:14px">' + fmt(s.CC_save||0) + '</div>' +
+        '<div class="tp-lbl">Permanent Insurance</div><div class="tp-val blue" style="font-size:14px">' + fmt(s.PI_save||0) + '</div>';
+
+      document.getElementById('pSavLbl').textContent = yrsLabel + ' vs. Wood Frame';
+      document.getElementById('pSavVal').textContent = fmt(totalSave);
+      document.getElementById('pSavSub').textContent = s.rfLabel || '';
+      loaded.push('Soft Cost Savings');
+    }
+
+    // ── Trade Savings ─────────────────────────────────────────────────────────
+    const tRaw = localStorage.getItem('pis-trades');
+    let tradeTotal = 0;
+    if (tRaw) {
+      const t = JSON.parse(tRaw);
+      tradeTotal = t.grandTotNum || 0;
+      const display = t.heroVal || (tradeTotal ? fmt(tradeTotal) : '—');
+      const sfStr   = t.sf ? Math.round(t.sf).toLocaleString() + ' SF' : '';
+      document.getElementById('tradeContent').innerHTML =
+        '<div class="tp-lbl">Project-Wide Trade Savings</div>' +
+        '<div class="tp-val purple">' + display + '</div>' +
+        '<div class="tp-sub">' + [sfStr, t.ptype].filter(Boolean).join(' · ') + '</div>';
+
+      document.getElementById('pTradeVal').textContent = display;
+      document.getElementById('pTradeSub').textContent = sfStr;
+      loaded.push('Trade Savings');
+    }
+
+    // ── Combined hero ─────────────────────────────────────────────────────────
+    const combined = totalSave + tradeTotal;
+    if (combined > 0) {
+      document.getElementById('heroVal').textContent  = fmtK(combined);
+      document.getElementById('heroSub').textContent  = 'Total combined savings vs. wood-frame construction';
+      document.getElementById('pCombVal').textContent = fmtK(combined);
+      document.getElementById('pCombSub').textContent = 'Soft Cost Savings + Trade Savings vs. wood-frame construction';
+    }
+
+    // ── Breakdown bars ────────────────────────────────────────────────────────
+    const bkItems = [
+      {label:'Soft Cost Total',  val:totalSave,  color:'#2589b0'},
+      {label:'Trade Savings',    val:tradeTotal, color:'#7b3db8'},
+    ];
+    if (savBreakdown['Builders Risk'])          bkItems.push({label:'Builders Risk',          val:savBreakdown['Builders Risk'],          color:'#3DB832'});
+    if (savBreakdown['Carry Cost (Schedule)'])  bkItems.push({label:'Carry Cost (Schedule)',  val:savBreakdown['Carry Cost (Schedule)'],  color:'#5ab835'});
+    if (savBreakdown['Permanent Insurance'])    bkItems.push({label:'Permanent Insurance',    val:savBreakdown['Permanent Insurance'],    color:'#7ed45a'});
+
+    const maxVal = Math.max(...bkItems.map(i => i.val), 1);
+    const activeItems = bkItems.filter(i => i.val > 0);
+
+    if (combined > 0) {
+      // ── Screen breakdown bars ─────────────────────────────────────────────────
+      document.getElementById('breakdownSection').style.display = 'block';
+      document.getElementById('breakdownRows').innerHTML = activeItems.map(i =>
+        '<div class="bk-row">' +
+        '<div class="bk-label">' + i.label + '</div>' +
+        '<div class="bk-bar-wrap"><div class="bk-bar" style="width:' + Math.round(i.val/maxVal*100) + '%;background:' + i.color + '"></div></div>' +
+        '<div class="bk-amount">' + fmt(i.val) + '</div>' +
+        '</div>'
+      ).join('');
+
+      // ── Print breakdown table ─────────────────────────────────────────────────
+      const pBreakSec = document.getElementById('pBreakdownSec');
+      const pBreakDiv = document.getElementById('pBreakdownPrint');
+      if (pBreakSec) pBreakSec.style.display = '';
+      if (pBreakDiv) {
+        pBreakDiv.innerHTML =
+          '<table style="width:100%;border-collapse:collapse;font-size:7pt">' +
+          '<tr style="border-bottom:1px solid #ddd">' +
+          '<th style="text-align:left;padding:3px 6px;color:#555;font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:6.5pt">Category</th>' +
+          '<th style="text-align:right;padding:3px 6px;color:#555;font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:6.5pt">Savings vs. Wood Frame</th>' +
+          '<th style="width:45%;padding:3px 6px"></th>' +
+          '</tr>' +
+          activeItems.map(i =>
+            '<tr style="border-bottom:1px solid #f0f0f0">' +
+            '<td style="padding:4px 6px;color:#333">' + i.label + '</td>' +
+            '<td style="padding:4px 6px;text-align:right;font-weight:700;color:' + i.color + '">' + fmt(i.val) + '</td>' +
+            '<td style="padding:4px 6px">' +
+              '<div style="background:#f0f0f0;border-radius:2px;height:8px;overflow:hidden">' +
+              '<div style="width:' + Math.round(i.val/maxVal*100) + '%;background:' + i.color + ';height:100%;border-radius:2px"></div>' +
+              '</div>' +
+            '</td>' +
+            '</tr>'
+          ).join('') +
+          '<tr style="border-top:2px solid #3DB832">' +
+          '<td style="padding:4px 6px;font-weight:700;color:#111">Combined Total</td>' +
+          '<td style="padding:4px 6px;text-align:right;font-weight:700;color:#3DB832">' + fmtK(combined) + '</td>' +
+          '<td></td>' +
+          '</tr>' +
+          '</table>';
+      }
+    }
+
+    // ── Banner ────────────────────────────────────────────────────────────────
+    if (banner) {
+      if (loaded.length > 0) {
+        banner.style.cssText = 'flex:1;background:#f0faf0;border:1px solid #3DB832;border-radius:8px;padding:10px 14px;font-size:11px;line-height:1.8;transition:all .3s';
+        banner.innerHTML =
+          '<b style="color:#3DB832">✓ Results loaded from: </b>' +
+          loaded.map(l => '<span style="background:#fff;border:1px solid #c8e6c8;color:#3DB832;padding:1px 10px;border-radius:4px;font-size:10px;margin-right:4px">' + l + '</span>').join('') +
+          '<span style="float:right;font-size:10px;color:#aaa;cursor:pointer" onclick="pisClear()">✕ Clear all</span>';
+      } else {
+        banner.style.cssText = 'flex:1;background:#fff8f0;border:1px solid #ffcc88;border-radius:8px;padding:10px 14px;font-size:11px;line-height:1.8;transition:all .3s';
+        banner.innerHTML = '<b style="color:#c47f00">⚠ No results found.</b> Open each calculator, run it, then return here and click Refresh Results.';
+      }
+    }
+
+    updatePrint();
+
+  } catch(e) {
+    console.error('pisLoad:', e);
+    if (banner) banner.innerHTML = '<span style="color:red">Error: ' + e.message + '</span>';
+  }
+}
+
+function pisClear() {
+  ['pis-budget','pis-savings','pis-trades'].forEach(k => { try { localStorage.removeItem(k); } catch(e){} });
+  location.reload();
+}
+
+function updatePrint() {
+  const name   = document.getElementById('projName').value || 'System Value Summary';
+  const client = document.getElementById('client').value   || '';
+  document.getElementById('pProjName').textContent = name;
+  document.getElementById('pClient').textContent   = client;
+  document.getElementById('pYear').textContent     = '© ' + new Date().getFullYear() + ' Prefab Consulting LLC';
+
+  const advTitles = ['Insurance Availability — Not Just Cost','Lender & Equity Partner Confidence','Asset Value at Disposition','Schedule Certainty — Not Just Schedule Savings','Carbon & ESG','Punch List & Certificate of Occupancy'];
+  const advBodies = [
+    'In California, the Gulf Coast, and other high-risk markets, the question is no longer what wood-frame insurance costs — it\'s whether you can get it. CFS isn\'t just cheaper to insure — in some markets it\'s the difference between a financeable project and one that can\'t close.',
+    'Banks and equity partners are underwriting construction risk more aggressively. A factory-controlled schedule, documented cost certainty, and a defined delivery window is a more bankable project.',
+    'The soft cost savings don\'t stop at year ten. A quieter, lower-maintenance building with a better insurance history commands a tighter cap rate at sale. Ten basis points on a $20M project is $200,000 in exit value.',
+    'The Trade Savings calculator quantifies what schedule compression saves the GC. It doesn\'t capture what a one-month delay costs a developer — roughly $106,000 in carry on a $15M loan.',
+    'CFS is fully recyclable, requires no deforestation, and carries lower embodied carbon. For projects accessing ESG-sensitive capital — pension funds, sovereign wealth, impact investors — this is a growing differentiator.',
+    'Factory fabrication eliminates field variation. Straight walls, consistent dimensions, and pre-punched holes dramatically reduce the punch list. Faster CO means faster lease-up and servicing permanent debt sooner.'
+  ];
+  document.getElementById('pAdvGrid').innerHTML = advTitles.map((t,i) =>
+    '<div class="padv"><div class="padv-title">' + t + '</div><div class="padv-body">' + advBodies[i] + '</div></div>'
+  ).join('');
+}
+
+function doPrint() {
+  updatePrint();
+  window.print();
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+window.addEventListener('load', function() {
+  if (localStorage.getItem('ghv_auth_v2') === '1') {
+    document.getElementById('gate').classList.remove('show');
+    document.body.style.overflow = '';
+    pisLoad();
+  } else {
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => document.getElementById('pwInput').focus(), 100);
+  }
+  updatePrint();
+});
+</script>
+</body>
+</html>

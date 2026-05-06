@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mainefactured Framing — Soft Cost Savings Calculator</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;background:#f5f5f5;color:#111;min-height:100vh}
+header{background:#111;padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:22px;font-weight:700;color:#2D9CDB;letter-spacing:.05em}
+.logo span{color:#fff;font-size:12px;font-weight:400;margin-left:10px;opacity:.6;letter-spacing:.1em;text-transform:uppercase}
+.nav-links{display:flex;gap:8px}
+.nav-link{padding:5px 14px;border-radius:6px;border:0.5px solid #444;color:#aaa;font-size:11px;text-decoration:none;cursor:pointer;background:transparent}
+.nav-link:hover{background:#222;color:#fff}
+.nav-link.active{border-color:#2D9CDB;color:#2D9CDB}
+.main{max-width:1200px;margin:0 auto;padding:20px}
+.card{background:#fff;border-radius:10px;border:1px solid #e5e5e5;padding:20px;margin-bottom:16px}
+label{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#888;display:block;margin-bottom:4px}
+input[type=number],select{width:100%;height:34px;padding:0 10px;font-size:13px;border:1px solid #ddd;border-radius:6px;background:#fff;color:#111;outline:none}
+input[type=number]:focus,select:focus{border-color:#2D9CDB}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.sh{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#555;border-bottom:2px solid #2D9CDB;padding-bottom:4px;margin:0 0 12px}
+.pfx{display:flex}.pfx em{height:34px;display:flex;align-items:center;padding:0 8px;font-size:12px;font-style:normal;color:#888;background:#f9f9f9;border:1px solid #ddd;border-right:none;border-radius:6px 0 0 6px}.pfx input{border-radius:0 6px 6px 0;flex:1}
+.sfx{display:flex}.sfx input{border-radius:6px 0 0 6px;flex:1}.sfx em{height:34px;display:flex;align-items:center;padding:0 8px;font-size:12px;font-style:normal;color:#888;background:#f9f9f9;border:1px solid #ddd;border-left:none;border-radius:0 6px 6px 0}
+.hero{background:#F0F7FD;border:2px solid #2D9CDB;border-radius:10px;padding:18px;text-align:center;margin-bottom:16px}
+.hero-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:6px}
+.hero-val{font-size:36px;font-weight:600;color:#2D9CDB}
+.hero-sub{font-size:11px;color:#888;margin-top:5px}
+.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.metric{background:#fff;border:1px solid #e5e5e5;border-radius:8px;padding:12px}
+.metric-label{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#888;margin-bottom:4px}
+.metric-val{font-size:16px;font-weight:600;color:#2D9CDB}
+.thead{display:flex;justify-content:space-between;padding:5px 0;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#888;border-bottom:2px solid #2D9CDB;margin-bottom:4px}
+.trow{display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-bottom:0.5px solid #f0f0f0}
+.trow .lbl{flex:2;color:#555}
+.trow .comp{flex:1;text-align:right;color:#111}
+.trow .cfs{flex:1;text-align:right;color:#2D9CDB;font-weight:500}
+.trow .save{flex:1;text-align:right;color:#2D9CDB;font-weight:600}
+.tot-row{display:flex;justify-content:space-between;padding:8px 0;font-size:13px;font-weight:600;border-top:2px solid #2D9CDB;margin-top:4px}
+.sbtn{width:100%;height:38px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;margin-top:8px;transition:opacity .15s}
+.sbtn:hover{opacity:.88}
+.sn{background:#F97316;color:#fff}
+.sp{background:#fff;border:1px solid #ddd!important;color:#555}
+.msg{font-size:11px;margin-top:6px;text-align:center;padding:7px 10px;border-radius:6px;display:none}
+.msok{background:#EBF5FB;border:1px solid #b8dcf0;color:#2a7a2a}
+.mse{background:#fff0f0;border:1px solid #f0c8c8;color:#7a2a2a}
+.note{font-size:10px;color:#aaa;margin-top:10px;line-height:1.6;font-style:italic}
+.chart-wrap{position:relative;width:100%;height:240px}
+.right-col{display:flex;flex-direction:column;gap:0}
+/* PRINT */
+#printDoc{display:none;font-family:Arial,sans-serif;font-size:10pt;color:#111;padding:.65in .75in}
+@media print{
+header,.main{display:none!important}
+#printDoc{display:block!important}
+body{background:#fff;margin:0;padding:0}
+@page{size:letter;margin:0}
+}
+#printDoc .ph{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #2D9CDB;padding-bottom:8px;margin-bottom:14px}
+#printDoc .plogo{font-size:22pt;font-weight:700;color:#2D9CDB;line-height:1}
+#printDoc .plogosub{font-size:6.5pt;color:#666;text-transform:uppercase;letter-spacing:.12em;margin-top:2px}
+#printDoc .pright{text-align:right}
+#printDoc .ptitle{font-size:13pt;font-weight:700}
+#printDoc .psub{font-size:8.5pt;color:#555;margin-top:3px}
+#printDoc .pbadge{font-size:7pt;padding:1px 6px;border:1px solid #ccc;border-radius:3px;color:#666;margin-left:3px;display:inline-block;margin-top:4px}
+#printDoc .psec{font-size:7.5pt;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.1em;border-bottom:2px solid #2D9CDB;padding-bottom:3px;margin:12px 0 7px}
+#printDoc .phero{border:2px solid #2D9CDB;border-radius:6px;padding:10px;text-align:center;max-width:380px;margin:0 auto 12px}
+#printDoc .phero-lbl{font-size:6.5pt;color:#888;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+#printDoc .phero-val{font-size:20pt;font-weight:700;color:#2D9CDB;line-height:1.1}
+#printDoc .phero-sub{font-size:7.5pt;color:#888;margin-top:3px}
+#printDoc .pmgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px}
+#printDoc .pmcard{border:1px solid #e0e0e0;border-radius:4px;padding:6px 8px;text-align:center}
+#printDoc .pmcard-lbl{font-size:6.5pt;color:#888;text-transform:uppercase;margin-bottom:2px}
+#printDoc .pmcard-val{font-size:11pt;font-weight:700;color:#2D9CDB}
+#printDoc table{width:100%;border-collapse:collapse;margin-bottom:10px}
+#printDoc th{font-size:7.5pt;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#555;border-bottom:2px solid #2D9CDB;padding:4px 5px;text-align:left}
+#printDoc th:not(:first-child){text-align:right}
+#printDoc td{font-size:9pt;padding:4px 5px;border-bottom:0.5px solid #eee}
+#printDoc td:not(:first-child){text-align:right}
+#printDoc tr.ptot td{font-weight:700;border-top:2px solid #2D9CDB;border-bottom:none;background:#f8f8f8}
+#printDoc .pdisc{margin-top:10px;padding:6px 9px;border:1px solid #c8e0c8;border-left:3px solid #2D9CDB;background:#f9f9f9;font-size:7.5pt;color:#666;line-height:1.5}
+#printDoc .pfoot{display:flex;justify-content:space-between;font-size:7pt;color:#aaa;margin-top:8px;padding-top:4px;border-top:1px solid #e0e0e0}
+</style>
+</head>
+<body>
+<!-- PASSWORD GATE -->
+<div id="gate" class="show" style="display:none;position:fixed;inset:0;background:#0B1C2E;z-index:9999;align-items:center;justify-content:center;flex-direction:column">
+<div style="margin-bottom:16px">
+<svg width="160" height="27" viewBox="0 0 200 34" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M191.132 1.16555C197.975 1.16555 200 6.36844 200 10.1104C200 13.9549 197.975 19.1065 191.132 19.1065H185.324V16.5435H191.132C196.54 16.5435 197.309 11.8276 197.309 10.1104C197.309 8.3932 196.548 3.72854 191.14 3.72854H185.324V1.16555H191.132Z" fill="white"/>
+<path d="M173.1 3.92569V1.16555H183.549V3.92569H173.1Z" fill="white"/>
+<path d="M173.1 11.6147V8.85451H182.169V11.6147H173.1Z" fill="white"/>
+<path d="M173.1 19.3036V16.5435H183.549V19.3036H173.1Z" fill="white"/>
+<path d="M164.558 1.16555C169.059 1.55985 170.439 4.60192 170.439 6.88298C170.439 9.84028 168.467 12.2061 166.2 12.699L170.734 19.1065H167.777L163.341 12.9947H160.508V19.1065H157.92V10.3332H164.788C167.531 10.2819 167.876 7.93381 167.876 6.88298C167.876 5.72965 167.383 4.02429 164.686 3.82711H157.92V1.16555H164.558Z" fill="white"/>
+<path d="M147.088 16.8392C150.574 16.8392 151.419 13.5448 151.419 12.2889V1.16555H154.085V12.2889C154.085 15.262 152.265 19.4022 147.088 19.4022C141.911 19.4022 140.117 15.262 140.117 12.2889V1.16555H142.731V12.2889C142.731 13.5448 143.602 16.8392 147.088 16.8392Z" fill="white"/>
+<path d="M132.881 19.3036H130.121V5.10861H132.881V19.3036Z" fill="white"/>
+<path d="M137.613 3.92569V1.16555H125.586V3.92569H137.613Z" fill="white"/>
+<path d="M123.714 3.24157L122.578 5.47137C121.604 4.34365 119.656 3.24157 117.657 3.24157C112.249 3.24157 111.455 8.39318 111.455 10.1104C111.455 11.8276 112.249 16.9536 117.657 16.9536C119.733 16.9536 121.578 15.8515 122.732 14.8006L123.714 17.1349C122.099 18.7496 120.579 19.3371 117.657 19.3371C110.814 19.3371 108.789 13.9549 108.789 10.1104C108.789 6.36842 110.814 0.90925 117.657 0.90925C120.733 0.90925 122.124 1.47311 123.714 3.24157Z" fill="white"/>
+<path d="M99.0694 0.77124L90.4932 19.1065H93.2533L99.0694 6.48868L104.787 19.1065H107.646L99.0694 0.77124Z" fill="white"/>
+<path d="M80.4384 19.3036V8.85451H89.5075V11.6147H83.1986V19.3036H80.4384Z" fill="white"/>
+<path d="M80.4384 3.92569V1.16555H90.8876V3.92569H80.4384Z" fill="white"/>
+<path d="M67.6235 3.92569V1.16555H78.0726V3.92569H67.6235Z" fill="white"/>
+<path d="M67.6235 11.6147V8.85451H76.6925V11.6147H67.6235Z" fill="white"/>
+<path d="M67.6235 19.3036V16.5435H78.0726V19.3036H67.6235Z" fill="white"/>
+<path d="M49.4854 6.48868V19.1065H51.8513V8.85451L49.4854 6.48868Z" fill="white"/>
+<path d="M49.4854 0.77124V4.51715L64.2719 19.5008V1.16555H61.7089V13.2905L49.4854 0.77124Z" fill="white"/>
+<path d="M44.5566 19.1065H41.9936V1.16555H44.5566V19.1065Z" fill="white"/>
+<path d="M30.4601 0.77124L21.884 19.1065H24.6441L30.4601 6.48868L36.1776 19.1065H39.0363L30.4601 0.77124Z" fill="white"/>
+<path d="M2.95729 0.771243L2.36584 4.91146L9.95623 19.5008L17.5466 4.91146L16.9552 0.771243L9.95623 14.1776L2.95729 0.771243Z" fill="white"/>
+<path d="M0 19.1065H2.56299L3.84448 10.7275L1.87295 7.27729L0 19.1065Z" fill="white"/>
+<path d="M20.011 19.1065H17.448L16.1665 10.7275L18.1381 7.27729L20.011 19.1065Z" fill="white"/>
+<path d="M123.139 26.4011C123.553 26.4011 123.948 26.4691 124.325 26.605C124.702 26.7409 125.038 26.9385 125.335 27.1978C125.631 27.4572 125.863 27.7753 126.03 28.152L125.224 28.4485C124.989 28.01 124.69 27.692 124.325 27.4943C123.967 27.2967 123.575 27.1978 123.149 27.1978C122.716 27.1978 122.321 27.3028 121.963 27.5128C121.605 27.7228 121.32 28.0162 121.11 28.3929C120.907 28.7634 120.805 29.202 120.805 29.7084C120.805 30.2087 120.907 30.6473 121.11 31.024C121.314 31.4007 121.592 31.6941 121.944 31.9041C122.302 32.1141 122.701 32.219 123.139 32.2191C123.454 32.2191 123.751 32.1635 124.029 32.0523C124.307 31.9412 124.547 31.7867 124.751 31.5891C124.961 31.3915 125.125 31.1567 125.242 30.885V30.7385H126.178V30.9312C126.03 31.3265 125.807 31.6817 125.511 31.9967C125.221 32.3117 124.872 32.5617 124.464 32.747C124.063 32.9261 123.621 33.0158 123.139 33.0158C122.682 33.0158 122.253 32.9355 121.852 32.7749C121.456 32.6143 121.11 32.3888 120.814 32.0985C120.518 31.8021 120.286 31.4532 120.119 31.0517C119.952 30.6441 119.869 30.1963 119.869 29.7084C119.869 29.2267 119.952 28.7851 120.119 28.3836C120.286 27.976 120.518 27.624 120.814 27.3276C121.11 27.0311 121.456 26.8026 121.852 26.642C122.253 26.4814 122.682 26.4011 123.139 26.4011Z" fill="white"/>
+<path d="M126.178 30.3442H122.826V29.3584H126.178V30.3442Z" fill="white"/>
+<path d="M111.194 28.3385V33.0491H112.078V29.2217L111.194 28.3385Z" fill="white"/>
+<path d="M111.194 26.204V27.6024L116.715 33.1963V26.3512H115.758V30.8778L111.194 26.204Z" fill="white"/>
+<path d="M107.646 33.1043H106.66V26.4011H107.646V33.1043Z" fill="white"/>
+<path d="M97.2888 26.4011L97.0732 27.9104L99.8401 33.2286L102.607 27.9104L102.391 26.4011L99.8401 31.2882L97.2888 26.4011Z" fill="white"/>
+<path d="M96.2107 33.0849H97.145L97.6122 30.0305L96.8935 28.7728L96.2107 33.0849Z" fill="white"/>
+<path d="M103.505 33.0849H102.571L102.104 30.0305L102.823 28.7728L103.505 33.0849Z" fill="white"/>
+<path d="M90.5918 26.204L87.3388 33.1587H88.3858L90.5918 28.3727L92.7605 33.1587H93.8449L90.5918 26.204Z" fill="white"/>
+<path d="M82.6923 26.4011C84.3542 26.5467 84.8638 27.6699 84.8638 28.5122C84.8638 29.6041 84.1359 30.4776 83.2987 30.6596L84.973 33.0255H83.8811L82.2432 30.7688H81.1971V33.0255H80.2413V29.7861H82.7775C83.7901 29.7672 83.9175 28.9002 83.9175 28.5122C83.9175 28.0863 83.7355 27.4567 82.7397 27.3839H80.2413V26.4011H82.6923Z" fill="white"/>
+<path d="M73.5381 33.0485V29.1055H76.9604V30.147H74.5797V33.0485H73.5381Z" fill="white"/>
+<path d="M73.5381 27.4427V26.4011H77.4812V27.4427H73.5381Z" fill="white"/></svg>
+</div>
+<input id="pwInput" type="password" placeholder="Enter access password"
+style="width:260px;height:42px;padding:0 16px;background:#162435;border:1px solid #F97316;color:#fff;border-radius:8px;font-size:14px;outline:none;text-align:center;margin-bottom:12px"
+onkeydown="if(event.key==='Enter')checkPW()">
+<button onclick="checkPW()" style="padding:10px 32px;background:#F97316;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">Enter</button>
+<div id="pwErr" style="color:#e05050;font-size:12px;margin-top:10px;display:none">Incorrect password. Try again.</div>
+</div>
+
+<!-- PRINT DOCUMENT -->
+<div id="printDoc">
+<div class="ph">
+<div><div class="plogo" style="font-size:14pt">MF</div><div class="plogosub">Mainefactured Framing</div></div>
+<div class="pright">
+<div style="font-size:7.5pt;color:#999;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Soft Cost Savings Analysis</div>
+<div class="ptitle" id="pTitle">CFS vs. Wood Frame — 10-Year Analysis</div>
+<div class="psub" id="pSub"></div>
+<div id="pMeta"></div>
+</div>
+</div>
+<div class="phero">
+<div class="phero-lbl" id="pHeroLbl">Total 10-Year Savings</div>
+<div class="phero-val" id="pHeroVal">—</div>
+<div class="phero-sub" id="pHeroSub"></div>
+</div>
+<div class="pmgrid" id="pCards"></div>
+<div class="psec">Line-Item Detail — 10-Year Soft Cost Comparison</div>
+<table>
+<thead><tr><th style="flex:2">Cost Category</th><th id="pThComp" style="text-align:right">Comparison (10yr)</th><th style="text-align:right" id="pThCFS">CFS (10yr)</th><th style="text-align:right">Savings</th></tr></thead>
+<tbody id="pTableBody"></tbody>
+<tfoot><tr class="ptot"><td>Total Soft Costs</td><td id="pTotComp" style="text-align:right">—</td><td style="text-align:right">—</td><td id="pTotSave" style="text-align:right;color:#2D9CDB">—</td></tr></tfoot>
+</table>
+<div class="psec">Key Assumptions</div>
+<div class="pdisc" id="pAssumptions"></div>
+<div class="pfoot"><div>Mainefactured Framing · Prefab Consulting LLC · Building Systems. Not Just Structures.</div><div id="pYear"></div></div>
+</div>
+
+<header>
+<div><svg width="160" height="27" style="display:block" viewBox="0 0 200 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M191.132 1.16555C197.975 1.16555 200 6.36844 200 10.1104C200 13.9549 197.975 19.1065 191.132 19.1065H185.324V16.5435H191.132C196.54 16.5435 197.309 11.8276 197.309 10.1104C197.309 8.3932 196.548 3.72854 191.14 3.72854H185.324V1.16555H191.132Z" fill="white"/>
+<path d="M173.1 3.92569V1.16555H183.549V3.92569H173.1Z" fill="white"/>
+<path d="M173.1 11.6147V8.85451H182.169V11.6147H173.1Z" fill="white"/>
+<path d="M173.1 19.3036V16.5435H183.549V19.3036H173.1Z" fill="white"/>
+<path d="M164.558 1.16555C169.059 1.55985 170.439 4.60192 170.439 6.88298C170.439 9.84028 168.467 12.2061 166.2 12.699L170.734 19.1065H167.777L163.341 12.9947H160.508V19.1065H157.92V10.3332H164.788C167.531 10.2819 167.876 7.93381 167.876 6.88298C167.876 5.72965 167.383 4.02429 164.686 3.82711H157.92V1.16555H164.558Z" fill="white"/>
+<path d="M147.088 16.8392C150.574 16.8392 151.419 13.5448 151.419 12.2889V1.16555H154.085V12.2889C154.085 15.262 152.265 19.4022 147.088 19.4022C141.911 19.4022 140.117 15.262 140.117 12.2889V1.16555H142.731V12.2889C142.731 13.5448 143.602 16.8392 147.088 16.8392Z" fill="white"/>
+<path d="M132.881 19.3036H130.121V5.10861H132.881V19.3036Z" fill="white"/>
+<path d="M137.613 3.92569V1.16555H125.586V3.92569H137.613Z" fill="white"/>
+<path d="M123.714 3.24157L122.578 5.47137C121.604 4.34365 119.656 3.24157 117.657 3.24157C112.249 3.24157 111.455 8.39318 111.455 10.1104C111.455 11.8276 112.249 16.9536 117.657 16.9536C119.733 16.9536 121.578 15.8515 122.732 14.8006L123.714 17.1349C122.099 18.7496 120.579 19.3371 117.657 19.3371C110.814 19.3371 108.789 13.9549 108.789 10.1104C108.789 6.36842 110.814 0.90925 117.657 0.90925C120.733 0.90925 122.124 1.47311 123.714 3.24157Z" fill="white"/>
+<path d="M99.0694 0.77124L90.4932 19.1065H93.2533L99.0694 6.48868L104.787 19.1065H107.646L99.0694 0.77124Z" fill="white"/>
+<path d="M80.4384 19.3036V8.85451H89.5075V11.6147H83.1986V19.3036H80.4384Z" fill="white"/>
+<path d="M80.4384 3.92569V1.16555H90.8876V3.92569H80.4384Z" fill="white"/>
+<path d="M67.6235 3.92569V1.16555H78.0726V3.92569H67.6235Z" fill="white"/>
+<path d="M67.6235 11.6147V8.85451H76.6925V11.6147H67.6235Z" fill="white"/>
+<path d="M67.6235 19.3036V16.5435H78.0726V19.3036H67.6235Z" fill="white"/>
+<path d="M49.4854 6.48868V19.1065H51.8513V8.85451L49.4854 6.48868Z" fill="white"/>
+<path d="M49.4854 0.77124V4.51715L64.2719 19.5008V1.16555H61.7089V13.2905L49.4854 0.77124Z" fill="white"/>
+<path d="M44.5566 19.1065H41.9936V1.16555H44.5566V19.1065Z" fill="white"/>
+<path d="M30.4601 0.77124L21.884 19.1065H24.6441L30.4601 6.48868L36.1776 19.1065H39.0363L30.4601 0.77124Z" fill="white"/>
+<path d="M2.95729 0.771243L2.36584 4.91146L9.95623 19.5008L17.5466 4.91146L16.9552 0.771243L9.95623 14.1776L2.95729 0.771243Z" fill="white"/>
+<path d="M0 19.1065H2.56299L3.84448 10.7275L1.87295 7.27729L0 19.1065Z" fill="white"/>
+<path d="M20.011 19.1065H17.448L16.1665 10.7275L18.1381 7.27729L20.011 19.1065Z" fill="white"/>
+<path d="M123.139 26.4011C123.553 26.4011 123.948 26.4691 124.325 26.605C124.702 26.7409 125.038 26.9385 125.335 27.1978C125.631 27.4572 125.863 27.7753 126.03 28.152L125.224 28.4485C124.989 28.01 124.69 27.692 124.325 27.4943C123.967 27.2967 123.575 27.1978 123.149 27.1978C122.716 27.1978 122.321 27.3028 121.963 27.5128C121.605 27.7228 121.32 28.0162 121.11 28.3929C120.907 28.7634 120.805 29.202 120.805 29.7084C120.805 30.2087 120.907 30.6473 121.11 31.024C121.314 31.4007 121.592 31.6941 121.944 31.9041C122.302 32.1141 122.701 32.219 123.139 32.2191C123.454 32.2191 123.751 32.1635 124.029 32.0523C124.307 31.9412 124.547 31.7867 124.751 31.5891C124.961 31.3915 125.125 31.1567 125.242 30.885V30.7385H126.178V30.9312C126.03 31.3265 125.807 31.6817 125.511 31.9967C125.221 32.3117 124.872 32.5617 124.464 32.747C124.063 32.9261 123.621 33.0158 123.139 33.0158C122.682 33.0158 122.253 32.9355 121.852 32.7749C121.456 32.6143 121.11 32.3888 120.814 32.0985C120.518 31.8021 120.286 31.4532 120.119 31.0517C119.952 30.6441 119.869 30.1963 119.869 29.7084C119.869 29.2267 119.952 28.7851 120.119 28.3836C120.286 27.976 120.518 27.624 120.814 27.3276C121.11 27.0311 121.456 26.8026 121.852 26.642C122.253 26.4814 122.682 26.4011 123.139 26.4011Z" fill="white"/>
+<path d="M126.178 30.3442H122.826V29.3584H126.178V30.3442Z" fill="white"/>
+<path d="M111.194 28.3385V33.0491H112.078V29.2217L111.194 28.3385Z" fill="white"/>
+<path d="M111.194 26.204V27.6024L116.715 33.1963V26.3512H115.758V30.8778L111.194 26.204Z" fill="white"/>
+<path d="M107.646 33.1043H106.66V26.4011H107.646V33.1043Z" fill="white"/>
+<path d="M97.2888 26.4011L97.0732 27.9104L99.8401 33.2286L102.607 27.9104L102.391 26.4011L99.8401 31.2882L97.2888 26.4011Z" fill="white"/>
+<path d="M96.2107 33.0849H97.145L97.6122 30.0305L96.8935 28.7728L96.2107 33.0849Z" fill="white"/>
+<path d="M103.505 33.0849H102.571L102.104 30.0305L102.823 28.7728L103.505 33.0849Z" fill="white"/>
+<path d="M90.5918 26.204L87.3388 33.1587H88.3858L90.5918 28.3727L92.7605 33.1587H93.8449L90.5918 26.204Z" fill="white"/>
+<path d="M82.6923 26.4011C84.3542 26.5467 84.8638 27.6699 84.8638 28.5122C84.8638 29.6041 84.1359 30.4776 83.2987 30.6596L84.973 33.0255H83.8811L82.2432 30.7688H81.1971V33.0255H80.2413V29.7861H82.7775C83.7901 29.7672 83.9175 28.9002 83.9175 28.5122C83.9175 28.0863 83.7355 27.4567 82.7397 27.3839H80.2413V26.4011H82.6923Z" fill="white"/>
+<path d="M73.5381 33.0485V29.1055H76.9604V30.147H74.5797V33.0485H73.5381Z" fill="white"/>
+<path d="M73.5381 27.4427V26.4011H77.4812V27.4427H73.5381Z" fill="white"/>
+</svg>
+<span class="logo"><span>Budget Tools</span></span></div>
+<div class="nav-links">
+<a class="nav-link" href="/mf_index.html">CFS Budget Builder</a>
+<a class="nav-link active" href="/mf_savings.html">Soft Cost Savings</a>
+<a class="nav-link" href="/mf_trades.html">Trade Savings</a>
+<a href="/mf_podium.html">Podium Analysis</a>
+<a class="nav-link" href="/mf_summary.html">System Summary</a>
+<a class="nav-link" href="/mf_caprate.html">Developer Pro Forma</a>
+</div>
+</header>
+
+<div class="main">
+
+<!-- PROJECT PARAMETERS -->
+<div class="card">
+<div class="sh">Project Parameters</div>
+<div class="g3">
+<div><label>Project Name</label><input type="text" id="projName" placeholder="e.g. Riverside Flats" oninput="persist()"></div>
+<div><label>Client / Developer</label><input type="text" id="client" placeholder="Developer name" oninput="persist()"></div>
+<div><label>Compare Against</label>
+<select id="compare" onchange="calc();persist()">
+<option value="wood">Wood Frame</option>
+<option value="cmu">CMU / Masonry</option>
+<option value="both">Both (avg)</option>
+</select>
+</div>
+</div>
+<div class="g4" style="margin-top:12px">
+<div><label>Total Building SF</label><input type="number" id="sf" value="48000" oninput="calc();persist()"></div>
+<div><label>Hard Cost / SF</label><div class="pfx"><em>$</em><input type="number" id="hardcost" value="35" oninput="calc();persist()"></div></div>
+<div><label>Region / Climate</label>
+<select id="region" onchange="calc();persist()">
+<option value="baseline">Baseline (AZ, TX, NM, NV, TN)</option>
+<option value="california">California (SoCal / NorCal)</option>
+<option value="coastal">Coastal / Humid (FL, SC, GA)</option>
+<option value="hurricane">Hurricane Zone (FL Keys, Gulf)</option>
+<option value="northern">Northern (IL, MN, WI, CO)</option>
+<option value="island">Island / Remote (Bahamas, HI)</option>
+</select>
+</div>
+<div><label>Analysis Period</label>
+<select id="years" onchange="calc();persist()">
+<option value="1">1 Year (Build &amp; Flip)</option>
+<option value="3">3 Years</option>
+<option value="5">5 Years</option>
+<option value="7">7 Years</option>
+<option value="10" selected>10 Years</option>
+<option value="15">15 Years</option>
+<option value="20">20 Years</option>
+<option value="25">25 Years</option>
+</select>
+</div>
+</div>
+</div>
+
+<!-- FINANCING & INSURANCE PARAMETERS -->
+<div class="card">
+<div class="sh">Financing & Insurance Parameters</div>
+<div class="g4">
+<div><label>Construction Loan Rate</label><div class="sfx"><input type="number" id="loanrate" value="8.5" step="0.1" oninput="calc();persist()"><em>%</em></div></div>
+<div><label>Construction Duration</label><div class="sfx"><input type="number" id="duration" value="18" oninput="calc();persist()"><em>mo</em></div></div>
+<div><label>Schedule Savings (CFS)</label><div class="sfx"><input type="number" id="schedSave" value="4" oninput="calc();persist()"><em>mo</em></div></div>
+<div><label>&nbsp;</label></div>
+</div>
+<div class="g4" style="margin-top:10px">
+<div><label>Builders Risk — Wood/CMU</label><div class="sfx"><input type="number" id="brWood" value="1.5" step="0.1" oninput="calc();persist()"><em>%</em></div></div>
+<div><label>Builders Risk — CFS</label><div class="sfx"><input type="number" id="brCFS" value="0.75" step="0.1" oninput="calc();persist()"><em>%</em></div></div>
+<div><label>Perm. Insurance — Wood/CMU</label><div class="sfx"><input type="number" id="piWood" value="0.9" step="0.1" oninput="calc();persist()"><em>%</em></div></div>
+<div><label>Perm. Insurance — CFS</label><div class="sfx"><input type="number" id="piCFS" value="0.55" step="0.1" oninput="calc();persist()"><em>%</em></div></div>
+</div>
+</div>
+
+<!-- RESULTS -->
+<div class="hero">
+<div class="hero-label">Total Soft Cost Savings — CFS vs. <span id="heroVs">Wood Frame</span></div>
+<div class="hero-val" id="heroVal">$0</div>
+<div class="hero-sub" id="heroSub">Per SF: $0.00 · Annual avg: $0 · Analysis period: 10 years</div>
+</div>
+
+<div class="metric-grid">
+<div class="metric"><div class="metric-label">Builders Risk</div><div class="metric-val" id="mBR">$0</div></div>
+<div class="metric"><div class="metric-label">Carry Cost</div><div class="metric-val" id="mCC">$0</div></div>
+<div class="metric"><div class="metric-label">Long-Term Insurance</div><div class="metric-val" id="mPI">$0</div></div>
+<div class="metric"><div class="metric-label">Pest / Mold / Moisture</div><div class="metric-val" id="mPest">$0</div></div>
+<div class="metric"><div class="metric-label">Maintenance & Repairs</div><div class="metric-val" id="mMaint">$0</div></div>
+<div class="metric"><div class="metric-label">Fire Risk</div><div class="metric-val" id="mFire">$0</div></div>
+<div class="metric"><div class="metric-label">Wind / Storm</div><div class="metric-val" id="mWind">$0</div></div>
+<div class="metric"><div class="metric-label">Warranty / Rework</div><div class="metric-val" id="mWar">$0</div></div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 280px;gap:16px">
+<!-- DETAIL TABLE -->
+<div class="card" style="margin-bottom:0">
+<div class="sh">Line-Item Detail</div>
+<div class="thead">
+<span style="flex:2">Cost Category</span>
+<span style="flex:1;text-align:right" id="thComp">Wood Frame</span>
+<span style="flex:1;text-align:right" id="thCFS">CFS (10yr)</span>
+<span style="flex:1;text-align:right">Savings</span>
+</div>
+<div id="tableBody"></div>
+<div class="tot-row">
+<span style="flex:2">Total Soft Costs</span>
+<span style="flex:1;text-align:right" id="totComp">—</span>
+<span style="flex:1;text-align:right">—</span>
+<span style="flex:1;text-align:right;color:#2D9CDB" id="totSave">—</span>
+</div>
+</div>
+
+<!-- SAVE / PRINT -->
+<div class="right-col">
+<div class="card" style="margin-bottom:0">
+<div class="sh">Actions</div>
+<button class="sbtn sn" onclick="doSave()">↑ Save to Notion</button>
+<button class="sbtn sp" onclick="doPrint()" style="margin-top:8px">⎙ Print / PDF</button>
+<div class="msg msok" id="msgOk"></div>
+<div class="msg mse" id="msgE"></div>
+<div class="note">Saves a detailed analysis page to your Notion workspace.</div>
+<div class="note" style="margin-top:6px;font-size:9px;color:#ccc">© 2026 Mainefactured Framing / Prefab Consulting LLC. All rights reserved. Unauthorized reproduction or distribution prohibited.</div>
+</div>
+</div>
+</div>
+
+<!-- CHART -->
+<div class="card" style="margin-top:16px">
+<div class="sh" style="margin-bottom:12px">10-Year Cost Comparison</div>
+<div class="chart-wrap"><canvas id="barChart"></canvas></div>
+</div>
+
+<div class="note" id="footnote" style="margin-top:8px"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const AZURE_SAVINGS_URL = 'https://ghv-budget-api-g0hagac9ccbqcbcu.centralus-01.azurewebsites.net/api/SaveSavings?code=0PTl9nvUZpo4hiAJ1dTKLcO1Qiw1r0X9kA5etpSB637EAzFuQc3EQA==';
+const SK = 'mf-savings-form-v1';
+let chartInst = null;
+let _results = null;
+
+const fmt = n => '$' + Math.round(n).toLocaleString();
+const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = v; };
+
+const FIELDS = ['projName','client','compare','sf','hardcost','region','years','loanrate','duration','schedSave','brWood','brCFS','piWood','piCFS'];
+function persist() {
+try { const d={}; FIELDS.forEach(f=>d[f]=document.getElementById(f).value); localStorage.setItem(SK,JSON.stringify(d)); } catch(e){}
+}
+function restore() {
+try {
+const raw=localStorage.getItem(SK); if(!raw)return; const d=JSON.parse(raw);
+FIELDS.forEach(f=>{ if(document.getElementById(f)&&d[f]!==undefined) document.getElementById(f).value=d[f]; });
+} catch(e){}
+}
+
+function calc() {
+const sf = parseFloat(document.getElementById('sf').value)||48000;
+const compare = document.getElementById('compare').value;
+const region = document.getElementById('region').value;
+const hc = parseFloat(document.getElementById('hardcost').value)||35;
+const loanRate = parseFloat(document.getElementById('loanrate').value)||8.5;
+const dur = parseFloat(document.getElementById('duration').value)||18;
+const sched = parseFloat(document.getElementById('schedSave').value)||4;
+const brW = parseFloat(document.getElementById('brWood').value)||1.5;
+const brC = parseFloat(document.getElementById('brCFS').value)||0.75;
+const piW = parseFloat(document.getElementById('piWood').value)||0.9;
+const piC = parseFloat(document.getElementById('piCFS').value)||0.55;
+const yrs = parseInt(document.getElementById('years').value)||10;
+
+const totalHC = sf * hc;
+const insuredVal= totalHC * 1.15;
+
+const regionFactors = {
+baseline: {pest:1.0,wind:1.0,mold:1.0,fire:1.0,label:'Baseline (AZ, TX, NM, NV, TN)'},
+california: {pest:1.2,wind:1.1,mold:0.8,fire:2.8,label:'California (SoCal / NorCal)'},
+coastal: {pest:1.8,wind:1.4,mold:2.0,fire:1.0,label:'Coastal / Humid (FL, SC, GA)'},
+hurricane: {pest:1.6,wind:2.5,mold:2.2,fire:1.0,label:'Hurricane Zone'},
+northern: {pest:0.6,wind:1.1,mold:1.2,fire:0.8,label:'Northern (IL, MN, WI, CO)'},
+island: {pest:2.2,wind:2.0,mold:2.5,fire:1.2,label:'Island / Remote (Bahamas, HI)'}
+};
+const rf = regionFactors[region];
+
+const woodF = {pest:1.0,fire:1.0,maint:1.0,wind:1.0,war:1.0};
+const cmuF = {pest:0.4,fire:0.3,maint:1.3,wind:0.6,war:0.7};
+const cfsF = {pest:0.05,fire:0.05,maint:0.25,wind:0.15,war:0.2};
+const getF = k => compare==='wood'?woodF[k]:compare==='cmu'?cmuF[k]:(woodF[k]+cmuF[k])/2;
+
+const compBR = compare==='cmu'?brW*0.8:brW;
+const compPI = compare==='cmu'?piW*0.85:piW;
+
+const BR_comp = insuredVal*(compBR/100)*(dur/12);
+const BR_cfs = insuredVal*(brC/100)*((dur-sched)/12);
+const BR_save = BR_comp-BR_cfs;
+
+const annLoan = totalHC*(loanRate/100);
+const CC_comp = annLoan*(dur/12);
+const CC_cfs = annLoan*((dur-sched)/12);
+const CC_save = CC_comp-CC_cfs;
+
+const PI_comp = insuredVal*(compPI/100)*yrs;
+const PI_cfs = insuredVal*(piC/100)*yrs;
+const PI_save = PI_comp-PI_cfs;
+
+const pestBase = sf*0.25*rf.pest;
+const Pest_comp = pestBase*getF('pest')*yrs;
+const Pest_cfs = pestBase*cfsF.pest*yrs;
+const Pest_save = Pest_comp-Pest_cfs;
+
+const moldBase = sf*0.15*rf.mold;
+const Mold_comp = moldBase*getF('pest')*yrs;
+const Mold_cfs = moldBase*cfsF.pest*yrs;
+const Mold_save = Mold_comp-Mold_cfs;
+
+const maintBase = sf*0.40;
+const Maint_comp = maintBase*getF('maint')*yrs;
+const Maint_cfs = maintBase*cfsF.maint*yrs;
+const Maint_save = Maint_comp-Maint_cfs;
+
+const fireBase = insuredVal*0.003*(rf.fire||1.0);
+const Fire_comp = fireBase*getF('fire')*yrs;
+const Fire_cfs = fireBase*cfsF.fire*yrs;
+const Fire_save = Fire_comp-Fire_cfs;
+
+const windBase = sf*0.30*rf.wind;
+const Wind_comp = windBase*getF('wind')*yrs;
+const Wind_cfs = windBase*cfsF.wind*yrs;
+const Wind_save = Wind_comp-Wind_cfs;
+
+const warBase = totalHC*0.01;
+const War_comp = warBase*getF('war');
+const War_cfs = warBase*cfsF.war;
+const War_save = War_comp-War_cfs;
+
+const totalSave = BR_save+CC_save+PI_save+Pest_save+Mold_save+Maint_save+Fire_save+Wind_save+War_save;
+const totalComp = BR_comp+CC_comp+PI_comp+Pest_comp+Mold_comp+Maint_comp+Fire_comp+Wind_comp+War_comp;
+
+const compLabel = compare==='wood'?'Wood Frame':compare==='cmu'?'CMU / Masonry':'Wood/CMU Avg';
+
+set('heroVs', compLabel);
+set('heroVal', fmt(totalSave));
+set('heroSub', 'Per SF: $'+(totalSave/sf).toFixed(2)+' · Annual avg: '+fmt(totalSave/yrs)+' · Analysis period: '+yrs+' years');
+set('mBR', fmt(BR_save)); set('mCC', fmt(CC_save)); set('mPI', fmt(PI_save));
+set('mPest', fmt(Pest_save+Mold_save)); set('mMaint', fmt(Maint_save));
+set('mFire', fmt(Fire_save)); set('mWind', fmt(Wind_save)); set('mWar', fmt(War_save));
+document.getElementById('thComp').textContent = compLabel+' ('+yrs+'yr)';
+document.getElementById('thCFS').textContent = 'CFS ('+yrs+'yr)';
+set('totComp', fmt(totalComp)); set('totSave', fmt(totalSave));
+
+const rows = [
+['Builders Risk Insurance', BR_comp, BR_cfs, BR_save],
+['Construction Carry Cost', CC_comp, CC_cfs, CC_save],
+['Long-Term Property Insurance', PI_comp, PI_cfs, PI_save],
+['Pest / Termite Treatment', Pest_comp, Pest_cfs, Pest_save],
+['Mold & Moisture Remediation', Mold_comp, Mold_cfs, Mold_save],
+['Maintenance & Repairs', Maint_comp, Maint_cfs, Maint_save],
+['Fire Risk (Claims/Deductibles)', Fire_comp, Fire_cfs, Fire_save],
+['Wind & Storm Damage', Wind_comp, Wind_cfs, Wind_save],
+['Warranty & Callback / Rework', War_comp, War_cfs, War_save],
+];
+document.getElementById('tableBody').innerHTML = rows.map(([l,co,cf,sv])=>
+`<div class="trow"><span class="lbl" style="flex:2">${l}</span><span class="comp" style="flex:1;text-align:right">${fmt(co)}</span><span class="cfs" style="flex:1;text-align:right">${fmt(cf)}</span><span class="save" style="flex:1;text-align:right">${fmt(sv)}</span></div>`
+).join('');
+
+document.getElementById('footnote').textContent =
+'Assumptions: '+rf.label+' region factors applied. Builders risk covers construction period only. Long-term insurance modeled over '+yrs+' years on insured value (hard cost ×1.15). Pest, mold, fire, wind, and maintenance savings based on published industry loss ratios. Carry cost savings reflect '+sched+'-month schedule compression. All figures are estimates for discussion purposes only.';
+
+const labels=['Builders Risk','Carry Cost','Perm. Insurance','Pest/Mold','Maintenance','Fire Risk','Wind/Storm','Warranty'];
+const compData=[BR_comp,CC_comp,PI_comp,Pest_comp+Mold_comp,Maint_comp,Fire_comp,Wind_comp,War_comp].map(Math.round);
+const cfsData=[BR_cfs,CC_cfs,PI_cfs,Pest_cfs+Mold_cfs,Maint_cfs,Fire_cfs,Wind_cfs,War_cfs].map(Math.round);
+
+if(chartInst) chartInst.destroy();
+chartInst = new Chart(document.getElementById('barChart'),{
+type:'bar',
+data:{labels,datasets:[{label:compLabel,data:compData,backgroundColor:'#d1d1d1',borderRadius:3},{label:'CFS',data:cfsData,backgroundColor:'#2D9CDB',borderRadius:3}]},
+options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{font:{size:11},boxWidth:10,padding:12}},tooltip:{callbacks:{label:ctx=>' '+ctx.dataset.label+': $'+ctx.parsed.y.toLocaleString()}}},scales:{x:{ticks:{font:{size:10},autoSkip:false,maxRotation:30},grid:{display:false}},y:{ticks:{font:{size:10},callback:v=>'$'+(v/1000).toFixed(0)+'K'},grid:{color:'rgba(128,128,128,0.1)'}}}}
+});
+
+_results = {sf,compare,compLabel,region,yrs,hc,loanRate,dur,sched,brW:compBR,brC,piW:compPI,piC,
+totalHC,insuredVal,totalSave,totalComp,rfLabel:rf.label,
+BR_comp,BR_cfs,BR_save,CC_comp,CC_cfs,CC_save,PI_comp,PI_cfs,PI_save,
+Pest_comp,Pest_cfs,Pest_save,Mold_comp,Mold_cfs,Mold_save,
+Maint_comp,Maint_cfs,Maint_save,Fire_comp,Fire_cfs,Fire_save,
+Wind_comp,Wind_cfs,Wind_save,War_comp,War_cfs,War_save,rows};
+pisSync();
+}
+
+async function doSave() {
+if(!_results){return;}
+const nm = document.getElementById('projName').value.trim()||'Unnamed Analysis';
+const cl = document.getElementById('client').value.trim();
+const btn = document.querySelector('.sn');
+btn.textContent='↑ Saving…'; btn.disabled=true;
+document.getElementById('msgOk').style.display='none';
+document.getElementById('msgE').style.display='none';
+try {
+const res = await fetch(AZURE_SAVINGS_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...(_results),projectName:nm,client:cl,date:new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})})});
+if(!res.ok) throw new Error('HTTP '+res.status);
+const msg = document.getElementById('msgOk');
+msg.textContent='✓ Saved — '+nm; msg.style.display='block';
+setTimeout(()=>msg.style.display='none',4000);
+} catch(err) {
+const msg = document.getElementById('msgE');
+msg.textContent='✗ Save failed — '+err.message; msg.style.display='block';
+} finally { btn.textContent='↑ Save to Notion'; btn.disabled=false; }
+}
+
+function doPrint() {
+if(!_results) return;
+const r = _results;
+const nm = document.getElementById('projName').value.trim()||'Unnamed Analysis';
+const cl = document.getElementById('client').value.trim();
+const d2 = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+
+set('pTitle','CFS vs. '+r.compLabel+' — '+r.yrs+'-Year Soft Cost Analysis');
+set('pSub', cl ? cl : '');
+document.getElementById('pYear').textContent='© '+new Date().getFullYear()+' Mainefactured Framing / Prefab Consulting LLC — All rights reserved. Unauthorized reproduction prohibited.';
+document.getElementById('pMeta').innerHTML=
+'<span class="pbadge">'+r.sf.toLocaleString()+' SF</span>'+
+'<span class="pbadge">'+r.rfLabel+'</span>'+
+'<span class="pbadge">'+r.yrs+' Year Analysis</span>'+
+'<span class="pbadge">'+d2+'</span>';
+set('pHeroLbl','Total '+r.yrs+'-Year Savings — CFS vs. '+r.compLabel);
+set('pHeroVal',fmt(r.totalSave));
+set('pHeroSub','Per SF: $'+(r.totalSave/r.sf).toFixed(2)+' · Annual avg: '+fmt(r.totalSave/r.yrs));
+set('pThComp',r.compLabel+' ('+r.yrs+'yr)');
+set('thComp',r.compLabel+' ('+r.yrs+'yr)');
+var cfsThEl=document.getElementById('thCFS'); if(cfsThEl) cfsThEl.textContent='CFS ('+r.yrs+'yr)';
+var pcfsThEl=document.getElementById('pThCFS'); if(pcfsThEl) pcfsThEl.textContent='CFS ('+r.yrs+'yr)';
+
+document.getElementById('pCards').innerHTML=[
+['Builders Risk',fmt(r.BR_save)],['Carry Cost',fmt(r.CC_save)],
+['Perm. Insurance',fmt(r.PI_save)],['Pest / Mold',fmt(r.Pest_save+r.Mold_save)],
+['Maintenance',fmt(r.Maint_save)],['Fire Risk',fmt(r.Fire_save)],
+['Wind / Storm',fmt(r.Wind_save)],['Warranty',fmt(r.War_save)]
+].map(([l,v])=>`<div class="pmcard"><div class="pmcard-lbl">${l}</div><div class="pmcard-val">${v}</div></div>`).join('');
+
+document.getElementById('pTableBody').innerHTML=r.rows.map(([l,co,cf,sv])=>
+`<tr><td>${l}</td><td>${fmt(co)}</td><td style="color:#2D9CDB">${fmt(cf)}</td><td style="color:#2D9CDB;font-weight:600">${fmt(sv)}</td></tr>`
+).join('');
+
+set('pTotComp',fmt(r.totalComp)); set('pTotSave',fmt(r.totalSave));
+
+document.getElementById('pAssumptions').innerHTML=
+r.rfLabel+' region factors applied. Builders risk covers construction period ('+r.dur+' months conventional vs. '+(r.dur-r.sched)+' months CFS). '+
+'Long-term insurance modeled on insured value ($'+Math.round(r.insuredVal).toLocaleString()+') at '+r.piW+'% conventional vs. '+r.piC+'% CFS annually over '+r.yrs+' years. '+
+'Pest, mold, fire, wind, and maintenance savings based on published industry loss ratios and CFS material performance data. '+
+'All figures are estimates intended for planning and discussion purposes only. Not a guarantee of actual savings.';
+
+window.print();
+}
+
+restore(); calc();
+FIELDS.forEach(f=>{const el=document.getElementById(f);if(el)el.addEventListener('change',()=>{calc();persist();});});
+// ── PIS Cross-Page Sync ───────────────────────────────────────────────────────
+function showSyncToast(msg) {
+let t = document.getElementById('pisToast');
+if (!t) {
+t = document.createElement('div');
+t.id = 'pisToast';
+t.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#F97316;color:#fff;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none';
+document.body.appendChild(t);
+}
+t.textContent = msg;
+t.style.opacity = '1';
+clearTimeout(t._timer);
+t._timer = setTimeout(() => t.style.opacity = '0', 2500);
+}
+function pisSync() {
+try {
+if (!_results) return;
+const r = _results;
+const d = {_page:'savings', _ts:Date.now(),
+projName: (document.getElementById('projName')||{}).value||'',
+client: (document.getElementById('client')||{}).value||'',
+sf: r.sf, hc: r.hc, totalHC: r.totalHC, region: r.region, rfLabel: r.rfLabel,
+years: r.yrs, totalHC: r.totalHC,
+totalSave: r.totalSave, totalComp: r.totalComp,
+BR_save: r.BR_save, CC_save: r.CC_save, PI_save: r.PI_save,
+Pest_save: r.Pest_save, Maint_save:r.Maint_save, Fire_save: r.Fire_save,
+Wind_save: r.Wind_save, War_save: r.War_save,
+totalSave: r.totalSave, schedSave: r.sched
+};
+localStorage.setItem('mf-pis-savings', JSON.stringify(d));
+showSyncToast('✓ Soft Cost Savings saved to Summary');
+} catch(e) {
+console.warn('pisSync error:', e);
+}
+}
+
+// ── Send to Summary ───────────────────────────────────────────────────────────
+function sendToSummary() {
+const p = new URLSearchParams();
+const sv = id => { const e=document.getElementById(id); return e ? e.value : ''; };
+const gv = id => { const e=document.getElementById(id); return e ? (parseFloat(e.value)||0) : 0; };
+// Common fields
+p.set('projName', sv('projName') || sv('rName') || '');
+p.set('client', sv('client') || '');
+p.set('ptype', sv('ptype') || 'multifamily');
+// Page-specific SF source
+if (window._c && window._c.tSF) {
+p.set('sf', Math.round(window._c.tSF));
+p.set('floors', Math.round(window._c.F || gv('floors') || 4));
+p.set('labor', sv('labor') || '0');
+} else {
+p.set('sf', gv('sf') || 48000);
+p.set('floors', gv('floors') || 4);
+p.set('labor', gv('laborAdj') || sv('laborAdj') || '0');
+}
+p.set('region', sv('region') || 'baseline');
+p.set('years', sv('years') || '10');
+p.set('from', window.location.pathname.split('/').pop());
+window.location.href = '/summary.html?' + p.toString();
+}
+
+// ── Password Gate ─────────────────────────────────────────────────────────────
+(function(){
+const gate = document.getElementById('gate');
+if(!gate) return;
+gate.style.display = 'flex';
+if(localStorage.getItem('mf_auth')==='1'){
+gate.classList.remove('show');
+gate.style.display = 'none';
+} else {
+document.body.style.overflow='hidden';
+setTimeout(()=>{ const p=document.getElementById('pwInput'); if(p) p.focus(); },100);
+}
+})();
+function checkPW(){
+if(document.getElementById('pwInput').value==='MF2026'){
+localStorage.setItem('mf_auth','1');
+const gate=document.getElementById('gate');
+gate.style.display='none';
+document.body.style.overflow='';
+} else {
+document.getElementById('pwErr').style.display='block';
+document.getElementById('pwInput').value='';
+setTimeout(()=>document.getElementById('pwErr').style.display='none',3000);
+}
+}
+
+// Auto-calculate on load so mf-pis- localStorage keys are always populated
+document.addEventListener('DOMContentLoaded', function() {
+if (localStorage.getItem('mf_auth') === '1') {
+restore();
+calc();
+}
+});
+</script>
+</body>
+</html>

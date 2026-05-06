@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mainefactured Framing — Developer Pro Forma</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;background:#f5f5f5;color:#111;min-height:100vh}
+header{background:#111;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.logo{font-size:22px;font-weight:700;color:#2D9CDB}
+.logo span{color:#fff;font-size:12px;font-weight:400;margin-left:10px;opacity:.6;text-transform:uppercase;letter-spacing:.1em}
+nav{display:flex;flex-wrap:wrap;gap:6px}
+nav a{padding:5px 14px;border-radius:6px;border:0.5px solid #444;color:#aaa;font-size:11px;text-decoration:none;transition:all .2s}
+nav a:hover,nav a.active{border-color:#2D9CDB;color:#2D9CDB}
+.main{max-width:1160px;margin:0 auto;padding:20px}
+.banner-row{display:flex;gap:8px;align-items:stretch;margin-bottom:14px}
+#pisBanner{flex:1;background:#f5f5f5;border:1px solid #e0e0e0;border-radius:8px;padding:10px 14px;font-size:11px;line-height:1.8;min-height:38px;transition:all .3s}
+.sec-head{background:#111;border-radius:8px;padding:10px 18px;margin-bottom:12px;display:flex;align-items:center;gap:12px}
+.sec-num{width:28px;height:28px;border-radius:50%;background:#2D9CDB;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sec-title{font-size:15px;font-weight:700;color:#fff}
+.input-grid{display:grid;gap:12px;margin-bottom:12px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.input-card{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:16px}
+.card-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#555;border-bottom:2px solid #2D9CDB;padding-bottom:5px;margin-bottom:12px}
+.field{margin-bottom:10px}.field:last-child{margin-bottom:0}
+.field label{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.field input,.field select{width:100%;height:34px;padding:0 10px;font-size:13px;border:1px solid #ddd;border-radius:6px;outline:none;background:#fff;color:#111;transition:border .2s}
+.field input:focus,.field select:focus{border-color:#2D9CDB}
+.field input[readonly]{background:#f5f5f5;color:#555}
+.field .hint{font-size:10px;color:#aaa;margin-top:3px;line-height:1.4}
+.auto-tag{display:inline-block;background:#F0F7FD;border:1px solid #b8dcf0;color:#2D9CDB;font-size:9px;font-weight:700;padding:1px 6px;border-radius:3px;text-transform:uppercase}
+.noi-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f5f5f5;font-size:12px}
+.noi-row.final{border-bottom:none;font-weight:700;font-size:14px;padding-top:8px;border-top:2px solid #2D9CDB;margin-top:4px}
+.noi-row .noi-lbl{color:#555}.noi-row .noi-val{font-weight:600}
+.noi-row.final .noi-val{color:#2D9CDB;font-size:16px}
+.dscr-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.dscr-panel{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:16px}
+.dscr-panel.construction{border-top:3px solid #C47F00}
+.dscr-panel.stabilized{border-top:3px solid #2589b0}
+.dscr-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.carry-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}
+.carry-cell{background:#fff8f0;border:1px solid #ffe0b0;border-radius:6px;padding:10px;text-align:center}
+.carry-cell.savings{background:#F0F7FD;border-color:#b8dcf0}
+.carry-lbl{font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.carry-val{font-size:16px;font-weight:700;color:#C47F00}
+.carry-val.green{color:#2D9CDB}
+.dscr-table{width:100%;border-collapse:collapse;font-size:12px}
+.dscr-table th{padding:6px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;text-align:center}
+.dscr-table th.lbl{background:#f5f5f5;color:#555;text-align:left}
+.dscr-table th.wood{background:#fff3f3;color:#c00}
+.dscr-table th.cfs{background:#F0F7FD;color:#2D9CDB}
+.dscr-table td{padding:6px 10px;border-bottom:1px solid #f0f0f0;text-align:center}
+.dscr-table td:first-child{text-align:left;font-weight:500;color:#555;font-size:11px}
+.dscr-table tr.final-row td{font-weight:700;font-size:14px;padding-top:8px;border-top:2px solid #e0e0e0}
+.pass-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700}
+.pass-badge.pass{background:#F0F7FD;color:#2D9CDB;border:1px solid #b8dcf0}
+.pass-badge.fail{background:#fff3f3;color:#c00;border:1px solid #ffc0c0}
+.pass-badge.warn{background:#fff8f0;color:#C47F00;border:1px solid #ffe0b0}
+.tight-note{background:#fff8f0;border:1px solid #ffe0b0;border-left:3px solid #C47F00;border-radius:0 6px 6px 0;padding:10px 14px;font-size:11px;color:#555;line-height:1.6;margin-top:10px;display:none}
+.narr{font-size:11px;color:#555;line-height:1.6;margin-top:10px}
+.hero{background:#111;border-radius:10px;padding:24px;text-align:center;margin-bottom:12px}
+.hero-eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:#2D9CDB;margin-bottom:8px;font-weight:600}
+.hero-val{font-size:48px;font-weight:700;color:#2D9CDB;line-height:1}
+.hero-sub{font-size:11px;color:#666;margin-top:8px}
+.hero-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#222;border-radius:8px;overflow:hidden;margin-top:16px}
+.hero-cell{background:#1a1a1a;padding:12px;text-align:center}
+.hc-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:#555;margin-bottom:5px}
+.hc-val{font-size:18px;font-weight:700;color:#2D9CDB}.hc-sub{font-size:9px;color:#444;margin-top:3px}
+.output-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
+.out-panel{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:16px}
+.out-panel.n{border-top:3px solid #2589b0}.out-panel.c{border-top:3px solid #7b3db8}.out-panel.g{border-top:3px solid #2D9CDB}
+.out-name{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:12px}
+.out-lbl{font-size:9px;color:#aaa;margin-top:8px;margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em}
+.out-lbl:first-of-type{margin-top:0}
+.out-val{font-size:20px;font-weight:700}
+.out-val.b{color:#2589b0}.out-val.p{color:#7b3db8}.out-val.gr{color:#2D9CDB}
+.out-divider{border:none;border-top:1px solid #f0f0f0;margin:10px 0}
+.out-sub{font-size:10px;color:#aaa;margin-top:3px;line-height:1.4}
+.sens-card{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:16px;margin-bottom:12px}
+.sens-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+.sens-table th{background:#111;color:#2D9CDB;font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:7px 10px;text-align:center;font-weight:700}
+.sens-table th:first-child{text-align:left}
+.sens-table td{padding:6px 10px;border-bottom:1px solid #f0f0f0;text-align:center}
+.sens-table td:first-child{text-align:left;font-weight:600;color:#333}
+.sens-table tr.hl td{background:#F0F7FD;font-weight:700;color:#2D9CDB}
+.callout{background:#F0F7FD;border:1px solid #b8dcf0;border-left:4px solid #2D9CDB;border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:12px;font-size:12px;color:#333;line-height:1.7}
+.callout-title{font-size:12px;font-weight:700;color:#2D9CDB;margin-bottom:6px}
+.print-btn{height:38px;padding:0 32px;background:#2D9CDB;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;letter-spacing:.04em}
+.print-btn:hover{background:#35a82b}
+.disc{font-size:10px;color:#aaa;text-align:center;line-height:1.5;padding:0 20px;margin-top:6px}
+.divider{border:none;border-top:2px solid #e5e5e5;margin:20px 0}
+#printDoc{display:none}
+@media print{header,.main,#gate{display:none!important}#printDoc{display:block!important}body{background:#fff;margin:0}@page{size:letter;margin:0}}
+#printDoc{font-family:Arial,sans-serif;font-size:8pt;color:#111;padding:.35in .55in .25in .55in}
+.ph{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #2D9CDB;padding-bottom:5px;margin-bottom:7px}
+.plogo{font-size:18pt;font-weight:700;color:#2D9CDB}
+.plogosub{font-size:5.5pt;color:#666;text-transform:uppercase;letter-spacing:.1em}
+.psec{font-size:6pt;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.1em;border-bottom:1.5px solid #2D9CDB;padding-bottom:2px;margin:6px 0 4px}
+.p4col{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:5px}
+.p3col{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:5px}
+.p2col{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;margin-bottom:5px}
+.pcol{border:1px solid #e0e0e0;border-radius:3px;padding:4px 6px}
+.pcol-name{font-size:5.5pt;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#888;margin-bottom:2px}
+.pcol-lbl{font-size:5pt;color:#aaa;margin-top:3px;margin-bottom:1px}
+.pcol-val{font-size:9.5pt;font-weight:700}
+.phero{border:2px solid #2D9CDB;border-radius:4px;padding:5px 10px;text-align:center;margin-bottom:5px}
+.phero-val{font-size:17pt;font-weight:700;color:#2D9CDB}
+.phero-lbl,.phero-sub{font-size:5.5pt;color:#888}
+.ptable{width:100%;border-collapse:collapse;font-size:6pt;margin-bottom:4px}
+.ptable th{background:#111;color:#2D9CDB;padding:3px 4px;font-size:5.5pt;font-weight:700;text-transform:uppercase;text-align:center}
+.ptable th:first-child{text-align:left}
+.ptable td{padding:2px 4px;border-bottom:1px solid #f0f0f0;text-align:center}
+.ptable td:first-child{text-align:left;font-weight:600}
+.ptable tr.hl td{background:#F0F7FD;color:#2D9CDB;font-weight:700}
+.pcallout{border:1px solid #b8dcf0;border-left:2.5px solid #2D9CDB;padding:4px 6px;font-size:6pt;color:#333;line-height:1.4;margin-bottom:4px}
+.pdisc{font-size:5pt;color:#999;line-height:1.3;border-top:1px solid #e0e0e0;padding-top:3px}
+.pfoot{display:flex;justify-content:space-between;font-size:5pt;color:#aaa;margin-top:2px}
+#gate{display:none;position:fixed;inset:0;background:#111;z-index:9999;align-items:center;justify-content:center;flex-direction:column}
+</style>
+</head>
+<body>
+
+<div id="printDoc">
+<div class="ph"><div><div class="plogo">MF</div><div class="plogosub">Mainefactured Framing &middot; Developer Pro Forma</div></div><div style="text-align:right"><div style="font-size:10pt;font-weight:700" id="pProjName">Developer Pro Forma</div><div style="font-size:6pt;color:#555" id="pClient"></div><div style="font-size:6pt;color:#555" id="pMeta"></div></div></div>
+<div class="psec">Section 1 &mdash; Revenue &amp; NOI</div>
+<div class="p4col">
+<div class="pcol"><div class="pcol-name" id="pUnitLabelP">Units</div><div class="pcol-val" id="pUnitsP">&#8212;</div></div>
+<div class="pcol"><div class="pcol-name" id="pRateLabelP">Rate</div><div class="pcol-val" id="pRateP">&#8212;</div></div>
+<div class="pcol"><div class="pcol-name">Occupancy</div><div class="pcol-val" id="pOccP">&#8212;</div></div>
+<div class="pcol"><div class="pcol-name">Expense Ratio</div><div class="pcol-val" id="pExpP">&#8212;</div></div>
+</div>
+<div class="p3col">
+<div class="pcol" style="border-top:2px solid #2589b0"><div class="pcol-name" style="color:#2589b0">Gross Annual Revenue</div><div class="pcol-val" style="color:#2589b0" id="pGrossP">&#8212;</div></div>
+<div class="pcol"><div class="pcol-name">Less OpEx &amp; Vacancy</div><div class="pcol-val" id="pDeductP">&#8212;</div></div>
+<div class="pcol" style="border-top:2px solid #2D9CDB"><div class="pcol-name" style="color:#2D9CDB">Stabilized NOI</div><div class="pcol-val" style="color:#2D9CDB" id="pNOIP">&#8212;</div></div>
+</div>
+<div class="psec">Section 2 &mdash; Financing &amp; DSCR</div>
+<div class="p2col">
+<div class="pcol" style="border-top:2px solid #C47F00">
+<div class="pcol-name" style="color:#C47F00">Construction Carry</div>
+<div class="pcol-lbl">Monthly (interest-only)</div><div class="pcol-val" style="color:#C47F00;font-size:8.5pt" id="pMCarryP">&#8212;</div>
+<div class="pcol-lbl">Total Carry (<span id="pConstrMoP">&#8212;</span> months)</div><div class="pcol-val" style="color:#C47F00;font-size:8.5pt" id="pTCarryP">&#8212;</div>
+<div class="pcol-lbl">CFS Schedule Savings (<span id="pSchedWksP">0</span> wks)</div><div class="pcol-val" style="color:#2D9CDB;font-size:8.5pt" id="pCSavedP">&#8212;</div>
+</div>
+<div class="pcol" style="border-top:2px solid #2589b0">
+<div class="pcol-name" style="color:#2589b0">Stabilized DSCR</div>
+<table style="width:100%;border-collapse:collapse;font-size:6pt;margin-top:3px">
+<tr><th style="padding:2px 3px;background:#f5f5f5;text-align:left;color:#555"></th><th style="padding:2px 3px;background:#fff3f3;color:#c00;text-align:center">Wood</th><th style="padding:2px 3px;background:#F0F7FD;color:#2D9CDB;text-align:center">CFS</th></tr>
+<tr><td style="padding:2px 3px;color:#555">Effective NOI</td><td style="text-align:center" id="pENOIwP">&#8212;</td><td style="text-align:center" id="pENOIcP">&#8212;</td></tr>
+<tr><td style="padding:2px 3px;color:#555">Annual Debt Service</td><td style="text-align:center" id="pADSwP">&#8212;</td><td style="text-align:center" id="pADScP">&#8212;</td></tr>
+<tr style="border-top:1px solid #ddd"><td style="padding:2px 3px;font-weight:700">DSCR</td><td style="text-align:center;font-weight:700;color:#c00" id="pDSCRwP">&#8212;</td><td style="text-align:center;font-weight:700;color:#2D9CDB" id="pDSCRcP">&#8212;</td></tr>
+<tr><td style="padding:2px 3px;color:#555">Min (<span id="pDSCRminP">1.25</span>x)</td><td id="pPassWP" style="text-align:center">&#8212;</td><td id="pPassCP" style="text-align:center">&#8212;</td></tr>
+</table>
+</div>
+</div>
+<div class="psec">Section 3 &mdash; Disposition Advantage</div>
+<div class="phero"><div class="phero-lbl">Total Disposition Advantage &mdash; CFS vs. Wood Frame</div><div class="phero-val" id="pHeroValP">&#8212;</div><div class="phero-sub" id="pHeroSubP"></div></div>
+<div class="p3col">
+<div class="pcol" style="border-top:2px solid #2589b0"><div class="pcol-name" style="color:#2589b0">NOI Lift &rarr; Asset Value</div><div class="pcol-lbl">Annual Improvement</div><div class="pcol-val" style="color:#2589b0;font-size:8.5pt" id="pNLiftP">&#8212;</div><div class="pcol-lbl">Value Gain</div><div class="pcol-val" style="color:#2589b0" id="pNGainP">&#8212;</div></div>
+<div class="pcol" style="border-top:2px solid #7b3db8"><div class="pcol-name" style="color:#7b3db8">Cap Rate Compression</div><div class="pcol-lbl">Wood &rarr; CFS Cap Rate</div><div class="pcol-val" style="color:#7b3db8;font-size:8pt" id="pCapRatesP">&#8212;</div><div class="pcol-lbl">Exit Premium</div><div class="pcol-val" style="color:#7b3db8" id="pCompValP">&#8212;</div></div>
+<div class="pcol" style="border-top:2px solid #2D9CDB"><div class="pcol-name" style="color:#2D9CDB">Combined Exit Advantage</div><div class="pcol-lbl">NOI + Compression + Savings</div><div class="pcol-val" style="color:#2D9CDB" id="pCombTotalP">&#8212;</div></div>
+</div>
+<table class="ptable" id="pSensTableP"></table>
+<div class="pcallout" id="pCalloutP"></div>
+<div class="pdisc">All figures are estimates for discussion purposes only. DSCR figures do not constitute a lender commitment. Cap rate compression is market-observed and not guaranteed. &copy; 2026 Mainefactured Framing / Prefab Consulting LLC. All rights reserved.</div>
+<div class="pfoot"><span>Mainefactured Framing &middot; Prefab Consulting LLC &middot; Building Systems. Not Just Structures.</span><span id="pYearP"></span></div>
+</div>
+
+<div id="gate">
+<div style="margin-bottom:8px"><svg width="160" height="27" viewBox="0 0 200 34" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M191.132 1.16555C197.975 1.16555 200 6.36844 200 10.1104C200 13.9549 197.975 19.1065 191.132 19.1065H185.324V16.5435H191.132C196.54 16.5435 197.309 11.8276 197.309 10.1104C197.309 8.3932 196.548 3.72854 191.14 3.72854H185.324V1.16555H191.132Z" fill="white"/>
+<path d="M173.1 3.92569V1.16555H183.549V3.92569H173.1Z" fill="white"/>
+<path d="M173.1 11.6147V8.85451H182.169V11.6147H173.1Z" fill="white"/>
+<path d="M173.1 19.3036V16.5435H183.549V19.3036H173.1Z" fill="white"/>
+<path d="M164.558 1.16555C169.059 1.55985 170.439 4.60192 170.439 6.88298C170.439 9.84028 168.467 12.2061 166.2 12.699L170.734 19.1065H167.777L163.341 12.9947H160.508V19.1065H157.92V10.3332H164.788C167.531 10.2819 167.876 7.93381 167.876 6.88298C167.876 5.72965 167.383 4.02429 164.686 3.82711H157.92V1.16555H164.558Z" fill="white"/>
+<path d="M147.088 16.8392C150.574 16.8392 151.419 13.5448 151.419 12.2889V1.16555H154.085V12.2889C154.085 15.262 152.265 19.4022 147.088 19.4022C141.911 19.4022 140.117 15.262 140.117 12.2889V1.16555H142.731V12.2889C142.731 13.5448 143.602 16.8392 147.088 16.8392Z" fill="white"/>
+<path d="M132.881 19.3036H130.121V5.10861H132.881V19.3036Z" fill="white"/>
+<path d="M137.613 3.92569V1.16555H125.586V3.92569H137.613Z" fill="white"/>
+<path d="M123.714 3.24157L122.578 5.47137C121.604 4.34365 119.656 3.24157 117.657 3.24157C112.249 3.24157 111.455 8.39318 111.455 10.1104C111.455 11.8276 112.249 16.9536 117.657 16.9536C119.733 16.9536 121.578 15.8515 122.732 14.8006L123.714 17.1349C122.099 18.7496 120.579 19.3371 117.657 19.3371C110.814 19.3371 108.789 13.9549 108.789 10.1104C108.789 6.36842 110.814 0.90925 117.657 0.90925C120.733 0.90925 122.124 1.47311 123.714 3.24157Z" fill="white"/>
+<path d="M99.0694 0.77124L90.4932 19.1065H93.2533L99.0694 6.48868L104.787 19.1065H107.646L99.0694 0.77124Z" fill="white"/>
+<path d="M80.4384 19.3036V8.85451H89.5075V11.6147H83.1986V19.3036H80.4384Z" fill="white"/>
+<path d="M80.4384 3.92569V1.16555H90.8876V3.92569H80.4384Z" fill="white"/>
+<path d="M67.6235 3.92569V1.16555H78.0726V3.92569H67.6235Z" fill="white"/>
+<path d="M67.6235 11.6147V8.85451H76.6925V11.6147H67.6235Z" fill="white"/>
+<path d="M67.6235 19.3036V16.5435H78.0726V19.3036H67.6235Z" fill="white"/>
+<path d="M49.4854 6.48868V19.1065H51.8513V8.85451L49.4854 6.48868Z" fill="white"/>
+<path d="M49.4854 0.77124V4.51715L64.2719 19.5008V1.16555H61.7089V13.2905L49.4854 0.77124Z" fill="white"/>
+<path d="M44.5566 19.1065H41.9936V1.16555H44.5566V19.1065Z" fill="white"/>
+<path d="M30.4601 0.77124L21.884 19.1065H24.6441L30.4601 6.48868L36.1776 19.1065H39.0363L30.4601 0.77124Z" fill="white"/>
+<path d="M2.95729 0.771243L2.36584 4.91146L9.95623 19.5008L17.5466 4.91146L16.9552 0.771243L9.95623 14.1776L2.95729 0.771243Z" fill="white"/>
+<path d="M0 19.1065H2.56299L3.84448 10.7275L1.87295 7.27729L0 19.1065Z" fill="white"/>
+<path d="M20.011 19.1065H17.448L16.1665 10.7275L18.1381 7.27729L20.011 19.1065Z" fill="white"/>
+<path d="M123.139 26.4011C123.553 26.4011 123.948 26.4691 124.325 26.605C124.702 26.7409 125.038 26.9385 125.335 27.1978C125.631 27.4572 125.863 27.7753 126.03 28.152L125.224 28.4485C124.989 28.01 124.69 27.692 124.325 27.4943C123.967 27.2967 123.575 27.1978 123.149 27.1978C122.716 27.1978 122.321 27.3028 121.963 27.5128C121.605 27.7228 121.32 28.0162 121.11 28.3929C120.907 28.7634 120.805 29.202 120.805 29.7084C120.805 30.2087 120.907 30.6473 121.11 31.024C121.314 31.4007 121.592 31.6941 121.944 31.9041C122.302 32.1141 122.701 32.219 123.139 32.2191C123.454 32.2191 123.751 32.1635 124.029 32.0523C124.307 31.9412 124.547 31.7867 124.751 31.5891C124.961 31.3915 125.125 31.1567 125.242 30.885V30.7385H126.178V30.9312C126.03 31.3265 125.807 31.6817 125.511 31.9967C125.221 32.3117 124.872 32.5617 124.464 32.747C124.063 32.9261 123.621 33.0158 123.139 33.0158C122.682 33.0158 122.253 32.9355 121.852 32.7749C121.456 32.6143 121.11 32.3888 120.814 32.0985C120.518 31.8021 120.286 31.4532 120.119 31.0517C119.952 30.6441 119.869 30.1963 119.869 29.7084C119.869 29.2267 119.952 28.7851 120.119 28.3836C120.286 27.976 120.518 27.624 120.814 27.3276C121.11 27.0311 121.456 26.8026 121.852 26.642C122.253 26.4814 122.682 26.4011 123.139 26.4011Z" fill="white"/>
+<path d="M126.178 30.3442H122.826V29.3584H126.178V30.3442Z" fill="white"/>
+<path d="M111.194 28.3385V33.0491H112.078V29.2217L111.194 28.3385Z" fill="white"/>
+<path d="M111.194 26.204V27.6024L116.715 33.1963V26.3512H115.758V30.8778L111.194 26.204Z" fill="white"/>
+<path d="M107.646 33.1043H106.66V26.4011H107.646V33.1043Z" fill="white"/>
+<path d="M97.2888 26.4011L97.0732 27.9104L99.8401 33.2286L102.607 27.9104L102.391 26.4011L99.8401 31.2882L97.2888 26.4011Z" fill="white"/>
+<path d="M96.2107 33.0849H97.145L97.6122 30.0305L96.8935 28.7728L96.2107 33.0849Z" fill="white"/>
+<path d="M103.505 33.0849H102.571L102.104 30.0305L102.823 28.7728L103.505 33.0849Z" fill="white"/>
+<path d="M90.5918 26.204L87.3388 33.1587H88.3858L90.5918 28.3727L92.7605 33.1587H93.8449L90.5918 26.204Z" fill="white"/>
+<path d="M82.6923 26.4011C84.3542 26.5467 84.8638 27.6699 84.8638 28.5122C84.8638 29.6041 84.1359 30.4776 83.2987 30.6596L84.973 33.0255H83.8811L82.2432 30.7688H81.1971V33.0255H80.2413V29.7861H82.7775C83.7901 29.7672 83.9175 28.9002 83.9175 28.5122C83.9175 28.0863 83.7355 27.4567 82.7397 27.3839H80.2413V26.4011H82.6923Z" fill="white"/>
+<path d="M73.5381 33.0485V29.1055H76.9604V30.147H74.5797V33.0485H73.5381Z" fill="white"/>
+<path d="M73.5381 27.4427V26.4011H77.4812V27.4427H73.5381Z" fill="white"/></svg></div>
+<div style="color:#aaa;font-size:12px;margin-bottom:24px;letter-spacing:.1em;text-transform:uppercase">Developer Pro Forma</div>
+<input id="pwInput" type="password" placeholder="Enter access password" style="width:260px;height:42px;padding:0 16px;background:#1a1a1a;border:1px solid #333;color:#fff;border-radius:8px;font-size:14px;outline:none;text-align:center" onkeydown="if(event.key==='Enter')checkPW()">
+<button onclick="checkPW()" style="margin-top:12px;padding:10px 32px;background:#2D9CDB;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">Enter</button>
+<div id="pwErr" style="color:#e05050;font-size:12px;margin-top:10px;display:none">Incorrect password.</div>
+</div>
+
+<header>
+<div><svg width="160" height="27" viewBox="0 0 200 34" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M191.132 1.16555C197.975 1.16555 200 6.36844 200 10.1104C200 13.9549 197.975 19.1065 191.132 19.1065H185.324V16.5435H191.132C196.54 16.5435 197.309 11.8276 197.309 10.1104C197.309 8.3932 196.548 3.72854 191.14 3.72854H185.324V1.16555H191.132Z" fill="white"/>
+<path d="M173.1 3.92569V1.16555H183.549V3.92569H173.1Z" fill="white"/>
+<path d="M173.1 11.6147V8.85451H182.169V11.6147H173.1Z" fill="white"/>
+<path d="M173.1 19.3036V16.5435H183.549V19.3036H173.1Z" fill="white"/>
+<path d="M164.558 1.16555C169.059 1.55985 170.439 4.60192 170.439 6.88298C170.439 9.84028 168.467 12.2061 166.2 12.699L170.734 19.1065H167.777L163.341 12.9947H160.508V19.1065H157.92V10.3332H164.788C167.531 10.2819 167.876 7.93381 167.876 6.88298C167.876 5.72965 167.383 4.02429 164.686 3.82711H157.92V1.16555H164.558Z" fill="white"/>
+<path d="M147.088 16.8392C150.574 16.8392 151.419 13.5448 151.419 12.2889V1.16555H154.085V12.2889C154.085 15.262 152.265 19.4022 147.088 19.4022C141.911 19.4022 140.117 15.262 140.117 12.2889V1.16555H142.731V12.2889C142.731 13.5448 143.602 16.8392 147.088 16.8392Z" fill="white"/>
+<path d="M132.881 19.3036H130.121V5.10861H132.881V19.3036Z" fill="white"/>
+<path d="M137.613 3.92569V1.16555H125.586V3.92569H137.613Z" fill="white"/>
+<path d="M123.714 3.24157L122.578 5.47137C121.604 4.34365 119.656 3.24157 117.657 3.24157C112.249 3.24157 111.455 8.39318 111.455 10.1104C111.455 11.8276 112.249 16.9536 117.657 16.9536C119.733 16.9536 121.578 15.8515 122.732 14.8006L123.714 17.1349C122.099 18.7496 120.579 19.3371 117.657 19.3371C110.814 19.3371 108.789 13.9549 108.789 10.1104C108.789 6.36842 110.814 0.90925 117.657 0.90925C120.733 0.90925 122.124 1.47311 123.714 3.24157Z" fill="white"/>
+<path d="M99.0694 0.77124L90.4932 19.1065H93.2533L99.0694 6.48868L104.787 19.1065H107.646L99.0694 0.77124Z" fill="white"/>
+<path d="M80.4384 19.3036V8.85451H89.5075V11.6147H83.1986V19.3036H80.4384Z" fill="white"/>
+<path d="M80.4384 3.92569V1.16555H90.8876V3.92569H80.4384Z" fill="white"/>
+<path d="M67.6235 3.92569V1.16555H78.0726V3.92569H67.6235Z" fill="white"/>
+<path d="M67.6235 11.6147V8.85451H76.6925V11.6147H67.6235Z" fill="white"/>
+<path d="M67.6235 19.3036V16.5435H78.0726V19.3036H67.6235Z" fill="white"/>
+<path d="M49.4854 6.48868V19.1065H51.8513V8.85451L49.4854 6.48868Z" fill="white"/>
+<path d="M49.4854 0.77124V4.51715L64.2719 19.5008V1.16555H61.7089V13.2905L49.4854 0.77124Z" fill="white"/>
+<path d="M44.5566 19.1065H41.9936V1.16555H44.5566V19.1065Z" fill="white"/>
+<path d="M30.4601 0.77124L21.884 19.1065H24.6441L30.4601 6.48868L36.1776 19.1065H39.0363L30.4601 0.77124Z" fill="white"/>
+<path d="M2.95729 0.771243L2.36584 4.91146L9.95623 19.5008L17.5466 4.91146L16.9552 0.771243L9.95623 14.1776L2.95729 0.771243Z" fill="white"/>
+<path d="M0 19.1065H2.56299L3.84448 10.7275L1.87295 7.27729L0 19.1065Z" fill="white"/>
+<path d="M20.011 19.1065H17.448L16.1665 10.7275L18.1381 7.27729L20.011 19.1065Z" fill="white"/>
+<path d="M123.139 26.4011C123.553 26.4011 123.948 26.4691 124.325 26.605C124.702 26.7409 125.038 26.9385 125.335 27.1978C125.631 27.4572 125.863 27.7753 126.03 28.152L125.224 28.4485C124.989 28.01 124.69 27.692 124.325 27.4943C123.967 27.2967 123.575 27.1978 123.149 27.1978C122.716 27.1978 122.321 27.3028 121.963 27.5128C121.605 27.7228 121.32 28.0162 121.11 28.3929C120.907 28.7634 120.805 29.202 120.805 29.7084C120.805 30.2087 120.907 30.6473 121.11 31.024C121.314 31.4007 121.592 31.6941 121.944 31.9041C122.302 32.1141 122.701 32.219 123.139 32.2191C123.454 32.2191 123.751 32.1635 124.029 32.0523C124.307 31.9412 124.547 31.7867 124.751 31.5891C124.961 31.3915 125.125 31.1567 125.242 30.885V30.7385H126.178V30.9312C126.03 31.3265 125.807 31.6817 125.511 31.9967C125.221 32.3117 124.872 32.5617 124.464 32.747C124.063 32.9261 123.621 33.0158 123.139 33.0158C122.682 33.0158 122.253 32.9355 121.852 32.7749C121.456 32.6143 121.11 32.3888 120.814 32.0985C120.518 31.8021 120.286 31.4532 120.119 31.0517C119.952 30.6441 119.869 30.1963 119.869 29.7084C119.869 29.2267 119.952 28.7851 120.119 28.3836C120.286 27.976 120.518 27.624 120.814 27.3276C121.11 27.0311 121.456 26.8026 121.852 26.642C122.253 26.4814 122.682 26.4011 123.139 26.4011Z" fill="white"/>
+<path d="M126.178 30.3442H122.826V29.3584H126.178V30.3442Z" fill="white"/>
+<path d="M111.194 28.3385V33.0491H112.078V29.2217L111.194 28.3385Z" fill="white"/>
+<path d="M111.194 26.204V27.6024L116.715 33.1963V26.3512H115.758V30.8778L111.194 26.204Z" fill="white"/>
+<path d="M107.646 33.1043H106.66V26.4011H107.646V33.1043Z" fill="white"/>
+<path d="M97.2888 26.4011L97.0732 27.9104L99.8401 33.2286L102.607 27.9104L102.391 26.4011L99.8401 31.2882L97.2888 26.4011Z" fill="white"/>
+<path d="M96.2107 33.0849H97.145L97.6122 30.0305L96.8935 28.7728L96.2107 33.0849Z" fill="white"/>
+<path d="M103.505 33.0849H102.571L102.104 30.0305L102.823 28.7728L103.505 33.0849Z" fill="white"/>
+<path d="M90.5918 26.204L87.3388 33.1587H88.3858L90.5918 28.3727L92.7605 33.1587H93.8449L90.5918 26.204Z" fill="white"/>
+<path d="M82.6923 26.4011C84.3542 26.5467 84.8638 27.6699 84.8638 28.5122C84.8638 29.6041 84.1359 30.4776 83.2987 30.6596L84.973 33.0255H83.8811L82.2432 30.7688H81.1971V33.0255H80.2413V29.7861H82.7775C83.7901 29.7672 83.9175 28.9002 83.9175 28.5122C83.9175 28.0863 83.7355 27.4567 82.7397 27.3839H80.2413V26.4011H82.6923Z" fill="white"/>
+<path d="M73.5381 33.0485V29.1055H76.9604V30.147H74.5797V33.0485H73.5381Z" fill="white"/>
+<path d="M73.5381 27.4427V26.4011H77.4812V27.4427H73.5381Z" fill="white"/></svg><span class="logo"><span>Developer Pro Forma</span></span></div>
+<nav>
+<a href="/mf_index.html">CFS Budget Builder</a>
+<a href="/mf_savings.html">Soft Cost Savings</a>
+<a href="/mf_trades.html">Trade Savings</a>
+<a href="/mf_podium.html">Podium Analysis</a>
+<a href="/mf_summary.html">System Summary</a>
+<a href="/mf_caprate.html" class="active">Developer Pro Forma</a>
+</nav>
+</header>
+
+<div class="main">
+<div class="banner-row">
+<div id="pisBanner"><span style="color:#aaa">Loading data from other calculators&hellip;</span></div>
+<button onclick="refreshData()" style="flex-shrink:0;height:38px;padding:0 18px;background:#fff;border:1px solid #2D9CDB;color:#2D9CDB;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap" title="Re-load data from Budget Builder, Soft Cost Savings, and Trade Savings">&#8635; Refresh Data</button>
+</div>
+
+
+<!-- MARKET INTELLIGENCE PANEL -->
+<div style="background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:16px;margin-bottom:12px">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+<div style="width:28px;height:28px;border-radius:50%;background:#555;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">&#9881;</div>
+<div>
+<div style="font-size:15px;font-weight:700;color:#111">Market Intelligence</div>
+<div style="font-size:11px;color:#666;margin-top:2px">Select your market and enter gross SF — benchmarks auto-populate key inputs below</div>
+</div>
+<div style="margin-left:auto;font-size:10px;color:#666">All figures are market estimates · Q1 2026</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px">
+<div class="field">
+<label>Market</label>
+<select id="market" onchange="applyMarketBenchmarks()">
+<option value="">— Select Market —</option>
+<optgroup label="Texas">
+<option value="dfw">Dallas-Fort Worth, TX</option>
+<option value="houston">Houston, TX</option>
+<option value="austin">Austin, TX</option>
+</optgroup>
+<optgroup label="Mountain West">
+<option value="phoenix">Phoenix, AZ</option>
+<option value="denver">Denver, CO</option>
+<option value="slc">Salt Lake City, UT</option>
+<option value="lasvegas">Las Vegas, NV</option>
+<option value="boise">Boise, ID</option>
+</optgroup>
+<optgroup label="Southeast">
+<option value="nashville">Nashville, TN</option>
+<option value="charlotte">Charlotte, NC</option>
+<option value="atlanta">Atlanta, GA</option>
+</optgroup>
+<optgroup label="Oklahoma">
+<option value="okc">Oklahoma City, OK</option>
+</optgroup>
+<optgroup label="Pacific Northwest">
+<option value="portland">Portland, OR</option>
+<option value="seattle">Seattle, WA</option>
+</optgroup>
+<optgroup label="California">
+<option value="losangeles">Los Angeles, CA</option>
+</optgroup>
+</select>
+<div class="hint">Select market to auto-populate benchmarks</div>
+</div>
+<div class="field">
+<label>Gross Building SF</label>
+<input type="number" id="grossSF" value="125000" min="1000" step="1000" onchange="applyMarketBenchmarks()">
+<div class="hint">Total gross SF → estimates unit count and asset value</div>
+</div>
+<div class="field">
+<label>Asset Class</label>
+<select id="assetClass" onchange="applyMarketBenchmarks()">
+<option value="A">Class A — New Construction</option>
+<option value="B">Class B — Existing / Renovated</option>
+</select>
+<div class="hint">Affects cap rate and per-unit pricing benchmarks</div>
+</div>
+</div>
+<div id="mktPanel" style="display:none;background:#f5f5f5;border:1px solid #e0e0e0;border-radius:8px;padding:12px">
+<div style="font-size:11px;color:#aaa">Select a market above to see benchmarks.</div>
+</div>
+<div style="margin-top:10px;font-size:10px;color:#aaa;line-height:1.5">
+&#9432; Benchmarks auto-populate: Units (from SF), Avg Rent/Rate, Occupancy, Cap Rate, Construction Period, and Asset Value. All inputs remain fully editable. Sources: CoStar, Yardi Matrix, Kidder Mathews, Marcus &amp; Millichap Q1 2026.
+</div>
+</div>
+
+<!-- SECTION 1 -->
+<div class="sec-head">
+<div class="sec-num">1</div>
+<div><div class="sec-title">Revenue Builder &mdash; Stabilized NOI</div><div style="font-size:11px;color:#666;margin-top:2px">Enter project fundamentals to calculate Net Operating Income</div></div>
+<div style="margin-left:auto;font-size:10px;color:#666">NOI flows automatically into Sections 2 and 3</div>
+</div>
+<div class="input-grid g3">
+<div class="input-card">
+<div class="card-title">&#128203; Project</div>
+<div class="field"><label>Project Name</label><input type="text" id="projName" placeholder="Project name"></div>
+<div class="field"><label>Client / Developer</label><input type="text" id="client" placeholder="Developer name"></div>
+<div class="field"><label>Product Type</label>
+<select id="ptype" onchange="applyTypeDefaults();applyMarketBenchmarks();calc()">
+<option value="multifamily">Multifamily</option>
+<option value="hospitality">Hospitality</option>
+<option value="senior">Senior Living</option>
+<option value="student">Student Housing</option>
+</select>
+</div>
+<div class="field"><label>Total Asset Value at Completion ($)</label><input type="number" id="assetVal" readonly style="color:#2589b0;font-weight:600;background:#f5f5f5"><div class="hint">Stabilized NOI &divide; Cap Rate. Auto-calculated from Section 1 &amp; 2 inputs.</div></div>
+</div>
+<div class="input-card">
+<div class="card-title">&#128176; Revenue Inputs</div>
+<div class="field"><label id="unitsLabel">Number of Units</label><input type="number" id="numUnits" value="120" min="1" step="1"></div>
+<div class="field"><label id="rateLabel">Avg Monthly Rent / Unit ($)</label><input type="number" id="unitRate" value="1850" min="1" step="50"><div class="hint" id="rateHint">Annual revenue = units &times; rate &times; 12 months</div></div>
+<div class="field"><label id="occLabel">Occupancy Rate (%)</label><input type="number" id="occRate" value="93" min="1" max="100" step="1"><div class="hint" id="occHint">% of units generating revenue at stabilization</div></div>
+<div class="field"><label>Operating Expense Ratio (%) <span class="auto-tag" id="expSugTag">Suggested</span></label><input type="number" id="expRatio" value="40" min="1" max="95" step="1"><div class="hint" id="expHint">Suggested 38-42% for multifamily. Includes taxes, insurance, mgmt, maintenance. Excludes debt service.</div></div>
+</div>
+<div class="input-card">
+<div class="card-title">&#128202; Stabilized NOI &mdash; Calculated</div>
+<div id="noiRows">
+<div class="noi-row"><span class="noi-lbl" id="grossLabel">Gross Potential Revenue</span><span class="noi-val" id="grossRev">&#8212;</span></div>
+<div class="noi-row" id="vacRow"><span class="noi-lbl">Less Vacancy &amp; Credit Loss</span><span class="noi-val" id="vacancyLoss" style="color:#c00">&#8212;</span></div>
+<div class="noi-row"><span class="noi-lbl">Effective Gross Income</span><span class="noi-val" id="egi">&#8212;</span></div>
+<div class="noi-row"><span class="noi-lbl" id="expLabel">Less Operating Expenses</span><span class="noi-val" id="opexVal" style="color:#c00">&#8212;</span></div>
+<div class="noi-row final"><span class="noi-lbl">Stabilized Annual NOI</span><span class="noi-val" id="calcNOI">&#8212;</span></div>
+</div>
+<div style="margin-top:10px;padding-top:10px;border-top:1px solid #f0f0f0">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+<div style="font-size:10px;color:#555;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Soft Cost Savings &rarr; Annual NOI <span class="auto-tag" id="savingsTag" style="display:none">Auto</span></div>
+<div style="font-size:9px;color:#aaa" id="savingsSource">Enter values or run Soft Cost Savings to auto-fill</div>
+</div>
+<div style="background:#f8fdf8;border:1px solid #e0f0e0;border-radius:8px;padding:10px;margin-bottom:6px">
+<div style="font-size:9px;color:#2D9CDB;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Annual Recurring Savings (flow to NOI)</div>
+<div style="display:grid;grid-template-columns:1fr auto;gap:3px 8px;align-items:center;font-size:11px">
+<span style="color:#555">Permanent Insurance ($/yr)</span>
+<input type="number" id="sav_PI" value="0" min="0" step="100" style="width:110px;height:26px;padding:0 8px;font-size:11px;border:1px solid #ddd;border-radius:4px;text-align:right">
+<span style="color:#555">Pest &amp; Termite ($/yr)</span>
+<input type="number" id="sav_Pest" value="0" min="0" step="100" style="width:110px;height:26px;padding:0 8px;font-size:11px;border:1px solid #ddd;border-radius:4px;text-align:right">
+<span style="color:#555">Maintenance &amp; OpEx ($/yr)</span>
+<input type="number" id="sav_Maint" value="0" min="0" step="100" style="width:110px;height:26px;padding:0 8px;font-size:11px;border:1px solid #ddd;border-radius:4px;text-align:right">
+<span style="color:#555">Fire Rating Advantage ($/yr)</span>
+<input type="number" id="sav_Fire" value="0" min="0" step="100" style="width:110px;height:26px;padding:0 8px;font-size:11px;border:1px solid #ddd;border-radius:4px;text-align:right">
+<span style="color:#555">Wind &amp; Storm Insurance ($/yr)</span>
+<input type="number" id="sav_Wind" value="0" min="0" step="100" style="width:110px;height:26px;padding:0 8px;font-size:11px;border:1px solid #ddd;border-radius:4px;text-align:right">
+<span style="color:#555">Warranty &amp; Callbacks ($/yr)</span>
+<input type="number" id="sav_War" value="0" min="0" step="100" style="width:110px;height:26px;padding:0 8px;font-size:11px;border:1px solid #ddd;border-radius:4px;text-align:right">
+</div>
+<div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;border-top:1.5px solid #2D9CDB;margin-top:6px;padding-top:5px">
+<span>Total Annual Recurring</span><span style="color:#2D9CDB" id="totalAnnualSav">$0/yr</span>
+</div>
+</div>
+<div style="background:#fff8f0;border:1px solid #ffe0b0;border-radius:8px;padding:10px;margin-bottom:6px">
+<div style="font-size:9px;color:#C47F00;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">One-Time Construction Savings (not in NOI)</div>
+<div style="display:grid;grid-template-columns:1fr auto;gap:3px 8px;align-items:center;font-size:11px">
+<span style="color:#888">Builder&#39;s Risk Insurance</span>
+<input type="number" id="sav_BR" value="0" min="0" step="100" style="width:110px;height:26px;padding:0 8px;font-size:11px;border:1px solid #ffe0b0;border-radius:4px;text-align:right">
+<span style="color:#888">Carry Cost (Schedule)</span>
+<input type="number" id="sav_CC" value="0" min="0" step="100" style="width:110px;height:26px;padding:0 8px;font-size:11px;border:1px solid #ffe0b0;border-radius:4px;text-align:right">
+</div>
+<div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:#C47F00;border-top:1px solid #ffe0b0;margin-top:5px;padding-top:4px">
+<span>Total One-Time</span><span id="totalOneTimeSav">$0</span>
+</div>
+</div>
+<div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;padding-top:6px;border-top:1px dashed #e5e5e5">
+<span style="color:#555">CFS Effective NOI (w/ savings)</span>
+<span style="color:#2D9CDB" id="cfsNOI">&#8212;</span>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SECTION 2 -->
+<div class="divider"></div>
+<div class="sec-head">
+<div class="sec-num">2</div>
+<div><div class="sec-title">Financing &amp; DSCR Analysis</div><div style="font-size:11px;color:#666;margin-top:2px">Construction carry cost + Stabilized debt service coverage &mdash; both Wood Frame and CFS</div></div>
+<div style="margin-left:auto;font-size:10px;color:#666">Project cost auto-loaded from Budget Builder</div>
+</div>
+<div class="input-grid g4">
+<div class="input-card">
+<div class="card-title">&#127959;&#65039; Project Cost</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+<div class="field" style="margin-bottom:0">
+<label>Total Construction Cost / SF ($)</label>
+<input type="number" id="hardCostSF" value="250" min="50" max="1000" step="5">
+<div class="hint">All trades: framing, MEP, finishes, envelope, sitework. Phoenix mid-rise: $200–$280/SF typical.</div>
+</div>
+<div class="field" style="margin-bottom:0">
+<label>Gross Building SF</label>
+<input type="number" id="grossSFcost" value="125000" min="1000" step="1000">
+<div class="hint">Synced with Market Intelligence SF</div>
+</div>
+</div>
+<div class="field"><label>Total Hard Cost ($)</label><input type="number" id="totalHardCost" readonly style="color:#555;background:#f5f5f5"><div class="hint">Hard Cost/SF &#215; Gross SF</div></div>
+<div style="display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-bottom:10px">
+<div class="field" style="margin-bottom:0">
+<label>Soft Cost Allowance (%)</label>
+<input type="number" id="softCostPct" value="20" min="0" max="50" step="1">
+<div class="hint">A&amp;E, permits, fees, financing costs, contingency. Industry standard: 20&ndash;25%.</div>
+</div>
+<div class="field" style="margin-bottom:0">
+<label>Soft Cost ($)</label>
+<input type="number" id="softCostAmt" readonly style="color:#C47F00;background:#fff8f0;font-weight:600">
+<div class="hint">Hard Cost &times; Soft %</div>
+</div>
+</div>
+<div class="field"><label>Total Project Cost ($)</label><input type="number" id="totalCost" readonly style="color:#2D9CDB;font-weight:600;background:#f5f5f5"><div class="hint">Hard Cost + Soft Costs (Hard Cost × (1 + Soft Cost %)) — this IS the Total Project Cost.</div></div>
+<div class="field"><label>Loan-to-Cost (%)</label><input type="number" id="ltc" value="65" min="1" max="95" step="1"><div class="hint">Typical construction: 60-70%</div></div>
+<div class="field"><label>Loan Amount ($)</label><input type="number" id="loanAmt" readonly style="color:#2D9CDB;font-weight:600"></div>
+<div class="field"><label>Developer Equity ($)</label><input type="number" id="devEquity" readonly></div>
+</div>
+<div class="input-card">
+<div class="card-title">&#128197; Construction Period</div>
+<div class="field"><label>Construction Period (months)</label><input type="number" id="constrMo" value="18" min="1" max="60" step="1"><div class="hint">Typical mid-rise: 16-24 months. CFS compresses this.</div></div>
+<div class="field"><label>CFS Schedule Savings (weeks) <span class="auto-tag" id="schedTag" style="display:none">Auto</span></label><input type="number" id="schedWks" value="0" min="0" max="52" step="1"><div class="hint">Auto-loaded from Trade Savings page</div></div>
+<div class="field"><label>Monthly Interest Carry ($)</label><input type="number" id="monthlyCarry" readonly style="color:#C47F00;font-weight:600"></div>
+<div class="field"><label>Total Construction Carry ($)</label><input type="number" id="totalCarry" readonly style="color:#C47F00;font-weight:600"></div>
+</div>
+<div class="input-card">
+<div class="card-title">&#127968; Permanent Loan</div>
+<div class="field"><label>Interest Rate (%)</label><input type="number" id="intRate" value="6.75" min="1" max="20" step="0.125"><div class="hint">Applies to both construction carry and permanent loan</div></div>
+<div class="field"><label>Amortization Period</label><select id="amortYrs"><option value="25">25 years</option><option value="30" selected>30 years</option><option value="35">35 years</option><option value="40">40 years</option></select></div>
+<div class="field"><label>Annual Debt Service ($)</label><input type="number" id="annualDS" readonly style="color:#2589b0;font-weight:600"></div>
+<div class="field"><label>Lender Minimum DSCR</label><input type="number" id="dscr_min" value="1.25" min="1.0" max="2.5" step="0.05"><div class="hint">Typical: 1.20-1.30. Multifamily agency: 1.25</div></div>
+</div>
+<div class="input-card">
+<div class="card-title">&#128200; Cap Rate Assumptions</div>
+<div class="field"><label>Wood-Frame Cap Rate (%)</label><input type="number" id="woodCap" value="7.00" min="3" max="15" step="0.25"></div>
+<div class="field"><label>CFS Compression (basis pts)</label><input type="number" id="bps" value="25" min="0" max="100" step="5"><div class="hint">Market range: 15-50 bps. Noncombustible assets trade tighter.</div></div>
+<div class="field"><label>Implied CFS Cap Rate (%)</label><input type="number" id="cfsCap" readonly></div>
+<div class="field"><label>Hold Period</label><select id="holdYrs"><option value="5">5 years</option><option value="7" selected>7 years</option><option value="10">10 years</option><option value="15">15 years</option></select></div>
+</div>
+</div>
+
+<div class="dscr-grid">
+<div class="dscr-panel construction">
+<div class="dscr-title" style="color:#C47F00">&#127959;&#65039; Construction Period &mdash; Carry Cost Analysis</div>
+<div class="carry-grid">
+<div class="carry-cell"><div class="carry-lbl">Monthly Carry</div><div class="carry-val" id="dMonthlyCarry">&#8212;</div><div style="font-size:9px;color:#aaa">interest-only</div></div>
+<div class="carry-cell"><div class="carry-lbl">Total Carry</div><div class="carry-val" id="dTotalCarry">&#8212;</div><div style="font-size:9px;color:#aaa" id="dConstrLbl">&#8212; months</div></div>
+<div class="carry-cell savings"><div class="carry-lbl">CFS Schedule Savings</div><div class="carry-val green" id="dCarrySaved">&#8212;</div><div style="font-size:9px;color:#aaa" id="dSchedLbl">&#8212; weeks faster</div></div>
+</div>
+<div class="narr" id="constrNarr">Enter financing details to generate construction carry analysis.</div>
+<div class="tight-note" id="debtYieldNote"><strong style="color:#C47F00">Debt Yield Check:</strong> <span id="debtYieldText"></span></div>
+</div>
+<div class="dscr-panel stabilized">
+<div class="dscr-title" style="color:#2589b0">&#128202; Stabilized DSCR &mdash; Wood Frame vs. CFS</div>
+<table class="dscr-table">
+<tr><th class="lbl"></th><th class="wood">Wood Frame</th><th class="cfs">CFS</th></tr>
+<tr><td>Stabilized NOI</td><td id="dtNWood">&#8212;</td><td id="dtNCfs">&#8212;</td></tr>
+<tr><td>Annual Soft Cost Savings</td><td id="dtSWood">&#8212;</td><td id="dtSCfs">&#8212;</td></tr>
+<tr><td>Effective NOI</td><td id="dtEWood">&#8212;</td><td id="dtECfs">&#8212;</td></tr>
+<tr><td>Annual Debt Service</td><td id="dtAWood">&#8212;</td><td id="dtACfs">&#8212;</td></tr>
+<tr class="final-row"><td>DSCR</td><td style="color:#c00" id="dtDWood">&#8212;</td><td style="color:#2D9CDB" id="dtDCfs">&#8212;</td></tr>
+<tr><td>Min Required</td><td id="dtPWood">&#8212;</td><td id="dtPCfs">&#8212;</td></tr>
+</table>
+<div class="tight-note" id="tightNote"><strong style="color:#C47F00">&#9888; Tight Scenario:</strong> <span id="tightText"></span></div>
+<div class="narr" id="dscrNarr">Enter financing details to generate the DSCR comparison.</div>
+</div>
+</div>
+
+<!-- SECTION 3 -->
+<div class="divider"></div>
+<div class="sec-head">
+<div class="sec-num">3</div>
+<div><div class="sec-title">Cap Rate &amp; Disposition Advantage</div><div style="font-size:11px;color:#666;margin-top:2px">Exit value impact from NOI improvement and cap rate compression</div></div>
+</div>
+<div class="hero">
+<div class="hero-eyebrow">Total Disposition Advantage &mdash; CFS vs. Wood-Frame Construction</div>
+<div class="hero-val" id="heroVal">&#8212;</div>
+<div class="hero-sub" id="heroSub">Complete Sections 1 and 2 to calculate the full disposition advantage</div>
+<div class="hero-grid">
+<div class="hero-cell"><div class="hc-lbl">NOI Lift &rarr; Asset Value</div><div class="hc-val" id="hNoiVal">&#8212;</div><div class="hc-sub">at same cap rate</div></div>
+<div class="hero-cell"><div class="hc-lbl">Cap Rate Compression</div><div class="hc-val" id="hCompVal">&#8212;</div><div class="hc-sub" id="hCompSub">bps</div></div>
+<div class="hero-cell"><div class="hc-lbl">Cumulative Savings</div><div class="hc-val" id="hCumVal">&#8212;</div><div class="hc-sub" id="hCumSub">hold period</div></div>
+</div>
+</div>
+<div class="output-grid">
+<div class="out-panel n">
+<div class="out-name">&#128176; NOI Lift &mdash; Asset Value Impact</div>
+<div class="out-lbl">Annual NOI Improvement</div><div class="out-val b" id="outNoiAnnual">&#8212;</div>
+<div class="out-sub">Soft cost savings flowing directly to NOI</div>
+<hr class="out-divider">
+<div class="out-lbl">Wood-Frame Asset Value</div><div class="out-val b" id="outNoiBase">&#8212;</div>
+<div class="out-lbl">CFS Asset Value (same cap rate)</div><div class="out-val b" id="outNoiNew">&#8212;</div>
+<div class="out-lbl">Value Gain from NOI Improvement</div><div class="out-val b" id="outNoiGain">&#8212;</div>
+</div>
+<div class="out-panel c">
+<div class="out-name">&#128201; Cap Rate Compression &mdash; Exit Premium</div>
+<div class="out-lbl">Wood-Frame Cap Rate</div><div class="out-val p" id="outWoodCap">&#8212;</div>
+<div class="out-lbl">CFS Cap Rate (compressed)</div><div class="out-val p" id="outCfsCap">&#8212;</div>
+<div class="out-lbl">Compression Applied</div><div class="out-val p" id="outBps">&#8212;</div>
+<hr class="out-divider">
+<div class="out-lbl">Value at Wood Cap Rate</div><div class="out-val p" id="outValWood">&#8212;</div>
+<div class="out-lbl">Value at CFS Cap Rate</div><div class="out-val p" id="outValCfs">&#8212;</div>
+<div class="out-lbl">Compression Value at Exit</div><div class="out-val p" id="outCompGain">&#8212;</div>
+</div>
+<div class="out-panel g">
+<div class="out-name">&#127942; Combined Exit Value Advantage</div>
+<div class="out-lbl">NOI Lift Value</div><div class="out-val gr" id="outCombNoi">&#8212;</div>
+<div class="out-lbl">Cap Rate Compression Value</div><div class="out-val gr" id="outCombComp">&#8212;</div>
+<div class="out-lbl">Cumulative Savings (Hold Period)</div><div class="out-val gr" id="outCombCum">&#8212;</div>
+<hr class="out-divider">
+<div class="out-lbl" style="font-size:11px;color:#2D9CDB;font-weight:700">Total Disposition Advantage</div>
+<div class="out-val gr" id="outCombTotal" style="font-size:30px">&#8212;</div>
+<div class="out-sub">The number that belongs in every developer pro forma</div>
+</div>
+</div>
+<div class="sens-card">
+<div class="card-title">&#128202; Cap Rate Sensitivity &mdash; Disposition Advantage by Compression Scenario</div>
+<div style="font-size:10px;color:#aaa;margin-top:5px">Your selected compression is highlighted. Same NOI applied across all scenarios.</div>
+<table class="sens-table" id="sensTable"></table>
+</div>
+<div class="callout">
+<div class="callout-title">The Framing Decision Shows Up Across the Entire Project Timeline</div>
+<div id="calloutText">Complete the Revenue Builder and Financing sections above to generate the full developer narrative.</div>
+</div>
+<div style="text-align:center;margin:8px 0 4px;display:flex;justify-content:center;gap:12px"><button class="print-btn" onclick="doPrint()">Print Developer Pro Forma</button><button onclick="resetForm()" style="height:38px;padding:0 24px;background:#fff;color:#c00;border:1px solid #c00;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">&#8635; Reset Form</button></div>
+<div class="disc">All figures are estimates for discussion purposes only. DSCR figures do not constitute a lender commitment. Cap rate compression is market-observed and not guaranteed.<br>&copy; 2026 Mainefactured Framing &middot; Prefab Consulting LLC &middot; Building Systems. Not Just Structures.</div>
+</div>
+
+<script>
+'use strict';
+var ACCENT='#2D9CDB', SK_SAV='mf-pis-savings', SK_BUD='mf-pis-budget', SK_TRD='mf-pis-trades';
+var SK_CAP='mf-pis-proforma', SK_PER='mf-proforma-v1', AUTH='mf_auth', PW='MF2026';
+function fmt(n){return '$'+Math.round(n).toLocaleString();}
+function fmtM(n){return Math.abs(n)>=1e6?'$'+(n/1e6).toFixed(2)+'M':fmt(n);}
+function fmtX(n){return n.toFixed(2)+'x';}
+function gv(id){var e=document.getElementById(id);return e?(parseFloat(e.value)||0):0;}
+function sv(id){var e=document.getElementById(id);return e?(e.value||''):'';}
+function ss(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+function si(id,v){var e=document.getElementById(id);if(e)e.innerHTML=v;}
+function pmt(r,y,p){var m=r/100/12,n=y*12;if(m===0)return p/n;return p*m*Math.pow(1+m,n)/(Math.pow(1+m,n)-1);}
+
+
+// ── Market Benchmark Data ─────────────────────────────────────────────────────
+// Sources: CoStar, Yardi Matrix, RealPage, Lodging Econometrics, NIC MAP Q1 2026
+// Updated: May 2026. All figures are market estimates for discussion purposes.
+var MKT = {
+phoenix: { label:'Phoenix, AZ', mf:{rent:1600,occ:93,capA:5.0,capB:5.5,vu:222000}, ho:{adr:155,occ:68,capA:7.0,vu:95000}, sl:{rate:4200,occ:88,capA:6.2,vu:180000}, st:{rent:950,occ:94,capA:6.0,vu:160000}, constr:{mf:20,ho:22,sl:24,st:18} },
+dfw: { label:'Dallas-Fort Worth, TX', mf:{rent:1650,occ:91,capA:5.2,capB:5.7,vu:240000}, ho:{adr:175,occ:70,capA:7.2,vu:105000}, sl:{rate:4400,occ:89,capA:6.3,vu:185000}, st:{rent:1050,occ:95,capA:6.1,vu:175000}, constr:{mf:20,ho:22,sl:24,st:18} },
+houston: { label:'Houston, TX', mf:{rent:1450,occ:90,capA:5.5,capB:6.0,vu:195000}, ho:{adr:160,occ:67,capA:7.4,vu:90000}, sl:{rate:4000,occ:87,capA:6.5,vu:165000}, st:{rent:900,occ:93,capA:6.2,vu:145000}, constr:{mf:20,ho:22,sl:24,st:18} },
+austin: { label:'Austin, TX', mf:{rent:1800,occ:89,capA:5.0,capB:5.5,vu:265000}, ho:{adr:195,occ:72,capA:6.8,vu:125000}, sl:{rate:4800,occ:90,capA:6.0,vu:210000}, st:{rent:1100,occ:95,capA:5.8,vu:200000}, constr:{mf:20,ho:22,sl:24,st:18} },
+denver: { label:'Denver, CO', mf:{rent:1900,occ:93,capA:5.0,capB:5.5,vu:280000}, ho:{adr:185,occ:71,capA:6.9,vu:120000}, sl:{rate:5000,occ:89,capA:6.1,vu:215000}, st:{rent:1150,occ:95,capA:5.9,vu:210000}, constr:{mf:22,ho:24,sl:26,st:20} },
+slc: { label:'Salt Lake City, UT', mf:{rent:1650,occ:94,capA:5.2,capB:5.7,vu:245000}, ho:{adr:165,occ:69,capA:7.1,vu:100000}, sl:{rate:4200,occ:90,capA:6.3,vu:175000}, st:{rent:950,occ:95,capA:6.0,vu:165000}, constr:{mf:20,ho:22,sl:24,st:18} },
+lasvegas: { label:'Las Vegas, NV', mf:{rent:1550,occ:92,capA:5.3,capB:5.8,vu:230000}, ho:{adr:210,occ:82,capA:6.5,vu:145000}, sl:{rate:3900,occ:87,capA:6.4,vu:160000}, st:{rent:900,occ:93,capA:6.1,vu:150000}, constr:{mf:20,ho:22,sl:24,st:18} },
+boise: { label:'Boise, ID', mf:{rent:1500,occ:94,capA:5.4,capB:5.9,vu:220000}, ho:{adr:145,occ:67,capA:7.3,vu:88000}, sl:{rate:3800,occ:88,capA:6.5,vu:160000}, st:{rent:850,occ:95,capA:6.2,vu:150000}, constr:{mf:20,ho:22,sl:24,st:18} },
+okc: { label:'Oklahoma City, OK', mf:{rent:1150,occ:92,capA:5.8,capB:6.3,vu:155000}, ho:{adr:130,occ:64,capA:7.8,vu:72000}, sl:{rate:3400,occ:86,capA:6.8,vu:140000}, st:{rent:750,occ:93,capA:6.5,vu:120000}, constr:{mf:18,ho:20,sl:22,st:16} },
+portland: { label:'Portland, OR', mf:{rent:1800,occ:93,capA:4.9,capB:5.4,vu:295000}, ho:{adr:175,occ:70,capA:6.8,vu:118000}, sl:{rate:4800,occ:89,capA:6.0,vu:220000}, st:{rent:1050,occ:94,capA:5.8,vu:205000}, constr:{mf:22,ho:24,sl:26,st:20} },
+seattle: { label:'Seattle, WA', mf:{rent:2200,occ:94,capA:4.5,capB:5.0,vu:380000}, ho:{adr:210,occ:73,capA:6.4,vu:165000}, sl:{rate:5500,occ:91,capA:5.7,vu:280000}, st:{rent:1400,occ:96,capA:5.5,vu:270000}, constr:{mf:24,ho:26,sl:28,st:22} },
+losangeles: { label:'Los Angeles, CA', mf:{rent:2600,occ:95,capA:4.2,capB:4.7,vu:460000}, ho:{adr:250,occ:75,capA:5.8,vu:210000}, sl:{rate:6000,occ:92,capA:5.4,vu:340000}, st:{rent:1600,occ:97,capA:5.2,vu:320000}, constr:{mf:26,ho:28,sl:30,st:24} },
+nashville: { label:'Nashville, TN', mf:{rent:1700,occ:92,capA:5.1,capB:5.6,vu:255000}, ho:{adr:190,occ:74,capA:6.6,vu:130000}, sl:{rate:4600,occ:90,capA:6.1,vu:200000}, st:{rent:1050,occ:95,capA:5.9,vu:190000}, constr:{mf:20,ho:22,sl:24,st:18} },
+charlotte: { label:'Charlotte, NC', mf:{rent:1600,occ:92,capA:5.2,capB:5.7,vu:240000}, ho:{adr:160,occ:69,capA:7.0,vu:98000}, sl:{rate:4200,occ:89,capA:6.3,vu:178000}, st:{rent:950,occ:94,capA:6.0,vu:168000}, constr:{mf:20,ho:22,sl:24,st:18} },
+atlanta: { label:'Atlanta, GA', mf:{rent:1700,occ:91,capA:5.3,capB:5.8,vu:248000}, ho:{adr:170,occ:68,capA:7.1,vu:100000}, sl:{rate:4300,occ:88,capA:6.4,vu:180000}, st:{rent:1000,occ:94,capA:6.1,vu:170000}, constr:{mf:20,ho:22,sl:24,st:18} },
+};
+
+// Unit density benchmarks (avg unit SF by product type and mix)
+var UNIT_SF = {
+multifamily: { studio:550, oneBR:820, twoBR:1080, blended:870, commonPct:0.15, mixLabel:'~60% 1BR / 35% 2BR / 5% Studio' },
+hospitality: { keysSF:380, commonPct:0.30, mixLabel:'Standard select-service key avg' },
+senior: { studio:480, oneBR:680, twoBR:950, blended:680, commonPct:0.20, mixLabel:'~50% 1BR / 30% Studio / 20% 2BR' },
+student: { studio:400, oneBR:600, twoBR:800, blended:500, commonPct:0.18, mixLabel:'~60% Studio / 30% 1BR / 10% 2BR (per bed)' },
+};
+
+// ── Apply Market Benchmarks ────────────────────────────────────────────────────
+function applyMarketBenchmarks() {
+var mktKey = sv('market');
+var ptype = sv('ptype');
+var mkt = MKT[mktKey];
+var grossSF = gv('grossSF');
+if (!mkt || !grossSF) return;
+
+var d = TD[ptype] || TD.multifamily;
+var usf = UNIT_SF[ptype] || UNIT_SF.multifamily;
+// Market Intelligence uses product type to show relevant benchmarks
+var ptKey = ptype==='multifamily'?'mf':ptype==='hospitality'?'ho':ptype==='senior'?'sl':'st';
+var mktData = mkt[ptKey];
+if (!mktData) return;
+
+// Unit calculation
+var netSF = grossSF * (1 - usf.commonPct);
+var avgUSF = usf.blended || usf.keysSF || 700;
+var estUnits = Math.round(netSF / avgUSF);
+
+// Populate fields
+function setIfEmpty(id, val) {
+var el = document.getElementById(id);
+if (el) el.value = val;
+}
+setIfEmpty('numUnits', estUnits);
+setIfEmpty('unitRate', mktData.rent || mktData.adr || mktData.rate);
+setIfEmpty('occRate', mktData.occ);
+setIfEmpty('woodCap', mktData.capA.toFixed(2));
+// construction period
+var cp = mkt.constr[ptype==='multifamily'?'mf':ptype==='hospitality'?'ho':ptype==='senior'?'sl':'st'] || 20;
+setIfEmpty('constrMo', cp);
+// Keep cost SF in sync with market intelligence SF
+var sfCostEl = document.getElementById('grossSFcost');
+var grossSFVal = gv('grossSF');
+if (sfCostEl && grossSFVal > 0) sfCostEl.value = grossSFVal;
+calcProjectCost();
+
+// Update the market info panel
+var panel = document.getElementById('mktPanel');
+if (panel) {
+var vuStr = mktData.vu ? ('$' + Math.round(mktData.vu/1000) + 'K/unit') : '—';
+var vuRange = mktData.vu ? (
+'$' + (estUnits * mktData.vu / 1e6 * 0.9).toFixed(1) + 'M – $' +
+(estUnits * mktData.vu / 1e6 * 1.15).toFixed(1) + 'M'
+) : '—';
+// Labels by product type
+var rateVal = (mktData.rent||mktData.adr||mktData.rate||0).toLocaleString();
+var rateLabel = ptype==='hospitality'?'Average Daily Rate (ADR)':ptype==='senior'?'Monthly Rate / Unit':ptype==='student'?'Monthly Rent / Bed':'Monthly Rent / Unit';
+var occLabel = ptype==='hospitality'?'% of nights occupied':'% stabilized occupancy';
+var unitLabel = ptype==='hospitality'?'Est. Keys':ptype==='student'?'Est. Beds':ptype==='senior'?'Est. Units':'Est. Units';
+var capLabel = ptype==='hospitality'?'Class A Hotel Cap Rate':ptype==='senior'?'Senior Living Cap Rate':ptype==='student'?'Student Housing Cap Rate':'Class A Cap Rate';
+var vuLabel = ptype==='hospitality'?'$/Key (market avg)':ptype==='senior'?'$/Unit (senior avg)':ptype==='student'?'$/Bed (student avg)':'$/Unit (all-vintage)';
+var ptypeLabel= {multifamily:'Multifamily',hospitality:'Hospitality',senior:'Senior Living',student:'Student Housing'}[ptype]||'';
+panel.innerHTML =
+'<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:8px">'+mkt.label+' — '+ptypeLabel+' Market Intelligence</div>' +
+'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px">' +
+mkCell(unitLabel, estUnits + ' ' + (d.unitShort||'units'), 'from ' + Math.round(grossSF*(1-usf.commonPct)).toLocaleString() + ' net SF ÷ ' + avgUSF + ' SF/unit') +
+mkCell('Unit Mix', usf.mixLabel || '—', grossSF.toLocaleString() + ' gross SF · ' + Math.round(usf.commonPct*100) + '% common') +
+mkCell(rateLabel, '$' + rateVal, ptype==='hospitality'?'RevPAR = ADR × Occ%':'Per ' + (d.unitShort||'unit') + ' per month') +
+mkCell('Stabilized Occ.', mktData.occ + '%', occLabel) +
+'</div>' +
+'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">' +
+mkCell(capLabel, mktData.capA.toFixed(2) + '%', 'Current ' + mkt.label + ' · Q1 2026') +
+mkCell(vuLabel, vuStr, 'Market avg · Q1 2026') +
+mkCell('Est. Asset Value', vuRange, estUnits + ' ' + (d.unitShort||'units') + ' at $' + Math.round(mktData.vu/1000) + 'K–$' + Math.round(mktData.vu*1.15/1000) + 'K/unit') +
+mkCell('Const. Period', cp + ' months', ptypeLabel + ' typical · CFS saves 4–6 wks') +
+'</div>';
+panel.style.display = 'block';
+// Update asset value suggestion
+// Per-unit market estimate shown in benchmark grid — does not override NOI-based asset value calc
+}
+calc();
+}
+
+function mkCell(label, val, sub) {
+return '<div style="background:#fff;border:1px solid #e5e5e5;border-radius:6px;padding:8px 10px">' +
+'<div style="font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">' + label + '</div>' +
+'<div style="font-size:13px;font-weight:700;color:var(--accent,#2D9CDB)">' + val + '</div>' +
+'<div style="font-size:9px;color:#aaa;margin-top:2px;line-height:1.3">' + sub + '</div>' +
+'</div>';
+}
+
+// ── Project Cost Calculator ───────────────────────────────────────────────────
+function calcProjectCost() {
+var hcSF = gv('hardCostSF');
+var sfCost = gv('grossSFcost');
+var softPct = gv('softCostPct') / 100;
+// Keep grossSFcost in sync with grossSF (Market Intelligence panel)
+var grossSFel = document.getElementById('grossSF');
+if (grossSFel && !sfCost) sfCost = parseFloat(grossSFel.value) || 0;
+var hardCostTotal = Math.round(hcSF * sfCost);
+var softCostAmt = Math.round(hardCostTotal * softPct);
+var totalProject = hardCostTotal + softCostAmt;
+// Update display fields
+var thcEl = document.getElementById('totalHardCost');
+if (thcEl) thcEl.value = hardCostTotal;
+var scEl = document.getElementById('softCostAmt');
+if (scEl) scEl.value = softCostAmt;
+var tcEl = document.getElementById('totalCost');
+if (tcEl && hardCostTotal > 0) tcEl.value = totalProject;
+calc();
+}
+
+// ── Savings Input Calculator ──────────────────────────────────────────────────
+// Reads directly from embedded input fields — no localStorage dependency
+var _totSav = 0;
+var _totOneTime = 0;
+
+function calcSavings() {
+var annual = [
+gv('sav_PI'), gv('sav_Pest'), gv('sav_Maint'),
+gv('sav_Fire'), gv('sav_Wind'), gv('sav_War')
+];
+var oneTime = [gv('sav_BR'), gv('sav_CC')];
+_totSav = annual.reduce(function(s,v){ return s+v; }, 0);
+_totOneTime = oneTime.reduce(function(s,v){ return s+v; }, 0);
+var totEl = document.getElementById('totalAnnualSav');
+if(totEl) totEl.textContent = fmt(_totSav) + '/yr';
+var otEl = document.getElementById('totalOneTimeSav');
+if(otEl) otEl.textContent = fmt(_totOneTime);
+calc();
+}
+
+function checkPW(){
+var gate=document.getElementById('gate'),pw=document.getElementById('pwInput'),err=document.getElementById('pwErr');
+if(!pw)return;
+if(pw.value===PW){localStorage.setItem(AUTH,'1');gate.style.display='none';document.body.style.overflow='';crRestore();calcProjectCost();loadFromPIS();calc();}
+else{if(err){err.style.display='block';setTimeout(function(){err.style.display='none';},3000);}pw.value='';}
+}
+
+var TD={
+multifamily:{unitLabel:'Number of Units',unitShort:'units',rateLabel:'Avg Monthly Rent / Unit ($)',rateHint:'Revenue = units \u00d7 rent \u00d7 12 months',isDaily:false,expRatio:40,expHint:'Suggested 38-42% for market-rate multifamily. Includes taxes, insurance, mgmt, maintenance.',occDefault:93,unitsDefault:120,rateDefault:1850,constrMo:18,woodCap:6.75,bps:25,occLabel:'Occupancy Rate (%)'},
+hospitality:{unitLabel:'Number of Keys (Rooms)',unitShort:'keys',rateLabel:'Average Daily Rate \u2014 ADR ($)',rateHint:'Revenue = keys \u00d7 ADR \u00d7 occupancy% \u00d7 365 nights',isDaily:true,expRatio:65,expHint:'Suggested 62-68% for select/full-service hotel. Includes all F&B, G&A, sales.',occDefault:70,unitsDefault:150,rateDefault:185,constrMo:20,woodCap:7.50,bps:30,occLabel:'Occupancy Rate (% of nights)'},
+senior:{unitLabel:'Number of Units',unitShort:'units',rateLabel:'Avg Monthly Rate / Unit ($)',rateHint:'Revenue = units \u00d7 rate \u00d7 12 months',isDaily:false,expRatio:60,expHint:'Suggested 55-65% for assisted/independent living.',occDefault:90,unitsDefault:80,rateDefault:4500,constrMo:22,woodCap:6.50,bps:35,occLabel:'Occupancy Rate (%)'},
+student:{unitLabel:'Number of Beds',unitShort:'beds',rateLabel:'Avg Monthly Rent / Bed ($)',rateHint:'Revenue = beds \u00d7 rent \u00d7 12 months',isDaily:false,expRatio:40,expHint:'Suggested 36-42% for purpose-built student housing.',occDefault:95,unitsDefault:200,rateDefault:900,constrMo:16,woodCap:6.25,bps:20,occLabel:'Occupancy Rate (%)'}
+};
+
+function applyTypeDefaults(){
+var d=TD[sv('ptype')]||TD.multifamily,el;
+function se(id,v){el=document.getElementById(id);if(el)el.textContent=v;}
+se('unitsLabel',d.unitLabel);se('rateLabel',d.rateLabel);se('rateHint',d.rateHint);
+se('expHint',d.expHint);se('occLabel',d.occLabel||'Occupancy Rate (%)');
+el=document.getElementById('expRatio');if(el)el.value=d.expRatio;
+el=document.getElementById('constrMo');if(el)el.value=d.constrMo;
+el=document.getElementById('woodCap');if(el)el.value=d.woodCap.toFixed(2);
+el=document.getElementById('bps');if(el)el.value=d.bps;
+}
+
+
+function loadFromPIS(){
+var banner=document.getElementById('pisBanner'),loaded=[];
+try{
+var bRaw=localStorage.getItem(SK_BUD);
+if(bRaw){var b=JSON.parse(bRaw);
+// mH (framing high estimate) is NOT used for Total Project Cost — cost is driven by Hard Cost/SF x Gross SF
+if(b.projName){var pn=document.getElementById('projName');if(pn&&!pn.value)pn.value=b.projName;}
+if(b.client){var cl=document.getElementById('client');if(cl&&!cl.value)cl.value=b.client;}
+if(b.ptype){var pt=document.getElementById('ptype');if(pt){pt.value=b.ptype;applyTypeDefaults();}}
+loaded.push('Budget Builder'); // data exists in localStorage
+}
+var sRaw=localStorage.getItem(SK_SAV);
+if(sRaw){var s=JSON.parse(sRaw);
+// Sync SF from savings page into grossSFcost if available
+if(s.sf && s.sf > 0){
+var sfCostEl=document.getElementById('grossSFcost');
+if(sfCostEl && !sfCostEl.value) sfCostEl.value=s.sf;
+}
+// Note: s.hc is framing-only cost — NOT used for total construction cost/SF
+// Savings page stores TOTALS over s.years — divide to get annual figures
+// Populate savings INPUT FIELDS from localStorage data — annualized
+var savYrsLocal = parseFloat(s.years) || 10;
+function setSav(id, raw) {
+var el = document.getElementById(id);
+// Only overwrite if field is currently 0 (not manually entered)
+if(el && (parseFloat(el.value)||0) === 0) {
+el.value = Math.round((raw||0) / savYrsLocal);
+}
+}
+setSav('sav_PI', s.PI_save);
+setSav('sav_Pest', s.Pest_save);
+setSav('sav_Maint',s.Maint_save);
+setSav('sav_Fire', s.Fire_save);
+setSav('sav_Wind', s.Wind_save);
+setSav('sav_War', s.War_save);
+setSav('sav_BR', s.BR_save);
+setSav('sav_CC', s.CC_save);
+calcSavings();
+
+if(stag)stag.style.display='inline-block';
+if(bkEl){
+bkEl.style.display='block';
+if(s.projName){var pn2=document.getElementById('projName');if(pn2&&!pn2.value)pn2.value=s.projName;}
+if(s.client){var cl2=document.getElementById('client');if(cl2&&!cl2.value)cl2.value=s.client;}
+}
+}
+var tRaw=localStorage.getItem(SK_TRD);
+if(tRaw){var t=JSON.parse(tRaw);
+loaded.push('Trade Savings'); // data exists in localStorage
+if(t.schedWks&&t.schedWks>0){var sw=document.getElementById('schedWks'),st2=document.getElementById('schedTag');if(sw)sw.value=t.schedWks;if(st2)st2.style.display='inline-block';}
+}
+if(banner){
+if(loaded.length>0){banner.style.cssText='flex:1;background:#F0F7FD;border:1px solid #2D9CDB;border-radius:8px;padding:10px 14px;font-size:11px;line-height:1.8;transition:all .3s';banner.innerHTML='<b style="color:#2D9CDB">&#10003; Auto-loaded from: </b>'+loaded.map(function(l){return '<span style="background:#fff;border:1px solid #b8dcf0;color:#2D9CDB;padding:1px 10px;border-radius:4px;font-size:10px;margin-right:4px">'+l+'</span>';}).join('');}
+else{banner.style.cssText='flex:1;background:#fff8f0;border:1px solid #ffcc88;border-radius:8px;padding:10px 14px;font-size:11px;line-height:1.8;transition:all .3s';banner.innerHTML='<span style="color:#555;font-weight:600">&#8505; Enter project details below</span> &mdash; All fields are fully editable. Run the other calculators first to auto-populate key inputs, or enter values manually.';}
+}
+}catch(e){console.warn('loadFromPIS:',e);}
+}
+
+function calc(){
+// Ensure savings totals are current from input fields
+var annual2=['sav_PI','sav_Pest','sav_Maint','sav_Fire','sav_Wind','sav_War'];
+var oneT2=['sav_BR','sav_CC'];
+_totSav=annual2.reduce(function(s,id){return s+gv(id);},0);
+_totOneTime=oneT2.reduce(function(s,id){return s+gv(id);},0);
+// Update display totals
+var taEl=document.getElementById('totalAnnualSav');if(taEl)taEl.textContent=fmt(_totSav)+'/yr';
+var otEl=document.getElementById('totalOneTimeSav');if(otEl)otEl.textContent=fmt(_totOneTime);
+var ptype=sv('ptype'),d=TD[ptype]||TD.multifamily;
+var units=gv('numUnits'),rate=gv('unitRate'),occ=gv('occRate')/100,expR=gv('expRatio')/100;
+/* Revenue */
+var gross=d.isDaily ? units*rate*365*occ : units*rate*12;
+var vac =d.isDaily ? 0 : gross*(1-occ);
+var egi =gross-vac, opex=egi*expR, noi=egi-opex, cfsNoi=noi+_totSav;
+/* Display NOI section */
+if(d.isDaily){document.getElementById('vacRow').style.display='none';ss('grossLabel','Gross Annual Revenue (ADR \u00d7 Occ \u00d7 365)');ss('expLabel','Less Operating Expenses ('+gv('expRatio')+'% of Gross)');}
+else{document.getElementById('vacRow').style.display='flex';ss('grossLabel','Gross Potential Revenue');ss('expLabel','Less Operating Expenses ('+gv('expRatio')+'% of EGI)');}
+ss('grossRev',fmt(gross));
+var vEl=document.getElementById('vacancyLoss');if(vEl)vEl.textContent=d.isDaily?'Included in ADR formula':'('+fmt(vac)+')';
+ss('egi',fmt(egi));ss('opexVal','('+fmt(opex)+')');ss('calcNOI',fmt(noi));ss('cfsNOI',fmt(cfsNoi));
+// Auto-calculate stabilized asset value = NOI ÷ Wood Cap Rate
+var avEl = document.getElementById('assetVal');
+var woodCapPctEarly = Math.max(0.001, gv('woodCap')/100);
+if (avEl && noi > 0 && woodCapPctEarly > 0) avEl.value = Math.round(noi / woodCapPctEarly);
+/* Financing */
+var totalCost=gv('totalCost'),ltc=gv('ltc')/100,intRate=gv('intRate'),amortYrs=gv('amortYrs');
+var constrMo=gv('constrMo'),schedWks=gv('schedWks'),dscrMin=gv('dscr_min');
+var loanAmt=totalCost*ltc,equity=totalCost-loanAmt;
+var mCarry=loanAmt*(intRate/100)/12,tCarry=mCarry*constrMo,cSaved=mCarry*(schedWks/52)*12;
+var mADS=pmt(intRate,amortYrs,loanAmt),annDS=mADS*12;
+var cfsCapPct=Math.max(0.001,gv('woodCap')/100-gv('bps')/10000);
+/* Set readonly fields */
+function setRO(id,v){var e=document.getElementById(id);if(e)e.value=Math.round(v);}
+setRO('loanAmt',loanAmt);setRO('devEquity',equity);setRO('monthlyCarry',mCarry);setRO('totalCarry',tCarry);setRO('annualDS',annDS);
+var ccEl=document.getElementById('cfsCap');if(ccEl)ccEl.value=(cfsCapPct*100).toFixed(2);
+/* DSCR */
+var dW=annDS>0?noi/annDS:0,dC=annDS>0?cfsNoi/annDS:0;
+var dy=loanAmt>0?(noi/loanAmt)*100:0;
+/* Carry panel */
+ss('dMonthlyCarry',fmt(mCarry));ss('dTotalCarry',fmt(tCarry));ss('dCarrySaved',fmt(cSaved));
+ss('dConstrLbl',constrMo+' months');ss('dSchedLbl',schedWks+' weeks faster');
+ss('constrNarr',loanAmt>0?
+'On a '+fmt(loanAmt)+' loan at '+intRate+'%, monthly carry is '+fmt(mCarry)+'. Over '+constrMo+' months: '+fmt(tCarry)+' total.'+(schedWks>0?' CFS schedule compression ('+schedWks+' weeks) saves '+fmt(cSaved)+' in carry cost.':' Add schedule compression from Trade Savings to see carry savings.'):
+'Enter financing details to generate the construction carry analysis.');
+/* Debt yield note */
+var dyNote=document.getElementById('debtYieldNote');
+if(dy>0){dyNote.style.display='block';var dyColor=dy>=8?'#2D9CDB':dy>=7?'#C47F00':'#c00';si('debtYieldText','Debt Yield = NOI / Loan = <strong style="color:'+dyColor+'">'+dy.toFixed(1)+'%</strong>. '+(dy>=8?'Meets typical institutional threshold (8%+).':dy>=7?'Below typical institutional threshold. Consider higher equity or improved NOI.':'Below agency thresholds. Adjust LTC or improve NOI.'));}
+else dyNote.style.display='none';
+/* DSCR table */
+function pb(d,m){if(d<=0)return '<span class="pass-badge warn">N/A</span>';if(d>=m)return '<span class="pass-badge pass">&#10003; PASS&nbsp;'+fmtX(d)+'</span>';return '<span class="pass-badge fail">&#10005; FAIL&nbsp;'+fmtX(d)+'</span>';}
+si('dtNWood',fmt(noi));si('dtNCfs',fmt(noi));
+si('dtSWood','&mdash;');si('dtSCfs',fmt(_totSav));
+si('dtEWood',fmt(noi));si('dtECfs',fmt(cfsNoi));
+si('dtAWood',fmt(annDS));si('dtACfs',fmt(annDS));
+si('dtDWood',fmtX(dW));si('dtDCfs',fmtX(dC));
+si('dtPWood',pb(dW,dscrMin));si('dtPCfs',pb(dC,dscrMin));
+/* Tight note */
+var tn=document.getElementById('tightNote'),tt=document.getElementById('tightText');
+if(dW>0&&dW<dscrMin&&dC>=dscrMin){tn.style.display='block';tt.textContent='Wood-frame FAILS the lender minimum '+dscrMin+'x. CFS framing — with '+fmt(_totSav)+'/yr in soft cost savings flowing to NOI — lifts DSCR to '+fmtX(dC)+'. This is a fundability conversation, not a savings conversation.';}
+else if(dW>0&&dW<dscrMin&&dC<dscrMin){tn.style.display='block';tt.textContent='Both scenarios are below minimum. CFS improves DSCR from '+fmtX(dW)+' to '+fmtX(dC)+'. Consider reducing LTC or improving revenue assumptions.';}
+else tn.style.display='none';
+ss('dscrNarr',annDS>0?
+'Wood-frame DSCR: '+fmtX(dW)+'. CFS DSCR: '+fmtX(dC)+' — the '+fmt(_totSav)+'/yr in soft cost savings flows to NOI, lifting coverage by '+fmtX(dC-dW)+'. That is not a savings number. That is an underwriting number.':
+'Enter financing details to generate the DSCR comparison.');
+/* Cap Rate section */
+var woodCapPct=gv('woodCap')/100,holdYrs=gv('holdYrs'),noiImp=_totSav;
+var noiBase=noi/woodCapPct,noiNew=cfsNoi/woodCapPct,noiGain=noiNew-noiBase;
+var valWood=cfsNoi/woodCapPct,valCfs=cfsNoi/cfsCapPct,compGain=valCfs-valWood;
+var cumSave=noiImp*holdYrs,totalAdv=noiGain+compGain+cumSave;
+ss('heroVal',fmtM(totalAdv));ss('heroSub','Total CFS disposition advantage over '+holdYrs+'-year hold vs. comparable wood-frame asset');
+ss('hNoiVal',fmtM(noiGain));ss('hCompVal',fmtM(compGain));ss('hCumVal',fmtM(cumSave));
+ss('hCompSub',gv('bps')+' bps compression applied');ss('hCumSub',holdYrs+'-year hold');
+ss('outNoiAnnual',fmt(noiImp));ss('outNoiBase',fmtM(noiBase));ss('outNoiNew',fmtM(noiNew));ss('outNoiGain',fmtM(noiGain));
+ss('outWoodCap',(woodCapPct*100).toFixed(2)+'%');ss('outCfsCap',(cfsCapPct*100).toFixed(2)+'%');ss('outBps',gv('bps')+' basis points');
+ss('outValWood',fmtM(valWood));ss('outValCfs',fmtM(valCfs));ss('outCompGain',fmtM(compGain));
+ss('outCombNoi',fmtM(noiGain));ss('outCombComp',fmtM(compGain));ss('outCombCum',fmtM(cumSave));ss('outCombTotal',fmtM(totalAdv));
+var tbl=document.getElementById('sensTable');
+if(tbl){var rows='<tr><th style="text-align:left">Compression</th><th>CFS Cap Rate</th><th>NOI Lift</th><th>Compression Value</th><th>Cumul. Savings</th><th>Total Advantage</th></tr>';
+[0,15,25,35,50].forEach(function(b){var c=Math.max(0.001,woodCapPct-b/10000),vC=cfsNoi/c,comp=vC-valWood,tot=noiGain+comp+cumSave,isA=b===gv('bps');
+rows+='<tr class="'+(isA?'hl':'')+'"><td>'+(b===0?'None (0 bps)':b+'bps'+(isA?' \u2190 Selected':''))+'</td><td>'+(c*100).toFixed(2)+'%</td><td>'+fmtM(noiGain)+'</td><td>'+fmtM(comp)+'</td><td>'+fmtM(cumSave)+'</td><td>'+fmtM(tot)+'</td></tr>';});
+tbl.innerHTML=rows;}
+var ptL={multifamily:'multifamily',hospitality:'hospitality',senior:'senior living',student:'student housing'}[ptype]||'this asset';
+var proj=sv('projName')||'this project',uSh=d.unitShort||'units';
+ss('calloutText',proj+' \u2014 '+units+' '+uSh+' at '+fmt(rate)+'/'+uSh+'. Stabilized NOI: '+fmt(noi)+'. CFS framing adds '+fmt(noiImp)+'/year in NOI from soft cost savings \u2014 lifting DSCR from '+fmtX(dW)+' to '+fmtX(dC)+'. At disposition, '+fmt(noiImp)+'/year improved NOI converts to '+fmtM(noiGain)+' in additional asset value at the same cap rate, plus '+fmtM(compGain)+' in exit premium at '+gv('bps')+' bps of compression. Over a '+holdYrs+'-year hold, cumulative savings add '+fmtM(cumSave)+'. Total disposition advantage: '+fmtM(totalAdv)+'. The framing decision made in preconstruction shows up in the DSCR, in the equity partner\u2019s return model, and at the closing table.');
+// ── Development Spread ──────────────────────────────────────────────────
+var woodAssetVal = noi / woodCapPct; // asset value at wood NOI + wood cap rate
+var cfsAssetVal = cfsNoi / cfsCapPct; // asset value at CFS NOI + CFS cap rate
+var woodSpread = woodAssetVal - totalCost;
+var cfsSpread = cfsAssetVal - totalCost;
+
+var banner = document.getElementById('devSpreadBanner');
+if (banner && totalCost > 0 && noi > 0) {
+banner.style.display = 'block';
+var woodPos = woodSpread >= 0;
+var cfsPos = cfsSpread >= 0;
+var titleEl = document.getElementById('devSpreadTitle');
+var color;
+if (cfsPos && woodPos) color = '#2D9CDB'; // both positive
+else if (cfsPos && !woodPos) color = '#C47F00'; // CFS fixes the deal
+else color = '#c00'; // both negative
+
+if(titleEl) { titleEl.textContent = 'Development Spread — Total Project Cost vs. Stabilized Asset Value'; titleEl.style.color=color; }
+banner.style.background = woodPos ? '#F0F7FD' : cfsPos ? '#fff8f0' : '#fff3f3';
+banner.style.border = '1px solid ' + (woodPos ? '#b8dcf0' : cfsPos ? '#ffe0b0' : '#ffc0c0');
+
+ss('dsTotalCost', fmtM(totalCost));
+ss('dsAssetVal', fmtM(woodAssetVal));
+document.getElementById('dsTotalCost').style.color = '#555';
+document.getElementById('dsAssetVal').style.color = '#2589b0';
+
+var wsEl = document.getElementById('dsWoodSpread');
+if(wsEl){ wsEl.textContent = (woodSpread>=0?'+':'')+fmtM(woodSpread); wsEl.style.color=woodPos?'#2D9CDB':'#c00'; }
+var csEl = document.getElementById('dsCfsSpread');
+if(csEl){ csEl.textContent = (cfsSpread>=0?'+':'')+fmtM(cfsSpread); csEl.style.color=cfsPos?'#2D9CDB':'#c00'; }
+
+var narr = '';
+if (woodPos && cfsPos) {
+narr = 'Both scenarios produce positive development spreads. Wood-frame returns <b style="color:#2D9CDB">'+fmtM(woodSpread)+'</b> above cost; CFS returns <b style="color:#2D9CDB">'+fmtM(cfsSpread)+'</b> — a <b>'+fmtM(cfsSpread-woodSpread)+'</b> improvement from CFS soft cost savings and cap rate compression.';
+} else if (!woodPos && cfsPos) {
+narr = '<b style="color:#C47F00">The wood-frame scenario does not pencil</b> — project cost exceeds stabilized asset value by <b style="color:#c00">'+fmtM(Math.abs(woodSpread))+'</b>. ' +
+'CFS framing — through soft cost savings flowing to NOI and tighter cap rate at disposition — <b style="color:#2D9CDB">closes the gap and produces a positive spread of '+fmtM(cfsSpread)+'</b>. ' +
+'This is not a savings conversation. This is a fundability conversation.';
+} else if (!woodPos && !cfsPos) {
+narr = 'Both scenarios show a negative spread in the current market. CFS narrows the gap from <b style="color:#c00">'+fmtM(Math.abs(woodSpread))+'</b> to <b style="color:#c00">'+fmtM(Math.abs(cfsSpread))+'</b> — a <b>'+fmtM(Math.abs(woodSpread)-Math.abs(cfsSpread))+'</b> improvement. ' +
+'Consider adjusting total project cost, LTC, or revenue assumptions. This market condition is real — Phoenix new construction starts are down 30% YoY for exactly this reason.';
+}
+ss('devSpreadNarr', '');
+document.getElementById('devSpreadNarr').innerHTML = narr;
+} else if (banner) {
+banner.style.display = 'none';
+}
+
+try{localStorage.setItem(SK_CAP,JSON.stringify({_page:'proforma',_ts:Date.now(),noi:noi,cfsNoi:cfsNoi,dscrWood:dW,dscrCfs:dC,totalAdv:totalAdv}));}catch(e){}
+crPersist();updatePrint();
+}
+
+var CR_FIELDS=['projName','client','ptype','market','grossSF','grossSFcost','hardCostSF','softCostPct','assetClass','numUnits','unitRate','occRate','expRatio','ltc','intRate','amortYrs','constrMo','schedWks','dscr_min','woodCap','bps','holdYrs','sav_PI','sav_Pest','sav_Maint','sav_Fire','sav_Wind','sav_War','sav_BR','sav_CC'];
+function crPersist(){try{var d={_ts:Date.now()};CR_FIELDS.forEach(function(f){var e=document.getElementById(f);if(e)d[f]=e.value;});localStorage.setItem(SK_PER,JSON.stringify(d));}catch(e){}}
+function crRestore(){try{var raw=localStorage.getItem(SK_PER);if(!raw)return;var d=JSON.parse(raw);CR_FIELDS.forEach(function(f){var e=document.getElementById(f);if(e&&d[f]!==undefined)e.value=d[f];});applyTypeDefaults();}catch(e){}}
+
+function updatePrint(){
+try{
+var ptype=sv('ptype'),d=TD[ptype]||TD.multifamily,units=gv('numUnits'),rate=gv('unitRate'),occ=gv('occRate')/100,expR=gv('expRatio')/100;
+var gross=d.isDaily?units*rate*365*occ:units*rate*12,vac=d.isDaily?0:gross*(1-occ),egi=gross-vac,opex=egi*expR,noi=egi-opex,cfsNoi=noi+_totSav;
+var totalCost=gv('totalCost'),ltc=gv('ltc')/100,intRate=gv('intRate'),amortYrs=gv('amortYrs'),constrMo=gv('constrMo'),schedWks=gv('schedWks'),dscrMin=gv('dscr_min');
+var loanAmt=totalCost*ltc,mC=loanAmt*(intRate/100)/12,tC=mC*constrMo,cS=mC*(schedWks/52)*12,annDS=pmt(intRate,amortYrs,loanAmt)*12;
+var dW=annDS>0?noi/annDS:0,dC=annDS>0?cfsNoi/annDS:0;
+var woodCapPct=gv('woodCap')/100,bps=gv('bps'),cfsCapPct=Math.max(0.001,woodCapPct-bps/10000),holdYrs=gv('holdYrs');
+var noImp=_totSav,noG=(cfsNoi-noi)/woodCapPct,vW=cfsNoi/woodCapPct,vC=cfsNoi/cfsCapPct,cG=vC-vW,cuS=noImp*holdYrs,tot=noG+cG+cuS;
+var ptType={multifamily:'Multifamily',hospitality:'Hospitality',senior:'Senior Living',student:'Student Housing'}[ptype]||'';
+function safe(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+safe('pProjName',sv('projName')||'Developer Pro Forma');safe('pClient',sv('client'));
+safe('pMeta',[ptType,units+' '+(d.unitShort||'units'),fmt(totalCost)+' cost',holdYrs+'-yr hold'].join(' \u00b7 '));
+safe('pUnitLabelP',d.unitLabel||'Units');safe('pUnitsP',units.toString());
+safe('pRateLabelP',d.rateLabel||'Rate');safe('pRateP',fmt(rate));
+safe('pOccP',gv('occRate')+'%');safe('pExpP',gv('expRatio')+'%');
+safe('pGrossP',fmt(gross));safe('pDeductP',fmt(vac+opex));safe('pNOIP',fmt(noi));
+safe('pMCarryP',fmt(mC));safe('pConstrMoP',constrMo.toString());safe('pTCarryP',fmt(tC));safe('pSchedWksP',schedWks.toString());safe('pCSavedP',fmt(cS));
+safe('pENOIwP',fmt(noi));safe('pENOIcP',fmt(cfsNoi));safe('pADSwP',fmt(annDS));safe('pADScP',fmt(annDS));
+safe('pDSCRwP',fmtX(dW));safe('pDSCRcP',fmtX(dC));safe('pDSCRminP',dscrMin.toString());
+safe('pPassWP',dW>=dscrMin?'PASS '+fmtX(dW):'FAIL '+fmtX(dW));safe('pPassCP',dC>=dscrMin?'PASS '+fmtX(dC):'FAIL '+fmtX(dC));
+safe('pHeroValP',fmtM(tot));safe('pHeroSubP','NOI lift + cap rate compression + cumulative savings');
+safe('pNLiftP',fmt(noImp));safe('pNGainP',fmtM(noG));
+safe('pCapRatesP',(woodCapPct*100).toFixed(2)+'% \u2192 '+(cfsCapPct*100).toFixed(2)+'%');
+safe('pCompValP',fmtM(cG));safe('pCombTotalP',fmtM(tot));
+safe('pYearP','\u00a9 '+new Date().getFullYear()+' Mainefactured Framing / Prefab Consulting LLC');
+var ptbl=document.getElementById('pSensTableP');
+if(ptbl){var r='<tr style="background:#111"><th style="color:#2D9CDB;padding:3px 4px;text-align:left;font-size:5.5pt;font-weight:700">Compression</th><th style="color:#2D9CDB;padding:3px 4px;font-size:5.5pt;font-weight:700;text-align:center">CFS Cap Rate</th><th style="color:#2D9CDB;padding:3px 4px;font-size:5.5pt;font-weight:700;text-align:center">NOI Lift</th><th style="color:#2D9CDB;padding:3px 4px;font-size:5.5pt;font-weight:700;text-align:center">Comp. Value</th><th style="color:#2D9CDB;padding:3px 4px;font-size:5.5pt;font-weight:700;text-align:center">Cumul. Savings</th><th style="color:#2D9CDB;padding:3px 4px;font-size:5.5pt;font-weight:700;text-align:center">Total</th></tr>';
+[0,15,25,35,50].forEach(function(b){var c=Math.max(0.001,woodCapPct-b/10000),vCl=cfsNoi/c,comp=vCl-vW,t=noG+comp+cuS;r+='<tr'+(b===bps?' class="hl"':'')+'>'+['<td>'+(b===0?'None':b+'bps'+(b===bps?' \u2190':''))+'</td>','<td style="text-align:center">'+(c*100).toFixed(2)+'%</td>','<td style="text-align:center">'+fmtM(noG)+'</td>','<td style="text-align:center">'+fmtM(comp)+'</td>','<td style="text-align:center">'+fmtM(cuS)+'</td>','<td style="text-align:center">'+fmtM(t)+'</td>'].join('')+'</tr>';});
+ptbl.innerHTML=r;}
+var pc=document.getElementById('pCalloutP');
+if(pc)pc.innerHTML='<b>Three-Part Argument:</b> '+fmt(noImp)+'/yr NOI improvement \u2192 '+fmtM(noG)+' asset value at same cap rate. '+bps+' bps compression \u2192 '+fmtM(cG)+' exit premium. '+holdYrs+'-yr cumulative savings \u2192 '+fmtM(cuS)+'. <b>Total: '+fmtM(tot)+'.</b>';
+}catch(e){}
+}
+function doPrint(){updatePrint();window.print();}
+
+function refreshData(){
+// Re-run loadFromPIS and calc to pick up latest localStorage from other pages
+loadFromPIS();
+calcSavings();
+calcProjectCost();
+calc();
+// Flash the banner to confirm refresh
+var b = document.getElementById('pisBanner');
+if(b){
+var orig = b.style.background;
+b.style.background='#F0F7FD';
+setTimeout(function(){ b.style.background=orig; }, 600);
+}
+}
+
+function resetForm() {
+if (!confirm('Reset all form inputs to defaults? This will clear your saved entries.')) return;
+// Clear persisted values
+try { localStorage.removeItem(SK_PER); } catch(e){}
+// Reset all CR_FIELDS to their HTML defaults
+var defaults = {
+projName:'', client:'', ptype:'multifamily', market:'', grossSF:'125000',
+grossSFcost:'125000', hardCostSF:'250', softCostPct:'20', assetClass:'A',
+numUnits:'120', unitRate:'1850', occRate:'93', expRatio:'40',
+ltc:'65', intRate:'6.75', amortYrs:'30', constrMo:'18',
+schedWks:'0', dscr_min:'1.25', woodCap:'7.00', bps:'25', holdYrs:'7'
+};
+Object.keys(defaults).forEach(function(id){
+var el = document.getElementById(id);
+if (el) el.value = defaults[id];
+});
+applyTypeDefaults();
+calcProjectCost();
+loadFromPIS();
+calc();
+}
+
+window.addEventListener('load',function(){
+var gate=document.getElementById('gate');
+if(localStorage.getItem(AUTH)==='1'){if(gate)gate.style.display='none';document.body.style.overflow='';crRestore();calcProjectCost();loadFromPIS();calc();}
+else{if(gate)gate.style.display='flex';document.body.style.overflow='hidden';setTimeout(function(){var p=document.getElementById('pwInput');if(p)p.focus();},100);}
+updatePrint();
+['numUnits','unitRate','occRate','expRatio','ltc','intRate','constrMo','schedWks','dscr_min','woodCap','bps'].forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('change',calc);});
+['amortYrs','holdYrs','ptype'].forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('change',calc);});
+['market','grossSF','assetClass'].forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('change',applyMarketBenchmarks);});
+['hardCostSF','grossSFcost','softCostPct'].forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('change',calcProjectCost);});
+['sav_PI','sav_Pest','sav_Maint','sav_Fire','sav_Wind','sav_War','sav_BR','sav_CC'].forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',calcSavings);});
+['projName','client'].forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',function(){crPersist();updatePrint();});});
+});
+</script>
+</body>
+</html>

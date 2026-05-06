@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GHV Podium Analysis</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;background:#f5f5f5;color:#111;min-height:100vh}
+header{background:#111;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.logo{font-size:22px;font-weight:700;color:#3DB832}
+.logo span{color:#fff;font-size:12px;font-weight:400;margin-left:10px;opacity:.6;text-transform:uppercase;letter-spacing:.1em}
+nav{display:flex;flex-wrap:wrap;gap:6px}
+nav a{padding:5px 14px;border-radius:6px;border:0.5px solid #444;color:#aaa;font-size:11px;text-decoration:none;transition:all .2s}
+nav a:hover,nav a.active{border-color:#3DB832;color:#3DB832}
+.main{max-width:1160px;margin:0 auto;padding:20px}
+.banner-row{display:flex;gap:8px;align-items:stretch;margin-bottom:14px}
+#pisBanner{flex:1;background:#f5f5f5;border:1px solid #e0e0e0;border-radius:8px;padding:10px 14px;font-size:11px;line-height:1.8;min-height:38px;transition:all .3s}
+.sec-head{background:#111;border-radius:8px;padding:10px 18px;margin-bottom:12px;display:flex;align-items:center;gap:12px}
+.sec-num{width:28px;height:28px;border-radius:50%;background:#3DB832;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sec-title{font-size:15px;font-weight:700;color:#fff}
+.input-grid{display:grid;gap:12px;margin-bottom:12px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.input-card{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:16px}
+.card-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#555;border-bottom:2px solid #3DB832;padding-bottom:5px;margin-bottom:12px}
+.field{margin-bottom:10px}.field:last-child{margin-bottom:0}
+.field label{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.field input,.field select{width:100%;height:34px;padding:0 10px;font-size:13px;border:1px solid #ddd;border-radius:6px;outline:none;background:#fff;color:#111;transition:border .2s}
+.field input:focus,.field select:focus{border-color:#3DB832}
+.field input[readonly]{background:#f5f5f5}
+.field .hint{font-size:10px;color:#aaa;margin-top:3px;line-height:1.4}
+.auto-tag{display:inline-block;background:#f0faf0;border:1px solid #c8e6c8;color:#3DB832;font-size:9px;font-weight:700;padding:1px 6px;border-radius:3px;text-transform:uppercase}
+.divider{border:none;border-top:2px solid #e5e5e5;margin:20px 0}
+/* Toggle */
+.toggle-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.toggle-btn{padding:5px 16px;border-radius:20px;border:1px solid #ddd;background:#fff;font-size:11px;font-weight:600;cursor:pointer;color:#777;transition:all .2s}
+.toggle-btn.active{background:#3DB832;border-color:#3DB832;color:#fff}
+/* Cost breakdown rows */
+.cost-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f5f5f5;font-size:12px}
+.cost-row .lbl{color:#555}
+.cost-row .val{font-weight:600;color:#111}
+.cost-row.sub{padding-left:16px}
+.cost-row.sub .lbl{color:#888;font-size:11px}
+.cost-row.sub .val{font-size:11px;color:#888}
+.cost-row.total{font-weight:700;font-size:14px;padding-top:10px;border-top:2px solid #3DB832;border-bottom:none;margin-top:4px}
+.cost-row.total .val{color:#3DB832;font-size:16px}
+.cost-row.onetime{background:#fff8f0}
+.cost-row.onetime .val{color:#C47F00}
+/* Summary hero */
+.hero-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.hero-cell{background:#111;border-radius:10px;padding:16px;text-align:center}
+.hero-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:#666;margin-bottom:6px}
+.hero-val{font-size:22px;font-weight:700;color:#3DB832}
+.hero-sub{font-size:9px;color:#444;margin-top:3px}
+/* Impact panel */
+.impact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
+.impact-panel{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:16px}
+.impact-panel.cost{border-top:3px solid #c00}
+.impact-panel.carry{border-top:3px solid #C47F00}
+.impact-panel.total{border-top:3px solid #3DB832}
+.impact-name{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:10px}
+.impact-val{font-size:28px;font-weight:700}
+.impact-val.red{color:#c00}.impact-val.amber{color:#C47F00}.impact-val.green{color:#3DB832}
+.impact-sub{font-size:10px;color:#aaa;margin-top:4px;line-height:1.4}
+/* Parking callout */
+.parking-note{background:#f0f8ff;border:1px solid #b3d9ff;border-left:4px solid #2589b0;border-radius:0 8px 8px 0;padding:12px 16px;font-size:11px;color:#333;line-height:1.7;margin-bottom:12px;display:none}
+.parking-note strong{color:#2589b0}
+/* Cost table */
+.cost-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+.cost-table th{background:#111;color:#3DB832;font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:7px 10px;text-align:left;font-weight:700}
+.cost-table th:last-child{text-align:right}
+.cost-table td{padding:6px 10px;border-bottom:1px solid #f0f0f0}
+.cost-table td:last-child{text-align:right;font-weight:600}
+.cost-table tr.subtotal td{background:#f8f8f8;font-weight:700}
+.cost-table tr.grand td{background:#f0faf0;font-weight:700;color:#3DB832;font-size:13px}
+/* Callout */
+.callout{background:#f0faf0;border:1px solid #c8e6c8;border-left:4px solid #3DB832;border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:12px;font-size:12px;color:#333;line-height:1.7}
+.callout-title{font-size:12px;font-weight:700;color:#3DB832;margin-bottom:6px}
+.print-btn{height:38px;padding:0 32px;background:#3DB832;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
+.print-btn:hover{background:#35a82b}
+.disc{font-size:10px;color:#aaa;text-align:center;line-height:1.5;padding:0 20px;margin-top:6px}
+/* Config badge */
+.config-badge{display:inline-flex;align-items:center;gap:8px;background:#111;border-radius:8px;padding:8px 16px;margin-bottom:12px}
+.config-stories{font-size:24px;font-weight:700;color:#3DB832}
+.config-detail{font-size:11px;color:#888;line-height:1.5}
+/* Benchmark table */
+.bench-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:8px}
+.bench-table th{background:#f5f5f5;color:#555;font-size:10px;text-transform:uppercase;letter-spacing:.05em;padding:5px 8px;font-weight:700;text-align:center}
+.bench-table th:first-child{text-align:left}
+.bench-table td{padding:5px 8px;border-bottom:1px solid #f0f0f0;text-align:center}
+.bench-table td:first-child{text-align:left;font-weight:600;color:#333}
+.bench-table tr.hl td{background:#f0faf0;color:#3DB832;font-weight:700}
+#gate{display:none;position:fixed;inset:0;background:#111;z-index:9999;align-items:center;justify-content:center;flex-direction:column}
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div style="color:#3DB832;font-size:28px;font-weight:700;margin-bottom:8px">GHV</div>
+  <div style="color:#aaa;font-size:12px;margin-bottom:24px;letter-spacing:.1em;text-transform:uppercase">Podium Analysis</div>
+  <input id="pwInput" type="password" placeholder="Enter access password" style="width:260px;height:42px;padding:0 16px;background:#1a1a1a;border:1px solid #333;color:#fff;border-radius:8px;font-size:14px;outline:none;text-align:center" onkeydown="if(event.key==='Enter')checkPW()">
+  <button onclick="checkPW()" style="margin-top:12px;padding:10px 32px;background:#3DB832;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">Enter</button>
+  <div id="pwErr" style="color:#e05050;font-size:12px;margin-top:10px;display:none">Incorrect password.</div>
+</div>
+
+<header>
+  <div><span class="logo">GHV</span><span class="logo"><span>Podium Analysis</span></span></div>
+  <nav>
+    <a href="/index.html">CFS Budget Builder</a>
+    <a href="/savings.html">Soft Cost Savings</a>
+    <a href="/trades.html">Trade Savings</a>
+    <a href="/podium.html" class="active">Podium Analysis</a>
+    <a href="/summary.html">System Summary</a>
+    <a href="/caprate.html">Developer Pro Forma</a>
+  </nav>
+</header>
+
+<div class="main">
+<div class="banner-row"><div id="pisBanner"><span style="color:#aaa">Loading data from other calculators&hellip;</span></div></div>
+
+<!-- ── SECTION 1: CONFIGURATION ─────────────────────────────────────────── -->
+<div class="sec-head">
+  <div class="sec-num">1</div>
+  <div><div class="sec-title">Current Building Configuration</div><div style="font-size:11px;color:#666;margin-top:2px">Define the existing hybrid wood-frame + concrete podium structure</div></div>
+  <div style="margin-left:auto;font-size:10px;color:#666">Podium costs flow to Developer Pro Forma as hard cost reduction</div>
+</div>
+
+<div class="input-grid g3">
+  <!-- Card 1: Building Config -->
+  <div class="input-card">
+    <div class="card-title">&#127959;&#65039; Building Configuration</div>
+    <div class="field">
+      <label>Current Configuration (Wood Frame + Podium)</label>
+      <select id="buildConfig" onchange="updateConfigLimits();calc()">
+        <option value="5-1">5 stories + 1 podium level</option>
+        <option value="5-2">5 stories + 2 podium levels</option>
+        <option value="5-3">5 stories + 3 podium levels</option>
+        <option value="6-1">6 stories + 1 podium level</option>
+        <option value="6-2" selected>6 stories + 2 podium levels</option>
+        <option value="6-3">6 stories + 3 podium levels</option>
+        <option value="7-1">7 stories + 1 podium level</option>
+        <option value="7-2">7 stories + 2 podium levels</option>
+        <option value="7-3">7 stories + 3 podium levels</option>
+        <option value="8-1">8 stories + 1 podium level</option>
+        <option value="8-2">8 stories + 2 podium levels</option>
+        <option value="8-3">8 stories + 3 podium levels</option>
+      </select>
+      <div class="hint">Wood frame requires concrete podium at 4+ stories due to fire code</div>
+    </div>
+    <div class="field">
+      <label>Podium Levels to Eliminate</label>
+      <select id="levelsElim" onchange="calc()">
+        <option value="1">1 level</option>
+        <option value="2" selected>2 levels (full elimination)</option>
+      </select>
+      <div class="hint">Enter levels to remove. Retain 1 level for parking if desired.</div>
+    </div>
+    <div id="parkingNote" class="parking-note">
+      <strong>&#128663; Parking Podium Strategy:</strong> Retaining <span id="parkingLevels">1</span> podium level for structured parking. CFS upper floors eliminate the code-required fire treatment while preserving ground-level parking structure. This is the optimal hybrid configuration for most mid-rise infill sites.
+    </div>
+    <div id="configBadge" class="config-badge">
+      <div class="config-stories" id="badgeStories">6+2</div>
+      <div class="config-detail" id="badgeDetail">6 wood-frame stories<br>2 concrete podium levels<br>Eliminating 2 levels</div>
+    </div>
+  </div>
+
+  <!-- Card 2: Podium Specs -->
+  <div class="input-card">
+    <div class="card-title">&#127959;&#65039; Podium Specifications</div>
+    <div class="field">
+      <label>Podium Type</label>
+      <select id="podiumType" onchange="calc()">
+        <option value="cip">Conventional Cast-in-Place (CIP)</option>
+        <option value="pt" selected>Post-Tension Cast-in-Place</option>
+        <option value="precast">Precast</option>
+      </select>
+      <div class="hint">Determines cost/SF benchmarks and cure schedule</div>
+    </div>
+    <div class="field">
+      <label>Slab Thickness</label>
+      <select id="slabThick" onchange="calc()">
+        <option value="12">12 inches</option>
+        <option value="16" selected>16 inches</option>
+        <option value="20">20 inches</option>
+        <option value="24">24 inches</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Structural Engineering Premium (%)</label>
+      <input type="number" id="structEng" value="8" min="0" max="30" step="1">
+      <div class="hint">% of concrete cost. Default 8%.</div>
+    </div>
+    <div class="field">
+      <label>Waterproofing / Membrane ($/SF)</label>
+      <input type="number" id="waterproof" value="4.50" min="0" max="20" step="0.25">
+      <div class="hint">Applied per level. Default $4.50/SF.</div>
+    </div>
+    <div class="field">
+      <label>MEP Coordination Premium (%)</label>
+      <input type="number" id="mepPrem" value="5" min="0" max="20" step="1">
+      <div class="hint">% of concrete cost for MEP through-slab coordination. Default 5%.</div>
+    </div>
+    <div class="field" style="margin-top:12px;padding-top:12px;border-top:1px dashed #e0e0e0">
+      <label>CFS Replacement Framing Cost ($/SF) <span class="auto-tag" id="cfsReplTag" style="display:none">Auto</span></label>
+      <input type="number" id="cfsReplSF" value="42" min="20" max="120" step="1">
+      <div class="hint">CFS framing cost/SF for levels replacing the podium. Heavier structural gauge: $38–$50/SF typical. Auto-loaded from Budget Builder if available.</div>
+    </div>
+  </div>
+
+  <!-- Card 3: Footprint -->
+  <div class="input-card">
+    <div class="card-title">&#128207; Podium Footprint</div>
+    <div class="toggle-row">
+      <button class="toggle-btn active" id="btnBuilding" onclick="setFootprintMode('building')">Use Building Footprint</button>
+      <button class="toggle-btn" id="btnCustom" onclick="setFootprintMode('custom')">Custom Dimensions</button>
+    </div>
+    <div id="buildingFpFields">
+      <div class="field">
+        <label>Building Gross SF <span class="auto-tag" id="sfTag" style="display:none">Auto</span></label>
+        <input type="number" id="buildingSF" value="125000" min="1000" step="1000" onchange="calc()">
+        <div class="hint">Synced from Market Intelligence panel when available</div>
+      </div>
+      <div class="field">
+        <label>Floors in Building</label>
+        <input type="number" id="totalFloors" value="7" min="2" max="20" step="1" readonly style="color:#555;background:#f5f5f5">
+        <div class="hint">Auto-calculated from configuration above</div>
+      </div>
+      <div class="field">
+        <label>Estimated Floor Plate (SF)</label>
+        <input type="number" id="floorPlateSF" readonly style="color:#3DB832;font-weight:600;background:#f5f5f5">
+        <div class="hint">Building SF &divide; Total Floors</div>
+      </div>
+      <div class="field">
+        <label>Podium Footprint (SF)</label>
+        <input type="number" id="podiumSF" readonly style="color:#2589b0;font-weight:600;background:#f5f5f5">
+        <div class="hint">= Floor plate &times; levels to eliminate</div>
+      </div>
+    </div>
+    <div id="customFpFields" style="display:none">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+        <div class="field" style="margin-bottom:0">
+          <label>Width (ft)</label>
+          <input type="number" id="fpWidth" value="150" min="10" step="5" onchange="calcCustomFP()">
+        </div>
+        <div class="field" style="margin-bottom:0">
+          <label>Length (ft)</label>
+          <input type="number" id="fpLength" value="100" min="10" step="5" onchange="calcCustomFP()">
+        </div>
+      </div>
+      <div class="field">
+        <label>Podium Footprint per Level (SF)</label>
+        <input type="number" id="customFPsf" readonly style="color:#3DB832;font-weight:600;background:#f5f5f5">
+        <div class="hint">Width &times; Length per level</div>
+      </div>
+      <div class="field">
+        <label>Podium Footprint (SF)</label>
+        <input type="number" id="podiumSFcustom" readonly style="color:#2589b0;font-weight:600;background:#f5f5f5">
+        <div class="hint">Per level SF &times; levels to eliminate</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SECTION 2: COST CALCULATOR ────────────────────────────────────────── -->
+<div class="divider"></div>
+<div class="sec-head">
+  <div class="sec-num">2</div>
+  <div><div class="sec-title">Podium Elimination Cost Analysis</div><div style="font-size:11px;color:#666;margin-top:2px">What disappears from the budget when CFS replaces the concrete podium</div></div>
+</div>
+
+<div class="impact-grid">
+  <div class="impact-panel cost">
+    <div class="impact-name">&#127959;&#65039; Net Hard Cost Savings (Podium − CFS Replacement)</div>
+    <div class="impact-val red" id="impactPodiumCost">&#8212;</div>
+    <div class="impact-sub" id="impactPodiumSub">Select configuration above</div>
+  </div>
+  <div class="impact-panel carry">
+    <div class="impact-name">&#8987; Cure Schedule Carry Savings</div>
+    <div class="impact-val amber" id="impactCarry">&#8212;</div>
+    <div class="impact-sub" id="impactCarrySub">Interest carry saved during cure period</div>
+  </div>
+  <div class="impact-panel total">
+    <div class="impact-name">&#127942; Total Podium Elimination Savings</div>
+    <div class="impact-val green" id="impactTotal">&#8212;</div>
+    <div class="impact-sub">Hard cost reduction + carry savings</div>
+  </div>
+</div>
+
+<div class="input-grid g2">
+  <!-- Cost Breakdown -->
+  <div class="input-card">
+    <div class="card-title">&#128202; Cost Breakdown by Component</div>
+    <table class="cost-table" id="costTable">
+      <tr><th>Component</th><th style="text-align:right">Amount</th></tr>
+    </table>
+    <div style="margin-top:14px;padding-top:12px;border-top:1px solid #e5e5e5">
+      <div style="font-size:10px;color:#aaa;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Embedded Benchmarks &#8212; <span id="benchLabel">Post-Tension CIP</span></div>
+      <table class="bench-table" id="benchTable"></table>
+    </div>
+  </div>
+
+  <!-- Cure + Carry -->
+  <div class="input-card">
+    <div class="card-title">&#128197; Cure Schedule &amp; Carry Cost</div>
+    <div class="field">
+      <label>Cure Period (weeks) <span class="auto-tag" id="cureAutoTag" style="display:none">Benchmark</span></label>
+      <input type="number" id="cureWks" value="7" min="1" max="20" step="1">
+      <div class="hint" id="cureHint">Post-tension CIP typical cure: 6&ndash;8 weeks before upper floors can begin</div>
+    </div>
+    <div class="field">
+      <label>Construction Loan Amount ($) <span class="auto-tag" id="loanAutoTag" style="display:none">Auto</span></label>
+      <input type="number" id="loanAmt" value="15000000" min="100000" step="100000">
+      <div class="hint">Auto-loaded from Developer Pro Forma. Used for carry calculation.</div>
+    </div>
+    <div class="field">
+      <label>Interest Rate (%) <span class="auto-tag" id="rateAutoTag" style="display:none">Auto</span></label>
+      <input type="number" id="intRate" value="6.75" min="1" max="20" step="0.125">
+      <div class="hint">Auto-loaded from Developer Pro Forma.</div>
+    </div>
+    <div style="background:#fff8f0;border:1px solid #ffe0b0;border-radius:8px;padding:12px;margin-top:10px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="text-align:center">
+          <div style="font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Monthly Carry</div>
+          <div style="font-size:18px;font-weight:700;color:#C47F00" id="monthlyCarryDisplay">&#8212;</div>
+          <div style="font-size:9px;color:#aaa">interest-only</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Carry Saved (<span id="cureWksDisplay">7</span> wks)</div>
+          <div style="font-size:18px;font-weight:700;color:#3DB832" id="carrySavedDisplay">&#8212;</div>
+          <div style="font-size:9px;color:#aaa">by eliminating cure delay</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:12px;padding:10px 14px;background:#f0faf0;border:1px solid #c8e6c8;border-radius:6px;font-size:11px;color:#333;line-height:1.6" id="cureNarrative">
+      Enter loan details above to calculate carry savings.
+    </div>
+  </div>
+</div>
+
+<!-- ── SECTION 3: PRO FORMA IMPACT ──────────────────────────────────────── -->
+<div class="divider"></div>
+<div class="sec-head">
+  <div class="sec-num">3</div>
+  <div><div class="sec-title">Pro Forma Impact</div><div style="font-size:11px;color:#666;margin-top:2px">How podium elimination flows into project cost, DSCR, and development spread</div></div>
+  <div style="margin-left:auto;font-size:10px;color:#666">Auto-loaded by Developer Pro Forma as hard cost reduction</div>
+</div>
+
+<div class="hero-row">
+  <div class="hero-cell"><div class="hero-lbl">Net Hard Cost Savings</div><div class="hero-val" id="h1">&#8212;</div><div class="hero-sub">podium out, CFS replacement in</div></div>
+  <div class="hero-cell"><div class="hero-lbl">Carry Savings</div><div class="hero-val" id="h2">&#8212;</div><div class="hero-sub">cure period eliminated</div></div>
+  <div class="hero-cell"><div class="hero-lbl">Total Savings</div><div class="hero-val" id="h3">&#8212;</div><div class="hero-sub">flows to Pro Forma</div></div>
+  <div class="hero-cell"><div class="hero-lbl">Hard Cost / SF Impact</div><div class="hero-val" id="h4">&#8212;</div><div class="hero-sub">$/SF reduction on project</div></div>
+</div>
+
+<div class="input-grid g3">
+  <div class="input-card" style="border-top:3px solid #c00">
+    <div class="card-title" style="color:#c00">Wood Frame + Podium</div>
+    <div class="cost-row"><span class="lbl">Total Hard Cost (w/ podium)</span><span class="val" id="p3WoodHC">&#8212;</span></div>
+    <div class="cost-row"><span class="lbl">Total Project Cost (20% soft)</span><span class="val" id="p3WoodTPC">&#8212;</span></div>
+    <div class="cost-row"><span class="lbl">Loan Amount (65% LTC)</span><span class="val" id="p3WoodLoan">&#8212;</span></div>
+    <div class="cost-row total"><span class="lbl">Hard Cost / SF</span><span class="val" style="color:#c00" id="p3WoodSF">&#8212;</span></div>
+  </div>
+  <div class="input-card" style="border-top:3px solid #3DB832">
+    <div class="card-title" style="color:#3DB832">CFS Full Frame (Podium Eliminated)</div>
+    <div class="cost-row"><span class="lbl">Total Hard Cost (no podium)</span><span class="val" id="p3CfsHC">&#8212;</span></div>
+    <div class="cost-row"><span class="lbl">Total Project Cost (20% soft)</span><span class="val" id="p3CfsTPC">&#8212;</span></div>
+    <div class="cost-row"><span class="lbl">Loan Amount (65% LTC)</span><span class="val" id="p3CfsLoan">&#8212;</span></div>
+    <div class="cost-row total"><span class="lbl">Hard Cost / SF</span><span class="val" style="color:#3DB832" id="p3CfsSF">&#8212;</span></div>
+  </div>
+  <div class="input-card" style="border-top:3px solid #2589b0">
+    <div class="card-title" style="color:#2589b0">The Difference</div>
+    <div class="cost-row"><span class="lbl">Hard Cost Reduction</span><span class="val" id="p3DiffHC">&#8212;</span></div>
+    <div class="cost-row"><span class="lbl">TPC Reduction</span><span class="val" id="p3DiffTPC">&#8212;</span></div>
+    <div class="cost-row"><span class="lbl">Loan Reduction</span><span class="val" id="p3DiffLoan">&#8212;</span></div>
+    <div class="cost-row total"><span class="lbl">$/SF Improvement</span><span class="val" style="color:#2589b0" id="p3DiffSF">&#8212;</span></div>
+  </div>
+</div>
+
+<div class="callout">
+  <div class="callout-title">The Podium Is a Code Workaround, Not a Design Choice</div>
+  <div id="calloutText">Complete the configuration above to generate the full podium elimination narrative.</div>
+</div>
+
+<div style="text-align:center;margin:8px 0 4px;display:flex;justify-content:center;gap:12px">
+  <button class="print-btn" onclick="window.print()">Print Podium Analysis</button>
+  <button onclick="resetForm()" style="height:38px;padding:0 24px;background:#fff;color:#c00;border:1px solid #c00;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">&#8635; Reset Form</button>
+</div>
+<div class="disc">All figures are estimates for discussion purposes only. Cost benchmarks are market averages and will vary by submarket, contractor, and site conditions. © 2026 Global Haven Ventures · Prefab Consulting LLC · Building Systems. Not Just Structures.</div>
+</div>
+
+<script>
+'use strict';
+var SK_PROFORMA='pis-proforma', SK_BUD='pis-budget', SK_PODIUM='pis-podium';
+var SK_PER='ghv-podium-v1', AUTH='ghv_auth_v2', PW='GHVtemp';
+var fpMode='building'; // 'building' or 'custom'
+
+function fmt(n){ return '$'+Math.round(n).toLocaleString(); }
+function fmtM(n){ return Math.abs(n)>=1e6?'$'+(n/1e6).toFixed(2)+'M':fmt(n); }
+function gv(id){ var e=document.getElementById(id); return e?(parseFloat(e.value)||0):0; }
+function sv(id){ var e=document.getElementById(id); return e?(e.value||''):'';}
+function ss(id,v){ var e=document.getElementById(id); if(e)e.textContent=v; }
+function si(id,v){ var e=document.getElementById(id); if(e)e.innerHTML=v; }
+
+// Cost benchmarks: [CIP, PT, Precast] × [12", 16", 20", 24"]
+var BENCH = {
+  cip:     {name:'Conventional CIP',    cure:[6,7],  costs:{12:22,16:26,20:30,24:34}},
+  pt:      {name:'Post-Tension CIP',    cure:[6,8],  costs:{12:28,16:33,20:38,24:44}},
+  precast: {name:'Precast',             cure:[2,3],  costs:{12:38,16:44,20:50,24:58}}
+};
+
+function checkPW(){
+  var gate=document.getElementById('gate'),pw=document.getElementById('pwInput'),err=document.getElementById('pwErr');
+  if(pw.value===PW){localStorage.setItem(AUTH,'1');gate.style.display='none';document.body.style.overflow='';podRestore();loadFromPIS();calc();}
+  else{if(err){err.style.display='block';setTimeout(function(){err.style.display='none';},3000);}pw.value='';}
+}
+
+function setFootprintMode(mode){
+  fpMode=mode;
+  document.getElementById('btnBuilding').className='toggle-btn'+(mode==='building'?' active':'');
+  document.getElementById('btnCustom').className='toggle-btn'+(mode==='custom'?' active':'');
+  document.getElementById('buildingFpFields').style.display=mode==='building'?'block':'none';
+  document.getElementById('customFpFields').style.display=mode==='custom'?'block':'none';
+  calc();
+}
+
+function calcCustomFP(){
+  var w=gv('fpWidth'), l=gv('fpLength');
+  var perLevel=Math.round(w*l);
+  var e1=document.getElementById('customFPsf'); if(e1)e1.value=perLevel;
+  calc();
+}
+
+function updateConfigLimits(){
+  var cfg=sv('buildConfig').split('-');
+  var podLevels=parseInt(cfg[1])||1;
+  var sel=document.getElementById('levelsElim');
+  if(!sel)return;
+  var cur=parseInt(sel.value)||1;
+  sel.innerHTML='';
+  for(var i=1;i<=podLevels;i++){
+    var opt=document.createElement('option');
+    opt.value=i;
+    opt.textContent=i+' level'+(i>1?'s':'')+(i===podLevels?' (full elimination)':'');
+    if(i===cur||i===podLevels)opt.selected=true;
+    sel.appendChild(opt);
+  }
+  // Update total floors display
+  var upper=parseInt(cfg[0])||5;
+  var total=upper+podLevels;
+  var tfEl=document.getElementById('totalFloors'); if(tfEl)tfEl.value=total;
+  calc();
+}
+
+function getPodiumSF(){
+  var levElim=gv('levelsElim');
+  if(fpMode==='custom'){
+    var perLevel=gv('fpWidth')*gv('fpLength');
+    var podSFcEl=document.getElementById('podiumSFcustom');
+    if(podSFcEl)podSFcEl.value=Math.round(perLevel*levElim);
+    return perLevel*levElim;
+  } else {
+    var bSF=gv('buildingSF');
+    var total=gv('totalFloors')||7;
+    var plateSF=Math.round(bSF/total);
+    var podSF=Math.round(plateSF*levElim);
+    var pEl=document.getElementById('floorPlateSF'); if(pEl)pEl.value=plateSF;
+    var podEl=document.getElementById('podiumSF'); if(podEl)podEl.value=podSF;
+    return podSF;
+  }
+}
+
+function calc(){
+  var cfg=sv('buildConfig').split('-');
+  var upperFloors=parseInt(cfg[0])||5;
+  var podLevels=parseInt(cfg[1])||1;
+  var levElim=gv('levelsElim');
+  var levRetain=podLevels-levElim;
+
+  // Update config badge
+  var configStr=upperFloors+'+'+podLevels;
+  ss('badgeStories',configStr);
+  si('badgeDetail',upperFloors+' wood-frame stories<br>'+podLevels+' concrete podium level'+(podLevels>1?'s':'')+'<br>Eliminating '+levElim+' level'+(levElim>1?'s':''));
+
+  // Parking note
+  var parkNote=document.getElementById('parkingNote');
+  if(levRetain>0){
+    parkNote.style.display='block';
+    ss('parkingLevels',levRetain);
+  } else {
+    parkNote.style.display='none';
+  }
+
+  // Podium SF
+  var podSF=getPodiumSF();
+  // Per-level SF
+  var perLevelSF=levElim>0?Math.round(podSF/levElim):podSF;
+
+  // Benchmark costs
+  var type=sv('podiumType');
+  var thick=parseInt(sv('slabThick'))||16;
+  var b=BENCH[type]||BENCH.pt;
+  var costPerSF=b.costs[thick]||b.costs[16];
+  ss('benchLabel',b.name);
+
+  // Component costs
+  var concreteCost=Math.round(costPerSF*podSF);
+  var structEngCost=Math.round(concreteCost*(gv('structEng')/100));
+  var waterproofCost=Math.round(gv('waterproof')*podSF);
+  var mepCost=Math.round(concreteCost*(gv('mepPrem')/100));
+  var totalPodiumCost=concreteCost+structEngCost+waterproofCost+mepCost;
+  // CFS replacement framing for eliminated podium levels
+  var cfsReplSF = gv('cfsReplSF');
+  var cfsReplCost = Math.round(cfsReplSF * podSF);
+  // Net savings = podium cost eliminated - CFS replacement framing added
+  var netPodiumSavings = totalPodiumCost - cfsReplCost;
+
+  // Cure & carry
+  var cureWks=gv('cureWks');
+  var loanAmt=gv('loanAmt');
+  var intRate=gv('intRate');
+  var monthlyCarry=Math.round(loanAmt*(intRate/100)/12);
+  var weeksCarry=Math.round(monthlyCarry*(cureWks/4.333));
+  var totalSavings=netPodiumSavings+weeksCarry;  // Net savings (after CFS replacement)
+
+  // Update cure displays
+  ss('cureWksDisplay',cureWks);
+  ss('monthlyCarryDisplay',fmt(monthlyCarry));
+  ss('carrySavedDisplay',fmt(weeksCarry));
+
+  // Update cure hint
+  var cureHintEl=document.getElementById('cureHint');
+  if(cureHintEl) cureHintEl.textContent=b.name+' typical cure: '+b.cure[0]+'–'+b.cure[1]+' weeks before upper floors can begin';
+  var cureTag=document.getElementById('cureAutoTag');
+  if(cureTag)cureTag.style.display='inline-block';
+
+  // Cure narrative
+  ss('cureNarrative',
+    'On a '+fmt(loanAmt)+' loan at '+intRate+'%, the monthly carry is '+fmt(monthlyCarry)+'. '+
+    'A '+b.name+' podium requires '+cureWks+' weeks of cure before upper floor framing can begin. '+
+    'CFS eliminates that wait entirely — saving '+fmt(weeksCarry)+' in carry cost. '+
+    'That '+fmt(weeksCarry)+' goes straight back into the development budget.'
+  );
+
+  // Impact panels
+  ss('impactPodiumCost',fmtM(netPodiumSavings));
+  ss('impactPodiumSub','Gross podium: '+fmtM(totalPodiumCost)+' less CFS replacement: '+fmtM(cfsReplCost)+' ('+cfsReplSF+'/SF × '+podSF.toLocaleString()+' SF)');
+  ss('impactCarry',fmtM(weeksCarry));
+  ss('impactCarrySub',cureWks+' weeks at '+fmt(monthlyCarry)+'/month carry on '+fmtM(loanAmt)+' loan');
+  ss('impactTotal',fmtM(totalSavings));
+
+  // Cost breakdown table
+  var tbl=document.getElementById('costTable');
+  if(tbl){
+    tbl.innerHTML='<tr><th>Component</th><th style="text-align:right">Amount</th></tr>'+
+      '<tr><td>Concrete &amp; Formwork ('+levElim+' level'+(levElim>1?'s':'')+' × '+perLevelSF.toLocaleString()+' SF × $'+costPerSF+'/SF)</td><td>'+fmt(concreteCost)+'</td></tr>'+
+      '<tr><td style="padding-left:20px;color:#888;font-size:11px">Unit cost: $'+costPerSF+'/SF ('+b.name+', '+thick+'" slab)</td><td style="color:#888;font-size:11px"></td></tr>'+
+      '<tr><td>Structural Engineering ('+gv('structEng')+'% of concrete)</td><td>'+fmt(structEngCost)+'</td></tr>'+
+      '<tr><td>Waterproofing / Membrane ($'+gv('waterproof')+'/SF × '+podSF.toLocaleString()+' SF)</td><td>'+fmt(waterproofCost)+'</td></tr>'+
+      '<tr><td>MEP Coordination Premium ('+gv('mepPrem')+'% of concrete)</td><td>'+fmt(mepCost)+'</td></tr>'+
+      '<tr class="subtotal"><td><strong>Total Podium Hard Cost Eliminated</strong></td><td><strong>'+fmt(totalPodiumCost)+'</strong></td></tr>'+
+      '<tr style="background:#fff8f0"><td style="color:#C47F00">Carry Savings ('+cureWks+' week cure eliminated)</td><td style="color:#C47F00">'+fmt(weeksCarry)+'</td></tr>'+
+      '<tr class="subtotal"><td><strong>Gross Podium Hard Cost (Eliminated)</strong></td><td><strong>'+fmt(totalPodiumCost)+'</strong></td></tr>'+
+      '<tr style="background:#fff3f3"><td style="color:#c00">Less: CFS Replacement Framing ('+levElim+' level'+(levElim>1?'s':'')+' × '+perLevelSF.toLocaleString()+' SF × $'+cfsReplSF+'/SF)</td><td style="color:#c00">('+fmt(cfsReplCost)+')</td></tr>'+
+      '<tr class="subtotal"><td><strong>Net Hard Cost Savings</strong></td><td><strong style="color:'+(netPodiumSavings>=0?'#3DB832':'#c00')+'">'+fmt(netPodiumSavings)+'</strong></td></tr>'+
+      '<tr style="background:#fff8f0"><td style="color:#C47F00">Carry Savings ('+cureWks+' week cure eliminated)</td><td style="color:#C47F00">'+fmt(weeksCarry)+'</td></tr>'+
+      '<tr class="grand"><td><strong>Total Net Advantage</strong></td><td><strong>'+fmt(totalSavings)+'</strong></td></tr>';
+  }
+
+  // Benchmark table
+  var btbl=document.getElementById('benchTable');
+  if(btbl){
+    var types=[['cip','Conventional CIP'],['pt','Post-Tension CIP'],['precast','Precast']];
+    var thicknesses=[12,16,20,24];
+    btbl.innerHTML='<tr><th>Type</th>'+thicknesses.map(function(t){return '<th>'+t+'"</th>';}).join('')+'<th>Cure</th></tr>'+
+      types.map(function(t){
+        var b2=BENCH[t[0]];
+        var isActive=t[0]===type;
+        return '<tr'+(isActive?' class="hl"':'')+'><td>'+t[1]+'</td>'+
+          thicknesses.map(function(th){return '<td'+(th===thick&&isActive?' style="font-weight:700"':'')+'>${'+b2.costs[th]+'</td>';}).join('')+
+          '<td>'+b2.cure[0]+'–'+b2.cure[1]+' wks</td></tr>';
+      }).join('');
+    // Fix the $ display
+    btbl.innerHTML=btbl.innerHTML.replace(/\${/g,'$');
+  }
+
+  // Hero row
+  ss('h1',fmtM(netPodiumSavings));
+  ss('h2',fmtM(weeksCarry));
+  ss('h3',fmtM(totalSavings));
+  var bSF2=gv('buildingSF')||125000;
+  var hcPerSF=bSF2>0?(totalSavings/bSF2).toFixed(2):0;
+  ss('h4','$'+hcPerSF+'/SF');
+
+  // Pro forma comparison (assumes 20% soft, 65% LTC)
+  var woodHC=gv('loanAmt')/0.65; // back-calc from loan
+  // Use building SF for $/SF calcs
+  var bldgSF=gv('buildingSF')||gv('grossSFcost')||125000;
+  // Wood frame: current hard cost (podium included)
+  // We don't have the full hard cost here — show the podium impact on $/SF
+  var podiumSFcost=(totalPodiumCost/bldgSF).toFixed(2);
+  var cfsHardCostReduction=totalPodiumCost;
+  var woodTPC_est=Math.round(woodHC*1.20);
+  var cfsTPC_est=Math.round((woodHC-cfsHardCostReduction)*1.20);
+  var woodLoan=Math.round(woodTPC_est*0.65);
+  var cfsLoan=Math.round(cfsTPC_est*0.65);
+  var diffHC=cfsHardCostReduction;
+  var diffTPC=woodTPC_est-cfsTPC_est;
+  var diffLoan=woodLoan-cfsLoan;
+
+  ss('p3WoodHC',fmtM(woodHC));ss('p3WoodTPC',fmtM(woodTPC_est));ss('p3WoodLoan',fmtM(woodLoan));
+  ss('p3WoodSF','$'+(woodHC/bldgSF).toFixed(0)+'/SF');
+  ss('p3CfsHC',fmtM(woodHC-diffHC));ss('p3CfsTPC',fmtM(cfsTPC_est));ss('p3CfsLoan',fmtM(cfsLoan));
+  ss('p3CfsSF','$'+((woodHC-diffHC)/bldgSF).toFixed(0)+'/SF');
+  ss('p3DiffHC',fmtM(diffHC));ss('p3DiffTPC',fmtM(diffTPC));ss('p3DiffLoan',fmtM(diffLoan));
+  ss('p3DiffSF','$'+podiumSFcost+'/SF');
+
+  // Callout
+  ss('calloutText',
+    'The developer building a '+upperFloors+'+'+podLevels+' structure isn\'t choosing concrete because they want it. '+
+    'They\'re building a '+podLevels+'-level concrete podium because the building code triggers combustion requirements above 4 stories of wood framing. '+
+    'CFS is noncombustible. The code trigger disappears. '+
+    'Eliminating '+levElim+' podium level'+(levElim>1?'s':'')+' removes '+fmt(totalPodiumCost)+' from the hard cost — '+
+    'plus '+fmt(weeksCarry)+' in carry savings during the '+cureWks+'-week cure period. '+
+    'Total: '+fmtM(totalSavings)+' that never needed to be in the budget. '+
+    'That\'s $'+podiumSFcost+'/SF off the project cost before the framing bid is even opened.'
+  );
+
+  // Write to localStorage for Pro Forma to read
+  try{
+    localStorage.setItem(SK_PODIUM,JSON.stringify({
+      _page:'podium',_ts:Date.now(),
+      podiumCost:totalPodiumCost, carrySavings:weeksCarry,
+      totalPodiumCost:totalPodiumCost, cfsReplCost:cfsReplCost, netPodiumSavings:netPodiumSavings, totalSavings:totalSavings, podiumSF:podSF,
+      levElim:levElim, type:type, buildConfig:sv('buildConfig'),
+      costPerSF:costPerSF, buildingSF:bldgSF,
+      hcPerSF:parseFloat(podiumSFcost)
+    }));
+  }catch(e){}
+  podPersist();
+}
+
+function loadFromPIS(){
+  var banner=document.getElementById('pisBanner');
+  var loaded=[];
+  try{
+    // Budget Builder → building SF, CFS framing cost/SF
+    var bRaw=localStorage.getItem(SK_BUD);
+    if(bRaw){var b=JSON.parse(bRaw);
+      if(b.sf&&b.sf>0){var sfEl=document.getElementById('buildingSF');if(sfEl)sfEl.value=b.sf;var sfTag=document.getElementById('sfTag');if(sfTag)sfTag.style.display='inline-block';}
+      if(b.hc&&b.hc>0){var cfsEl=document.getElementById('cfsReplSF');var cfsTag=document.getElementById('cfsReplTag');if(cfsEl){cfsEl.value=b.hc;if(cfsTag)cfsTag.style.display='inline-block';}}
+      loaded.push('Budget Builder');
+    }
+    // Pro Forma → loan amount, interest rate
+    var pRaw=localStorage.getItem(SK_PROFORMA);
+    if(pRaw){var p=JSON.parse(pRaw);
+      // The proforma stores loanAmt and intRate in its own calculated output
+      // Also try ghv-proforma-v1 for the input fields
+    }
+    var prRaw=localStorage.getItem('ghv-proforma-v1');
+    if(prRaw){var pr=JSON.parse(prRaw);
+      if(pr.intRate){var irEl=document.getElementById('intRate');if(irEl){irEl.value=pr.intRate;var rTag=document.getElementById('rateAutoTag');if(rTag)rTag.style.display='inline-block';}}
+      // Loan amount: ltc × totalCost — if we have those
+      if(pr.ltc&&pr.grossSFcost&&pr.hardCostSF){
+        var hc=parseFloat(pr.hardCostSF)*parseFloat(pr.grossSFcost)*(1+0.20); // with soft costs
+        var loan=Math.round(hc*(parseFloat(pr.ltc)/100));
+        if(loan>0){var laEl=document.getElementById('loanAmt');if(laEl){laEl.value=loan;var lTag=document.getElementById('loanAutoTag');if(lTag)lTag.style.display='inline-block';}}
+      }
+      if(pr.grossSF){var sfEl2=document.getElementById('buildingSF');if(sfEl2){sfEl2.value=pr.grossSF;var sfTag2=document.getElementById('sfTag');if(sfTag2)sfTag2.style.display='inline-block';}}
+      loaded.push('Developer Pro Forma');
+    }
+    if(banner){
+      if(loaded.length>0){
+        banner.style.cssText='flex:1;background:#f0faf0;border:1px solid #3DB832;border-radius:8px;padding:10px 14px;font-size:11px;line-height:1.8;transition:all .3s';
+        banner.innerHTML='<b style="color:#3DB832">&#10003; Auto-loaded from: </b>'+loaded.map(function(l){return '<span style="background:#fff;border:1px solid #c8e6c8;color:#3DB832;padding:1px 10px;border-radius:4px;font-size:10px;margin-right:4px">'+l+'</span>';}).join('');
+      }else{
+        banner.style.cssText='flex:1;background:#fff8f0;border:1px solid #ffcc88;border-radius:8px;padding:10px 14px;font-size:11px;line-height:1.8;transition:all .3s';
+        banner.innerHTML='<span style="color:#c47f00;font-weight:600">&#8505; Run Budget Builder and Developer Pro Forma first</span> to auto-load building SF, loan amount, and interest rate.';
+      }
+    }
+  }catch(e){console.warn('loadFromPIS:',e);}
+}
+
+var POD_FIELDS=['buildConfig','levelsElim','podiumType','slabThick','structEng','waterproof','mepPrem','cfsReplSF','cureWks','loanAmt','intRate','buildingSF','fpWidth','fpLength'];
+function podPersist(){try{var d={_ts:Date.now(),fpMode:fpMode};POD_FIELDS.forEach(function(f){var e=document.getElementById(f);if(e)d[f]=e.value;});localStorage.setItem(SK_PER,JSON.stringify(d));}catch(e){}}
+function podRestore(){try{var raw=localStorage.getItem(SK_PER);if(!raw)return;var d=JSON.parse(raw);if(d.fpMode)setFootprintMode(d.fpMode);POD_FIELDS.forEach(function(f){var e=document.getElementById(f);if(e&&d[f]!==undefined)e.value=d[f];});updateConfigLimits();}catch(e){}}
+
+function resetForm(){
+  if(!confirm('Reset all form inputs to defaults?'))return;
+  try{localStorage.removeItem(SK_PER);}catch(e){}
+  var defs={buildConfig:'6-2',podiumType:'pt',slabThick:'16',structEng:'8',waterproof:'4.50',mepPrem:'5',cfsReplSF:'42',cureWks:'7',loanAmt:'15000000',intRate:'6.75',buildingSF:'125000',fpWidth:'150',fpLength:'100'};
+  Object.keys(defs).forEach(function(id){var el=document.getElementById(id);if(el)el.value=defs[id];});
+  setFootprintMode('building');
+  updateConfigLimits();
+  loadFromPIS();
+  calc();
+}
+
+window.addEventListener('load',function(){
+  var gate=document.getElementById('gate');
+  if(localStorage.getItem(AUTH)==='1'){if(gate)gate.style.display='none';document.body.style.overflow='';podRestore();updateConfigLimits();loadFromPIS();calc();}
+  else{if(gate)gate.style.display='flex';document.body.style.overflow='hidden';setTimeout(function(){var p=document.getElementById('pwInput');if(p)p.focus();},100);}
+  ['podiumType','slabThick','buildConfig','levelsElim'].forEach(function(id){var e=document.getElementById(id);if(e)e.addEventListener('change',calc);});
+  ['structEng','waterproof','mepPrem','cfsReplSF','cureWks','loanAmt','intRate','buildingSF'].forEach(function(id){var e=document.getElementById(id);if(e)e.addEventListener('change',calc);});
+});
+</script>
+</body>
+</html>

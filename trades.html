@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GHV Trade Savings Calculator</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;background:#f5f5f5;color:#111;min-height:100vh}
+header{background:#111;padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:22px;font-weight:700;color:#3DB832}.logo span{color:#fff;font-size:12px;font-weight:400;margin-left:10px;opacity:.6;letter-spacing:.1em;text-transform:uppercase}
+.main{max-width:1200px;margin:0 auto;padding:20px}
+.card{background:#fff;border-radius:10px;border:1px solid #e5e5e5;padding:20px;margin-bottom:16px}
+label{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#888;display:block;margin-bottom:4px}
+input[type=number],select{width:100%;height:32px;padding:0 10px;font-size:12px;border:1px solid #ddd;border-radius:6px;background:#fff;color:#111;outline:none}
+input[type=number]:focus,select:focus{border-color:#3DB832}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.sh{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#555;border-bottom:2px solid #3DB832;padding-bottom:4px;margin-bottom:14px}
+.pfx{display:flex}.pfx em{height:32px;display:flex;align-items:center;padding:0 8px;font-size:11px;font-style:normal;color:#888;background:#f9f9f9;border:1px solid #ddd;border-right:none;border-radius:6px 0 0 6px}.pfx input{border-radius:0 6px 6px 0;flex:1}
+.sfx{display:flex}.sfx input{border-radius:6px 0 0 6px;flex:1}.sfx em{height:32px;display:flex;align-items:center;padding:0 8px;font-size:11px;font-style:normal;color:#888;background:#f9f9f9;border:1px solid #ddd;border-left:none;border-radius:0 6px 6px 0}
+.hero{background:#f8fdf8;border:2px solid #3DB832;border-radius:10px;padding:18px;text-align:center;margin-bottom:16px}
+.hero-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:6px}
+.hero-val{font-size:36px;font-weight:700;color:#3DB832}
+.hero-sub{font-size:11px;color:#888;margin-top:5px}
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.mc{background:#fff;border:1px solid #e5e5e5;border-radius:8px;padding:10px;text-align:center}
+.mc-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.05em;color:#888;margin-bottom:4px;line-height:1.4}
+.mc-val{font-size:15px;font-weight:700;color:#3DB832}
+.trade-card{background:#fff;border:1px solid #e5e5e5;border-radius:8px;margin-bottom:8px;overflow:hidden}
+.trade-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;user-select:none}
+.trade-head:hover{background:#f9f9f9}
+.trade-icon{font-size:18px;margin-right:10px}
+.trade-name{font-size:13px;font-weight:600;color:#111;flex:1}
+.trade-save{font-size:15px;font-weight:700;color:#3DB832;margin-right:10px}
+.chev{font-size:11px;color:#aaa;transition:transform .2s;display:inline-block}
+.chev.open{transform:rotate(180deg)}
+.trade-body{display:none;padding:0 16px 14px;border-top:1px solid #f0f0f0}
+.trade-body.open{display:block}
+.trade-desc{font-size:11px;color:#555;line-height:1.65;margin:10px 0;padding:8px 10px;background:#f9fdf9;border-left:3px solid #3DB832;border-radius:0 4px 4px 0}
+.li-thead{display:grid;grid-template-columns:2fr 1.5fr 1fr;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#aaa;border-bottom:1.5px solid #3DB832;padding:5px 0 3px;margin-top:8px}
+.li-row{display:grid;grid-template-columns:2fr 1.5fr 1fr;padding:5px 0;border-bottom:0.5px solid #f0f0f0;font-size:11px;align-items:baseline}
+.li-row:last-child{border-bottom:none}
+.li-lbl{color:#555}
+.li-basis{font-size:10px;color:#aaa}
+.li-val{color:#3DB832;font-weight:700;text-align:right}
+.trade-total{display:flex;justify-content:flex-end;padding:7px 0 2px;font-size:12px;font-weight:700;border-top:1.5px solid #3DB832;margin-top:4px}
+.math-box{background:#f9fdf9;border:1px solid #c8e6c8;border-left:3px solid #3DB832;border-radius:0 6px 6px 0;padding:10px 12px;margin-top:10px;font-size:10.5px;color:#444;line-height:1.9}
+.math-step{margin:1px 0;color:#555}
+.badge{display:inline-block;font-size:9px;padding:2px 7px;border-radius:4px;background:#f0faf0;border:1px solid #c8e6c8;color:#2a7a2a;margin-left:8px;vertical-align:middle}
+.tot-bar{display:flex;justify-content:space-between;align-items:center;background:#f0faf0;border:2px solid #3DB832;border-radius:8px;padding:12px 16px;margin-top:4px}
+.tot-lbl{font-size:13px;font-weight:700;color:#111}
+.tot-val{font-size:22px;font-weight:700;color:#3DB832}
+.chart-wrap{position:relative;width:100%;height:260px}
+.toggle-btn{font-size:11px;color:#3DB832;cursor:pointer;border:none;background:transparent;padding:0;margin-bottom:8px;text-decoration:underline;display:block}
+.note{font-size:10px;color:#aaa;margin-top:10px;line-height:1.6;font-style:italic}
+.grp-lbl{font-size:10px;font-weight:600;color:#3DB832;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.divider{height:1px;background:#eee;margin:14px 0}
+
+  /* ── PRINT LAYOUT ─────────────────────────────────────────────────────── */
+  #printDoc{display:none;font-family:Arial,sans-serif;font-size:10pt;color:#111;padding:.6in .75in}
+  @media print{
+    header,.main,#overlay{display:none!important}
+    #printDoc{display:block!important}
+    body{background:#fff;margin:0;padding:0}
+    @page{size:letter;margin:0}
+    #printDoc .pbot{page-break-inside:avoid}
+    #printDoc .ptrade{page-break-inside:avoid;margin-bottom:8pt}
+  }
+  #printDoc .ph{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #3DB832;padding-bottom:8px;margin-bottom:14px}
+  #printDoc .plogo{font-size:22pt;font-weight:700;color:#3DB832;line-height:1}
+  #printDoc .plogosub{font-size:6.5pt;color:#666;text-transform:uppercase;letter-spacing:.12em;margin-top:2px}
+  #printDoc .pright{text-align:right}
+  #printDoc .ptitle{font-size:13pt;font-weight:700}
+  #printDoc .psub{font-size:8.5pt;color:#555;margin-top:3px}
+  #printDoc .pbadge{font-size:7pt;padding:1px 6px;border:1px solid #ccc;border-radius:3px;color:#666;margin-left:3px;display:inline-block;margin-top:4px}
+  #printDoc .psec{font-size:7.5pt;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.1em;border-bottom:2px solid #3DB832;padding-bottom:3px;margin:12px 0 7px}
+  #printDoc .phero{border:2px solid #3DB832;border-radius:6px;padding:10px;text-align:center;max-width:400px;margin:0 auto 12px}
+  #printDoc .phero-lbl{font-size:6.5pt;color:#888;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+  #printDoc .phero-val{font-size:20pt;font-weight:700;color:#3DB832;line-height:1.1}
+  #printDoc .phero-sub{font-size:7.5pt;color:#888;margin-top:3px}
+  #printDoc .pmgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px}
+  #printDoc .pmcard{border:1px solid #e0e0e0;border-radius:4px;padding:6px 8px;text-align:center}
+  #printDoc .pmcard-lbl{font-size:6.5pt;color:#888;text-transform:uppercase;margin-bottom:2px;line-height:1.3}
+  #printDoc .pmcard-val{font-size:10pt;font-weight:700;color:#3DB832}
+  #printDoc .ptrade{border:1px solid #e0e0e0;border-radius:4px;margin-bottom:8px;overflow:hidden}
+  #printDoc .ptrade-head{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:#f8fdf8;border-bottom:1px solid #e0e0e0}
+  #printDoc .ptrade-name{font-size:9.5pt;font-weight:700;color:#111}
+  #printDoc .ptrade-save{font-size:10pt;font-weight:700;color:#3DB832}
+  #printDoc .ptrade-body{padding:6px 10px}
+  #printDoc .ptrade-desc{font-size:8pt;color:#666;font-style:italic;margin-bottom:6px;line-height:1.5;border-left:2px solid #3DB832;padding-left:6px}
+  #printDoc table{width:100%;border-collapse:collapse;margin-bottom:4px}
+  #printDoc th{font-size:7pt;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#888;border-bottom:1.5px solid #3DB832;padding:3px 5px;text-align:left}
+  #printDoc th:not(:first-child){text-align:right}
+  #printDoc td{font-size:8.5pt;padding:3px 5px;border-bottom:0.5px solid #eee}
+  #printDoc td:not(:first-child){text-align:right}
+  #printDoc tr.ptot td{font-weight:700;border-top:1.5px solid #3DB832;border-bottom:none;background:#f8f8f8;font-size:9pt}
+  #printDoc .pfoot{display:flex;justify-content:space-between;font-size:7pt;color:#aaa;margin-top:10px;padding-top:5px;border-top:1px solid #e0e0e0}
+
+</style>
+</head>
+<body>
+
+<!-- PRINT DOCUMENT -->
+<div id="printDoc">
+  <div class="ph">
+    <div><div class="plogo">GHV</div><div class="plogosub">Global Haven Ventures</div></div>
+    <div class="pright">
+      <div style="font-size:7.5pt;color:#999;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">CFS Trade Savings Analysis</div>
+      <div class="ptitle" id="pProjName">Trade Savings Summary</div>
+      <div class="psub" id="pProjSub"></div>
+      <div id="pMeta"></div>
+    </div>
+  </div>
+
+  <div class="phero">
+    <div class="phero-lbl">Combined Project-Wide Trade Savings — CFS vs. Conventional Wood Framing</div>
+    <div class="phero-val" id="pHeroVal">—</div>
+    <div class="phero-sub" id="pHeroSub"></div>
+  </div>
+
+  <div class="psec">Savings by Trade — Summary</div>
+  <div class="pmgrid" id="pCards"></div>
+
+  <div class="psec">Trade-by-Trade Line Item Detail</div>
+  <div id="pTradeList"></div>
+
+  <table style="margin-top:8px">
+    <tr class="ptot">
+      <td>Total Trade Savings — All Disciplines</td>
+      <td style="text-align:right;color:#3DB832" id="pGrandTot">—</td>
+    </tr>
+  </table>
+
+  <div style="margin-top:10px;padding:6px 9px;border:1px solid #c8e0c8;border-left:3px solid #3DB832;background:#f9f9f9;font-size:7.5pt;color:#666;line-height:1.5">
+    <strong>Important Notice</strong> — All figures are estimates based on field-validated defaults (Robert Johnson, Prefab Consulting LLC — April 2026). Actual savings vary by project design, site conditions, and subcontractor agreements. Not a guarantee of savings. All defaults scale proportionally with floor plate size.
+  </div>
+
+  <div class="pfoot">
+    <div>Global Haven Ventures · Prefab Consulting LLC · Building Systems. Not Just Structures.</div>
+    <div id="pYear"></div>
+  </div>
+</div>
+
+<header>
+  <div><span class="logo">GHV</span><span class="logo"><span>Budget Tools</span></span></div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <a href="/index.html" style="padding:5px 14px;border-radius:6px;border:0.5px solid #444;color:#aaa;font-size:11px;text-decoration:none">CFS Budget Builder</a>
+    <a href="/savings.html" style="padding:5px 14px;border-radius:6px;border:0.5px solid #444;color:#aaa;font-size:11px;text-decoration:none">Soft Cost Savings</a>
+    <a href="/trades.html" style="padding:5px 14px;border-radius:6px;border:1px solid #3DB832;color:#3DB832;font-size:11px;text-decoration:none">Trade Savings</a>
+    <a href="/podium.html" style="padding:5px 14px;border-radius:6px;border:1px solid #3DB832;color:#3DB832;font-size:11px;text-decoration:none">Podium Analysis</a>
+    <a href="/summary.html" style="padding:5px 14px;border-radius:6px;border:0.5px solid #444;color:#aaa;font-size:11px;text-decoration:none">System Summary</a>
+    <a href="/caprate.html" style="padding:5px 14px;border-radius:6px;border:0.5px solid #444;color:#aaa;font-size:11px;text-decoration:none">Developer Pro Forma</a>
+  </div>
+</header>
+
+<div class="main">
+  <!-- BUILDING PARAMETERS -->
+  <div class="card">
+    <div class="sh">Building Parameters</div>
+    <div class="g4">
+      <div><label>Total Building SF</label><input type="number" id="sf" value="48000" oninput="calc()"></div>
+      <div><label>Number of Floors</label><input type="number" id="floors" value="4" oninput="calc()"></div>
+      <div><label>Total Footing Length</label><div class="sfx"><input type="number" id="footLF" value="1320" oninput="calc()"><em>LF</em></div></div>
+      <div><label>Project Type</label>
+        <select id="ptype" onchange="calc()">
+          <option value="multifamily">Multifamily</option>
+          <option value="hospitality">Hospitality</option>
+          <option value="senior">Senior / Assisted Living</option>
+          <option value="student">Student Housing</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-top:10px">
+      <label>Regional Labor Adjustment <span style="font-size:9px;color:#3DB832;font-weight:600">(applied to MEP, HVAC, Drywall, Framing &amp; Cladding labor)</span></label>
+      <select id="laborAdj" onchange="calc()" style="width:100%;height:32px;padding:0 10px;font-size:12px;border:1px solid #ddd;border-radius:6px;background:#fff;color:#111;outline:none">
+        <option value="0">Baseline — AZ, TX, NM, NV, TN, SC, GA, FL (0%)</option>
+        <option value="12">Low — UT, CO, VA, OH, MI, IN, WI, PA (+12%)</option>
+        <option value="22">Medium — OR, IL, MN, MD, NJ, CT (+22%)</option>
+        <option value="32">High — WA, MA, NY Upstate (+32%)</option>
+        <option value="40">Very High — CA (+40%)</option>
+        <option value="45">Very High — NYC (+45%)</option>
+        <option value="55">Very High — HI (+55%)</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- VALIDATED DEFAULTS -->
+  <div class="card">
+    <div class="sh">Validated Default Parameters <span class="badge">All field-validated by Robert Johnson · April 2, 2026</span></div>
+    <div class="g4">
+      <!-- Foundation -->
+      <div>
+        <div class="grp-lbl">🏗️ Foundation</div>
+        <div style="display:grid;gap:6px">
+          <div><label>Wood Dead Load</label><div class="sfx"><input type="number" id="dlWood" value="14" step=".5" oninput="calc()"><em>psf</em></div></div>
+          <div><label>CFS Dead Load</label><div class="sfx"><input type="number" id="dlCFS" value="10" step=".5" oninput="calc()"><em>psf</em></div></div>
+          <div><label>Soil Bearing</label><div class="sfx"><input type="number" id="soilPSF" value="1500" step="250" oninput="calc()"><em>psf</em></div></div>
+          <div><label>Concrete / CY</label><div class="pfx"><em>$</em><input type="number" id="concCost" value="150" oninput="calc()"></div></div>
+          <div><label>Footing Depth</label><div class="sfx"><input type="number" id="footIn" value="12" oninput="calc()"><em>in</em></div></div>
+        </div>
+      </div>
+      <!-- MEP -->
+      <div>
+        <div class="grp-lbl">🔌 MEP (per 12,000 SF floor plate · scales with SF)</div>
+        <div style="display:grid;gap:6px">
+          <div><label>MEP Labor Rate / hr</label><div class="pfx"><em>$</em><input type="number" id="mepRate" value="85" oninput="calc()"></div></div>
+          <div class="g2">
+            <div><label>Elec. holes</label><input type="number" id="eH" value="5000" oninput="calc()"></div>
+            <div><label>Elec. min/hole</label><input type="number" id="eM" value="8" oninput="calc()"></div>
+          </div>
+          <div class="g2">
+            <div><label>Plumb. holes</label><input type="number" id="pH" value="3200" oninput="calc()"></div>
+            <div><label>Plumb. min/hole</label><input type="number" id="pM" value="10" oninput="calc()"></div>
+          </div>
+          <div class="g2">
+            <div><label>Mech. holes</label><input type="number" id="mH" value="200" oninput="calc()"></div>
+            <div><label>Mech. min/hole</label><input type="number" id="mM" value="12" oninput="calc()"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Drywall / GC / Framing -->
+      <div>
+        <div class="grp-lbl">🧱 Drywall & Finishes</div>
+        <div><label>Drywall Labor / SF</label><div class="pfx"><em>$</em><input type="number" id="dwRate" value="2.25" step=".05" oninput="calc()"></div></div>
+        <div class="divider"></div>
+        <div class="grp-lbl">📋 General Conditions</div>
+        <div style="display:grid;gap:6px">
+          <div><label>GC Gen. Cond. / wk</label><div class="pfx"><em>$</em><input type="number" id="gcWeek" value="12000" oninput="calc()"></div></div>
+          <div><label>Schedule Savings</label><div class="sfx"><input type="number" id="schedWks" value="6" oninput="calc()"><em>wks</em></div></div>
+        </div>
+        <div class="divider"></div>
+        <div class="grp-lbl">🔧 Framing Field Labor</div>
+        <div><label>Framing Labor / SF</label><div class="pfx"><em>$</em><input type="number" id="framRate" value="5.50" step=".25" oninput="calc()"></div></div>
+      </div>
+      <!-- Waste + HVAC -->
+      <div>
+        <div class="grp-lbl">🗑️ Waste Removal</div>
+        <div style="display:grid;gap:6px">
+          <div><label>Pulls / 100K SF</label><input type="number" id="dumpPer100k" value="10" oninput="calc()"></div>
+          <div><label>Cost / Pull</label><div class="pfx"><em>$</em><input type="number" id="dumpCost" value="600" oninput="calc()"></div></div>
+        </div>
+        <div class="divider"></div>
+        <div class="grp-lbl">🌡️ HVAC (per 12,000 SF floor plate · scales)</div>
+        <div style="display:grid;gap:6px">
+          <div><label>Penetrations / floor</label><input type="number" id="hvH" value="5" oninput="calc()"></div>
+          <div><label>Min / penetration</label><input type="number" id="hvM" value="15" oninput="calc()"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-label">Combined Project-Wide Trade Savings — CFS vs. Conventional Wood Framing</div>
+    <div class="hero-val" id="heroVal">$0</div>
+    <div class="hero-sub" id="heroSub">Per SF: $0.00 · Across 8 trades · 6-week schedule compression included</div>
+  </div>
+
+  <!-- METRIC CARDS -->
+  <div class="mgrid">
+    <div class="mc"><div class="mc-lbl">Foundation / Concrete</div><div class="mc-val" id="m0">$0</div></div>
+    <div class="mc"><div class="mc-lbl">MEP — Plumbing, Elec, Mech</div><div class="mc-val" id="m1">$0</div></div>
+    <div class="mc"><div class="mc-lbl">Waste Removal</div><div class="mc-val" id="m2">$0</div></div>
+    <div class="mc"><div class="mc-lbl">Drywall & Finishes</div><div class="mc-val" id="m3">$0</div></div>
+    <div class="mc"><div class="mc-lbl">Exterior Cladding</div><div class="mc-val" id="m4">$0</div></div>
+    <div class="mc"><div class="mc-lbl">HVAC Rough-In</div><div class="mc-val" id="m5">$0</div></div>
+    <div class="mc"><div class="mc-lbl">General Conditions</div><div class="mc-val" id="m6">$0</div></div>
+    <div class="mc"><div class="mc-lbl">Framing / Field Labor</div><div class="mc-val" id="m7">$0</div></div>
+  </div>
+
+  <!-- TRADE CARDS -->
+  <div class="card">
+    <div class="sh" style="margin-bottom:10px">Savings by Trade — Line Item Detail</div>
+    <button class="toggle-btn" id="toggleBtn" onclick="toggleAll()">▶ Expand all trades</button>
+    <div id="tradeCards"></div>
+    <div class="tot-bar">
+      <span class="tot-lbl">Total Trade Savings — All Disciplines</span>
+      <span class="tot-val" id="totVal">$0</span>
+    </div>
+  </div>
+
+  <!-- CHART -->
+  <div class="card">
+    <div class="sh" style="margin-bottom:12px">Trade Savings — Visual Comparison</div>
+    <div class="chart-wrap"><canvas id="tradeChart"></canvas></div>
+  </div>
+
+  <div style="text-align:center;margin:12px 0">
+  <button onclick="doPrint()" style="height:38px;padding:0 28px;background:#3DB832;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;letter-spacing:.02em">⎙ Print / PDF</button>
+</div>
+  <div style="text-align:center;margin:10px 0 4px">
+    <button onclick="sendToSummary()" style="height:38px;padding:0 24px;background:#3DB832;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.03em">
+      ▶ Send to System Summary
+    </button>
+  </div>
+
+<div class="note" id="footnote"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+let chartInst = null;
+let allOpen = false;
+
+const fmt  = n => '$' + Math.round(n).toLocaleString();
+const fmtF = (n,d) => n.toFixed(d||2);
+const fmtI = n => Math.round(n).toLocaleString();
+const set  = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+const gv   = id => parseFloat(document.getElementById(id).value)||0;
+
+// Baseline floor plate for scaling MEP/HVAC hole counts
+const BASELINE_FLOOR_SF = 12000; // 48,000 SF ÷ 4 floors
+
+function calc() {
+  const sf       = gv('sf')||48000;
+  const floors   = gv('floors')||4;
+  const footLF   = gv('footLF')||1320;
+  const footDFt  = (gv('footIn')||12)/12;
+  const ptype    = document.getElementById('ptype').value;
+  const ptAdj    = ptype==='hospitality'?1.15:ptype==='senior'?1.1:1.0;
+  const laborPct  = parseFloat(document.getElementById('laborAdj').value)||0;
+  const laborMult = 1 + laborPct/100;
+
+  // Derived geometry
+  const floorSF   = sf/floors;
+  const scaleFac  = floorSF/BASELINE_FLOOR_SF; // scales hole counts with floor plate
+  const perimFt   = 4*Math.sqrt(floorSF);
+  const extWall   = perimFt*10*floors;
+  const intWall   = extWall*0.6;
+  const totalWall = extWall+intWall;
+
+  // ── T1: FOUNDATION — Real engineering math ────────────────────────────────
+  const dlWood   = gv('dlWood')||14;
+  const dlCFS    = gv('dlCFS')||10;
+  const soilPSF  = gv('soilPSF')||1500;
+  const concCost = gv('concCost')||150;
+  const dlDiff        = dlWood - dlCFS;
+  const totalDLRed    = dlDiff * sf;
+  const loadPerLF     = totalDLRed / footLF;
+  const widthRedFt    = loadPerLF / soilPSF;
+  const widthRedIn    = widthRedFt * 12;
+  const concCY        = (widthRedFt * footDFt * footLF) / 27;
+  const concSave      = concCY * concCost;
+  const rebarSave     = concSave * 0.18;
+  const formSave      = concSave * 0.12;
+  const foundSave     = concSave + rebarSave + formSave;
+
+  // ── T2: MEP — scales with floor plate SF ──────────────────────────────────
+  const mepRate  = gv('mepRate')||85;
+  const eH = (gv('eH')||5000)*scaleFac, eM = gv('eM')||8;
+  const pH = (gv('pH')||3200)*scaleFac, pM = gv('pM')||10;
+  const mH = (gv('mH')||200)*scaleFac,  mMin = gv('mM')||12;
+  const elecSave  = eH*floors*(eM/60)*mepRate*laborMult;
+  const plumbSave = pH*floors*(pM/60)*mepRate*laborMult;
+  const mechSave  = mH*floors*(mMin/60)*mepRate*laborMult;
+  const mepSave   = (elecSave+plumbSave+mechSave)*ptAdj;
+
+  // ── T3: WASTE REMOVAL ─────────────────────────────────────────────────────
+  const dumpPer100k = gv('dumpPer100k')||10;
+  const dumpCost    = gv('dumpCost')||600;
+  const dumpPulls   = Math.max(1, Math.round((sf/100000)*dumpPer100k*0.75));
+  const dumpSave    = dumpPulls * dumpCost;
+  const cleanSave   = (sf/10000) * 320;
+  const wasteSave   = dumpSave + cleanSave;
+
+  // ── T4: DRYWALL ───────────────────────────────────────────────────────────
+  const dwRate   = gv('dwRate')||2.25;
+  const dwHang   = totalWall * dwRate * 0.15 * laborMult;
+  const dwFin    = totalWall * dwRate * 0.08 * laborMult;
+  const dwMat    = totalWall * 0.40 * 0.05;
+  const dwSave   = (dwHang + dwFin + dwMat) * ptAdj;
+
+  // ── T5: EXTERIOR CLADDING ─────────────────────────────────────────────────
+  const furSave  = extWall * 0.35 * laborMult;
+  const backSave = extWall * 0.20 * laborMult;
+  const cladSave = (furSave + backSave) * ptAdj;
+
+  // ── T6: HVAC — scales with floor plate SF ────────────────────────────────
+  const hvH     = (gv('hvH')||5) * scaleFac;
+  const hvM     = gv('hvM')||15;
+  const hvDrill = hvH * floors * (hvM/60) * mepRate * laborMult;
+  const rfiSave = floors * 180;
+  const hvacSave = (hvDrill + rfiSave) * ptAdj;
+
+  // ── T7: GENERAL CONDITIONS ────────────────────────────────────────────────
+  const gcWeek   = gv('gcWeek')||12000;
+  const schedWks = gv('schedWks')||6;
+  const gcSave   = schedWks * gcWeek;
+
+  // ── T8: FRAMING FIELD LABOR ───────────────────────────────────────────────
+  const framRate = gv('framRate')||5.50;
+  const framLab  = sf * framRate * laborMult;
+  const strSave  = framLab * 0.12;
+  const refrSave = framLab * 0.05;
+  const holeSave = floors * (22 * scaleFac) * (10/60) * 65 * laborMult;
+  const frameSave = (strSave + refrSave + holeSave) * ptAdj;
+
+  const saves = [foundSave,mepSave,wasteSave,dwSave,cladSave,hvacSave,gcSave,frameSave];
+  window._saves = saves;
+  const total = saves.reduce((a,b)=>a+b,0);
+
+  // Hero
+  set('heroVal', fmt(total));
+  set('heroSub',
+    'Per SF: $'+(total/sf).toFixed(2)+
+    '  ·  Across 8 trades  ·  '+Math.round(schedWks)+'-week schedule compression  ·  '+
+    fmtI(floorSF)+' SF/floor plate');
+  saves.forEach((s,i) => set('m'+i, fmt(s)));
+  set('totVal', fmt(total));
+
+  // Trade card definitions
+  const TRADES = [
+    {
+      id:'foundation', label:'Foundation & Concrete', icon:'🏗️',
+      desc:
+        'CFS structural dead load ('+dlCFS+' psf) vs. wood ('+dlWood+' psf) — a '+dlDiff+' psf differential that reduces the total building dead load by '+fmtI(totalDLRed)+' lbs ('+fmtF(totalDLRed/2000,1)+' tons). '+
+        'That load reduction cascades into smaller footing cross-sections, less concrete volume, and less rebar. Calculation uses real structural engineering dead load values validated April 2, 2026.',
+      math:[
+        'DL reduction: '+dlDiff+' psf × '+fmtI(sf)+' SF = '+fmtI(totalDLRed)+' lbs ('+fmtF(totalDLRed/2000,1)+' tons)',
+        'Load per footing LF: '+fmtI(totalDLRed)+' lbs ÷ '+fmtI(footLF)+' LF = '+fmtF(loadPerLF)+' PLF',
+        'Width reduction: '+fmtF(loadPerLF)+' PLF ÷ '+fmtI(soilPSF)+' psf = '+fmtF(widthRedFt)+' ft ('+fmtF(widthRedIn)+'")',
+        'Concrete saved: '+fmtF(widthRedFt)+'" × '+fmtF(footDFt)+'ft depth × '+fmtI(footLF)+' LF ÷ 27 = '+fmtF(concCY)+' CY',
+        'Concrete savings: '+fmtF(concCY)+' CY × $'+concCost+'/CY = '+fmt(concSave)+' | Rebar (18%): '+fmt(rebarSave)+' | Forming (12%): '+fmt(formSave),
+      ],
+      lines:[
+        ['Footing concrete reduction', fmtF(concCY)+' CY × $'+concCost+'/CY', fmt(concSave)],
+        ['Rebar reduction', '18% of concrete savings', fmt(rebarSave)],
+        ['Forming & stripping labor', '12% of concrete savings', fmt(formSave)],
+      ]
+    },
+    {
+      id:'mep', label:'MEP — Plumbing, Electrical & Mechanical', icon:'🔌',
+      desc:
+        'Factory-prefabricated CFS panels arrive with service holes pre-punched at specified heights. MEP trades walk through pre-cut openings instead of drilling their own — eliminating field drilling labor entirely. '+
+        'Hole counts scale proportionally with floor plate size (baseline: '+fmtI(BASELINE_FLOOR_SF)+' SF/floor). Current floor plate: '+fmtI(floorSF)+' SF (scale factor: '+fmtF(scaleFac,2)+'×).',
+      lines:[
+        ['Electrical drilling eliminated', fmtI(Math.round(eH))+' holes/fl × '+Math.round(floors)+' fl @ '+eM+' min @ $'+mepRate+'/hr', fmt(elecSave)],
+        ['Plumbing drilling eliminated',   fmtI(Math.round(pH))+' holes/fl × '+Math.round(floors)+' fl @ '+pM+' min @ $'+mepRate+'/hr', fmt(plumbSave)],
+        ['Mechanical drilling eliminated', fmtI(Math.round(mH))+' holes/fl × '+Math.round(floors)+' fl @ '+mMin+' min @ $'+mepRate+'/hr', fmt(mechSave)],
+      ]
+    },
+    {
+      id:'waste', label:'Waste Removal & Dumpster Pulls', icon:'🗑️',
+      desc:
+        'Offsite prefabrication generates 70–80% less jobsite framing waste. '+dumpPulls+' fewer dumpster pulls on this project at $'+dumpCost+' per pull. A clean site also reduces OSHA-related delays and improves safety records.',
+      lines:[
+        ['Dumpster pulls eliminated', dumpPulls+' pulls @ $'+dumpCost+' ea.', fmt(dumpSave)],
+        ['Site cleanup labor reduction', '$320 per 10,000 SF', fmt(cleanSave)],
+      ]
+    },
+    {
+      id:'drywall', label:'Drywall & Interior Finishes', icon:'🧱',
+      desc:
+        'Dimensionally stable, perfectly straight CFS walls hang drywall faster — no shimming, no furring strips, no shaving curved studs. Applied across '+fmtI(Math.round(totalWall))+' SF total wall area at $'+dwRate+'/SF labor.',
+      lines:[
+        ['Hang labor savings (no shimming)', '15% of $'+dwRate+'/SF on '+fmtI(Math.round(totalWall))+' SF wall', fmt(dwHang)],
+        ['Finish labor savings',             '8% reduction on wall SF', fmt(dwFin)],
+        ['Material waste reduction',         '5% less board waste', fmt(dwMat)],
+      ]
+    },
+    {
+      id:'cladding', label:'Exterior Cladding & Sheathing', icon:'🪟',
+      desc:
+        'Plumb, straight walls eliminate the need for furring, sistering, or shimming backing for stone, brick, siding, or curtainwall. Labor savings across '+fmtI(Math.round(extWall))+' SF exterior wall.',
+      lines:[
+        ['Furring & shimming eliminated', '$0.35/SF on '+fmtI(Math.round(extWall))+' SF exterior wall', fmt(furSave)],
+        ['Backing installation savings',  '$0.20/SF — cladding ties direct to panel', fmt(backSave)],
+      ]
+    },
+    {
+      id:'hvac', label:'HVAC Rough-In', icon:'🌡️',
+      desc:
+        'Pre-punched service holes allow ductwork and piping to route through walls without field drilling. '+fmtI(Math.round(hvH))+' penetrations per floor across '+Math.round(floors)+' floors. '+
+        'Hole counts scale with floor plate size (baseline: '+fmtI(BASELINE_FLOOR_SF)+' SF/floor).',
+      lines:[
+        ['Duct penetration drilling eliminated', fmtI(Math.round(hvH))+' penetr. × '+Math.round(floors)+' fl @ '+hvM+' min @ $'+mepRate+'/hr', fmt(hvDrill)],
+        ['RFI & coordination conflict reduction', '$180/floor — pre-planned holes eliminate RFIs', fmt(rfiSave)],
+      ]
+    },
+    {
+      id:'gc', label:'General Conditions — All Trades', icon:'📋',
+      desc:
+        'Schedule compression from prefab CFS framing accelerates the entire project. '+Math.round(schedWks)+' weeks saved × $'+fmtI(gcWeek)+'/week general conditions — superintendent time, site trailer, temp utilities, portable toilets, site security, and time-based insurance and bonding.',
+      lines:[
+        ['All general condition line items', Math.round(schedWks)+' weeks × $'+fmtI(gcWeek)+'/week', fmt(gcSave)],
+      ]
+    },
+    {
+      id:'framing', label:'Framing & Field Labor Corrections', icon:'🔧',
+      desc:
+        'No straightening crooked studs. No shaving bowed walls. No re-framing misaligned sections. Pre-punched holes eliminate field cutting. Based on $'+framRate+'/SF framing labor across '+fmtI(sf)+' SF.',
+      lines:[
+        ['Stud straightening & shaving eliminated', '12% of $'+framRate+'/SF framing labor', fmt(strSave)],
+        ['Re-framing & field correction labor',      '5% of $'+framRate+'/SF framing labor',  fmt(refrSave)],
+        ['Field cutting of service holes',           fmtI(Math.round(floors*22*scaleFac))+' holes @ 10 min @ $65/hr', fmt(holeSave)],
+      ]
+    },
+  ];
+
+  // Preserve open states
+  const openStates = {};
+  TRADES.forEach(t=>{ const b=document.getElementById('body-'+t.id); if(b) openStates[t.id]=b.classList.contains('open'); });
+
+  document.getElementById('tradeCards').innerHTML = TRADES.map((t,i) => {
+    const isOpen = openStates[t.id]||false;
+    const mathBlock = t.math
+      ? `<div class="math-box"><strong>Engineering Calculation</strong>${t.math.map(l=>`<div class="math-step">→ ${l}</div>`).join('')}</div>`
+      : '';
+    return `<div class="trade-card">
+      <div class="trade-head" onclick="toggleTrade('${t.id}')">
+        <span class="trade-icon">${t.icon}</span>
+        <span class="trade-name">${t.label}</span>
+        <span class="trade-save">${fmt(saves[i])}</span>
+        <span class="chev ${isOpen?'open':''}">▼</span>
+      </div>
+      <div class="trade-body ${isOpen?'open':''}" id="body-${t.id}">
+        <div class="trade-desc">${t.desc}</div>
+        <div class="li-thead"><span>Line Item</span><span>Basis</span><span style="text-align:right">Savings</span></div>
+        ${t.lines.map(([l,b,v])=>`<div class="li-row"><span class="li-lbl">${l}</span><span class="li-basis">${b}</span><span class="li-val">${v}</span></div>`).join('')}
+        ${mathBlock}
+        <div class="trade-total">Trade Total: <span style="color:#3DB832;margin-left:10px">${fmt(saves[i])}</span></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Chart
+  const labels = ['Foundation','MEP Trades','Waste Removal','Drywall','Ext. Cladding','HVAC','Gen. Conditions','Field Labor'];
+  const colors = ['#2a7a1e','#3DB832','#52c73d','#6dd458','#88e073','#a3eb8e','#1a6b8a','#2589b0'];
+  if(chartInst) chartInst.destroy();
+  chartInst = new Chart(document.getElementById('tradeChart'),{
+    type:'bar',
+    data:{labels,datasets:[{label:'Trade Savings',data:saves.map(Math.round),backgroundColor:colors,borderRadius:4}]},
+    options:{
+      indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' Savings: $'+ctx.parsed.x.toLocaleString()}}},
+      scales:{
+        x:{ticks:{font:{size:10},callback:v=>'$'+(v/1000).toFixed(0)+'K'},grid:{color:'rgba(0,0,0,0.05)'}},
+        y:{ticks:{font:{size:11}},grid:{display:false}}
+      }
+    }
+  });
+
+  set('footnote',
+    'Foundation: Real structural engineering calculation using '+dlWood+' psf wood vs. '+dlCFS+' psf CFS dead load at '+fmtI(soilPSF)+' psf soil bearing. '+
+    'MEP/HVAC hole counts scale proportionally with floor plate SF (baseline '+fmtI(BASELINE_FLOOR_SF)+' SF/floor). '+
+    'All defaults field-validated by Robert Johnson, Prefab Consulting LLC — April 2, 2026. '+
+    'All figures are estimates for discussion purposes only. '+
+    '© 2026 Global Haven Ventures / Prefab Consulting LLC. All rights reserved. Unauthorized reproduction prohibited.');
+  pisSync();
+  tradePersist();
+}
+
+function toggleTrade(id) {
+  const body=document.getElementById('body-'+id);
+  const chev=body.previousElementSibling.querySelector('.chev');
+  body.classList.toggle('open');
+  chev.classList.toggle('open');
+}
+
+function toggleAll() {
+  allOpen=!allOpen;
+  document.getElementById('toggleBtn').textContent=allOpen?'▼ Collapse all trades':'▶ Expand all trades';
+  ['foundation','mep','waste','drywall','cladding','hvac','gc','framing'].forEach(id=>{
+    const body=document.getElementById('body-'+id);
+    const chev=body?.previousElementSibling?.querySelector('.chev');
+    if(body){body.classList.toggle('open',allOpen);chev?.classList.toggle('open',allOpen);}
+  });
+}
+
+
+// ── PRINT ─────────────────────────────────────────────────────────────────────
+function doPrint() {
+  if(!window._saves || !window._saves.length) { alert('Fill in the parameters first.'); return; }
+  const saves = window._saves;
+  const total = saves.reduce((a,b)=>a+b,0);
+  const sf    = parseFloat(document.getElementById('sf').value)||48000;
+  const floors= parseFloat(document.getElementById('floors').value)||4;
+  const floorSF = sf/floors;
+  const schedWks = parseFloat(document.getElementById('schedWks').value)||6;
+  const d2 = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+
+  set('pProjName', 'Trade Savings Analysis');
+  set('pProjSub', Math.round(sf).toLocaleString()+' SF  ·  '+Math.round(floors)+'-Story  ·  '+Math.round(floorSF).toLocaleString()+' SF/Floor Plate');
+  document.getElementById('pYear').textContent = '© '+new Date().getFullYear()+' Global Haven Ventures / Prefab Consulting LLC — All rights reserved';
+  document.getElementById('pMeta').innerHTML =
+    '<span class="pbadge">'+document.getElementById('ptype').options[document.getElementById('ptype').selectedIndex].text+'</span>'+
+    '<span class="pbadge">'+d2+'</span>'+
+    '<span class="pbadge">'+Math.round(schedWks)+'-wk schedule savings</span>';
+
+  set('pHeroVal', fmt(total));
+  set('pHeroSub', 'Per SF: $'+(total/sf).toFixed(2)+'  ·  8 trades  ·  '+Math.round(schedWks)+'-week schedule compression');
+  set('pGrandTot', fmt(total));
+
+  const cardLabels = ['Foundation / Concrete','MEP — Elec, Plumb, Mech','Waste Removal','Drywall & Finishes',
+                      'Exterior Cladding','HVAC Rough-In','General Conditions','Framing / Field Labor'];
+  const cardIcons  = ['🏗️','🔌','🗑️','🧱','🪟','🌡️','📋','🔧'];
+  document.getElementById('pCards').innerHTML = cardLabels.map((l,i)=>
+    `<div class="pmcard"><div class="pmcard-lbl">${l}</div><div class="pmcard-val">${fmt(saves[i])}</div></div>`
+  ).join('');
+
+  // Build trade detail blocks
+  const tradeIds = ['foundation','mep','waste','drywall','cladding','hvac','gc','framing'];
+  const tradePHtml = tradeIds.map((id,i) => {
+    const card = document.getElementById('body-'+id);
+    if(!card) return '';
+    const desc = card.querySelector('.trade-desc')?.textContent||'';
+    const rows = Array.from(card.querySelectorAll('.li-row')).map(r => {
+      const cells = r.querySelectorAll('.li-lbl,.li-basis,.li-val');
+      return `<tr><td>${cells[0]?.textContent||''}</td><td style="text-align:right;font-size:8pt;color:#aaa">${cells[1]?.textContent||''}</td><td style="text-align:right;color:#3DB832;font-weight:600">${cells[2]?.textContent||''}</td></tr>`;
+    }).join('');
+    return `<div class="ptrade">
+      <div class="ptrade-head">
+        <span class="ptrade-name">${cardIcons[i]} ${cardLabels[i]}</span>
+        <span class="ptrade-save">${fmt(saves[i])}</span>
+      </div>
+      <div class="ptrade-body">
+        <div class="ptrade-desc">${desc}</div>
+        <table><thead><tr><th style="flex:2">Line Item</th><th style="text-align:right">Basis</th><th style="text-align:right">Savings</th></tr></thead>
+        <tbody>${rows}</tbody></table>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('pTradeList').innerHTML = tradePHtml;
+
+  window.print();
+}
+
+calc();
+document.querySelectorAll('input,select').forEach(el=>el.addEventListener('change',calc));
+// ── PIS Cross-Page Sync ───────────────────────────────────────────────────────
+function showSyncToast(msg) {
+  let t = document.getElementById('pisToast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'pisToast';
+    t.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#3DB832;color:#fff;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.style.opacity = '0', 2500);
+}
+function pisSync() {
+  try {
+    const d = {_page:'trades', _ts:Date.now()};
+    const gv = id => { const el=document.getElementById(id); return el ? parseFloat(el.value)||0 : 0; };
+    const sv = id => { const el=document.getElementById(id); return el ? el.value : ''; };
+    d.sf       = gv('sf');
+    d.floors   = gv('floors');
+    d.ptype    = sv('ptype');
+    d.laborAdj = gv('laborAdj');
+    const heroEl = document.getElementById('heroVal');
+    const totEl  = document.getElementById('totVal');
+    d.heroVal  = heroEl ? heroEl.textContent : '';
+    d.grandTot = totEl  ? totEl.textContent  : '';
+    // Store raw numeric value for Summary math
+    const rawTot = totEl ? totEl.textContent.replace(/[^0-9.-]/g,'') : '0';
+    d.grandTotNum = parseFloat(rawTot) || 0;
+    var schedEl = document.getElementById('schedWks'); d.schedWks = schedEl ? (parseFloat(schedEl.value)||0) : 0;
+    localStorage.setItem('pis-trades', JSON.stringify(d));
+    showSyncToast('✓ Trade Savings saved to Summary');
+  } catch(e) {
+    console.warn('pisSync error:', e);
+  }
+}
+
+// ── Send to Summary ───────────────────────────────────────────────────────────
+function sendToSummary() {
+  const p = new URLSearchParams();
+  const sv = id => { const e=document.getElementById(id); return e ? e.value : ''; };
+  const gv = id => { const e=document.getElementById(id); return e ? (parseFloat(e.value)||0) : 0; };
+  // Common fields
+  p.set('projName', sv('projName') || sv('rName') || '');
+  p.set('client',   sv('client')   || '');
+  p.set('ptype',    sv('ptype')    || 'multifamily');
+  // Page-specific SF source
+  if (window._c && window._c.tSF) {
+    p.set('sf', Math.round(window._c.tSF));
+    p.set('floors', Math.round(window._c.F || gv('floors') || 4));
+    p.set('labor', sv('labor') || '0');
+  } else {
+    p.set('sf',     gv('sf')     || 48000);
+    p.set('floors', gv('floors') || 4);
+    p.set('labor',  gv('laborAdj') || sv('laborAdj') || '0');
+  }
+  p.set('region', sv('region') || 'baseline');
+  p.set('years',  sv('years')  || '10');
+  p.set('from',   window.location.pathname.split('/').pop());
+  window.location.href = '/summary.html?' + p.toString();
+}
+
+// ── Input Persistence (survives page navigation) ──────────────────────────────
+const TRADE_SK = 'ghv-trades-v1';
+const TRADE_FIELDS = ['sf','floors','footLF','ptype','laborAdj','dlWood','dlCFS',
+  'soilPSF','concCost','footIn','mepRate','eH','eM','pH','pM','mH','mM',
+  'dwRate','gcWeek','schedWks','framRate','dumpPer100k','dumpCost','hvH','hvM'];
+
+function tradePersist() {
+  try {
+    const d = {};
+    TRADE_FIELDS.forEach(f => {
+      const el = document.getElementById(f);
+      if (el) d[f] = el.value;
+    });
+    d._ts = Date.now();
+    localStorage.setItem(TRADE_SK, JSON.stringify(d));
+  } catch(e) {}
+}
+
+function tradeRestore() {
+  try {
+    const raw = localStorage.getItem(TRADE_SK);
+    if (!raw) return false;
+    const d = JSON.parse(raw);
+    TRADE_FIELDS.forEach(f => {
+      const el = document.getElementById(f);
+      if (el && d[f] !== undefined) el.value = d[f];
+    });
+    return true;
+  } catch(e) { return false; }
+}
+
+// ── Page Init ────────────────────────────────────────────────────────────────
+window.addEventListener('load', function() {
+  const authKey = 'ghv_auth_v2';
+  if (localStorage.getItem(authKey) === '1') {
+    const gate = document.getElementById('gate');
+    if (gate) { gate.style.display = 'none'; gate.classList.remove('show'); }
+    document.body.style.overflow = '';
+    tradeRestore();
+    calc();
+  } else {
+    const gate = document.getElementById('gate');
+    if (gate) { gate.style.display = 'flex'; gate.classList.add('show'); }
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => { const p = document.getElementById('pwInput'); if(p) p.focus(); }, 100);
+  }
+});
+</script>
+</body>
+</html>
