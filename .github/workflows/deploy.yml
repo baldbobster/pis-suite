@@ -1,0 +1,30 @@
+yamlname: Deploy to Azure Static Website
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '*.html'
+      - '*.css'
+      - '*.js'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Upload HTML files to Azure Storage $web container
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az storage blob upload-batch \
+              --source . \
+              --destination '$web' \
+              --pattern '*.html' \
+              --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}" \
+              --overwrite \
+              --content-cache-control "no-cache, no-store, must-revalidate"
