@@ -650,36 +650,98 @@ function renderComparison() {
     if (raw) cfs = JSON.parse(raw);
   } catch(e){}
 
+  // ── Empty state: no CFS data at all ────────────────────────────────────────
   if (!cfs || !cfs.mL || !cfs.mH) {
     cont.innerHTML = '<div class="cblock-empty">Run the CFS Budget Builder for this project to populate the comparison.</div>';
     return;
   }
 
-  // Use averages for clean comparison (low + high) / 2
-  const woodAvg = (c.mL + c.mH) / 2;
-  const cfsAvg  = (parseFloat(cfs.mL) + parseFloat(cfs.mH)) / 2;
-  const cfsPSF  = cfs.tSF ? cfsAvg / parseFloat(cfs.tSF) : null;
-  const woodPSF = woodAvg / c.tSF;
-  const delta   = cfsAvg - woodAvg;
-  const deltaPct = woodAvg > 0 ? (delta / woodAvg) * 100 : 0;
+  // ── Dimension validation: SF must match within tolerance ───────────────────
+  const cfsTSF = parseFloat(cfs.tSF) || 0;
+  const woodTSF = c.tSF;
+  const sfTolerance = 0.05; // 5%
+  const sfMismatch = !cfsTSF || Math.abs(cfsTSF - woodTSF) / woodTSF > sfTolerance;
 
-  const woodIsCheaper = delta > 0;
-  const deltaClass = woodIsCheaper ? 'premium' : 'savings';
-  const deltaLabel = woodIsCheaper ? 'CFS Premium' : 'CFS Savings';
-  const deltaSign = delta >= 0 ? '+' : '−';
-  const dollarText = deltaSign + '$' + Math.abs(Math.round(delta)).toLocaleString();
+  if (sfMismatch) {
+    cont.innerHTML =
+      '<div style="background:#fffbf0;border:1px solid #f0d080;border-radius:6px;padding:10px;font-size:11px;color:#7a5a00;line-height:1.5">'+
+        '<strong>⚠ Dimensions don\'t match.</strong> '+
+        'CFS Budget Builder data is for <strong>'+Math.round(cfsTSF).toLocaleString()+' SF</strong>. '+
+        'This Wood scenario is <strong>'+Math.round(woodTSF).toLocaleString()+' SF</strong>. '+
+        'Re-run the CFS Budget Builder with the same dimensions to enable an accurate comparison.'+
+      '</div>';
+    return;
+  }
+
+  // ── Pull Wood + CFS Low/High and compute deltas at each end of the range ──
+  const woodLow = c.mL, woodHigh = c.mH;
+  const cfsLow  = parseFloat(cfs.mL), cfsHigh = parseFloat(cfs.mH);
+
+  const woodLowPSF  = woodLow / c.tSF,   woodHighPSF = woodHigh / c.tSF;
+  const cfsLowPSF   = cfsLow / cfsTSF,   cfsHighPSF  = cfsHigh / cfsTSF;
+
+  const deltaLow  = cfsLow  - woodLow;   // positive = CFS more expensive (wood cheaper)
+  const deltaHigh = cfsHigh - woodHigh;
+
+  // Label the column based on the avg direction
+  const avgDelta = (deltaLow + deltaHigh) / 2;
+  const cfsIsCheaper = avgDelta < 0;
+  const deltaLabel = cfsIsCheaper ? 'CFS Savings' : 'CFS Premium';
+  const deltaClass = cfsIsCheaper ? 'savings' : 'premium';
+
+  // For each cell, format the dollar value as absolute (no minus signs)
+  const fmtDelta = n => '$' + Math.abs(Math.round(n)).toLocaleString();
+  const fmtDeltaPct = (delta, base) => {
+    if (!base || base === 0) return '';
+    const p = (Math.abs(delta) / base) * 100;
+    return p.toFixed(1) + '%';
+  };
 
   document.getElementById('cMode').textContent = c.nb > 1 ? 'Per Building' : 'Project Total';
 
+  // ── Source attribution: format the CFS data timestamp ─────────────────────
+  let attribution = 'CFS data from CFS Budget Builder';
+  if (cfs._ts) {
+    try {
+      const ts = new Date(parseInt(cfs._ts));
+      const fmtTime = ts.toLocaleString('en-US', {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+      attribution += ' · ' + fmtTime;
+    } catch(e) {}
+  }
+
+  // ── Build the range table ─────────────────────────────────────────────────
+  const table =
+    '<table style="width:100%;border-collapse:collapse;font-size:11px;margin-top:2px">'+
+      '<thead>'+
+        '<tr>'+
+          '<th style="text-align:left;font-size:9px;color:#888;text-transform:uppercase;letter-spacing:.05em;padding:4px 6px;border-bottom:1px solid #ddd"></th>'+
+          '<th style="text-align:right;font-size:9px;color:#888;text-transform:uppercase;letter-spacing:.05em;padding:4px 6px;border-bottom:1px solid #ddd">Wood</th>'+
+          '<th style="text-align:right;font-size:9px;color:#888;text-transform:uppercase;letter-spacing:.05em;padding:4px 6px;border-bottom:1px solid #ddd">CFS</th>'+
+          '<th style="text-align:right;font-size:9px;color:#888;text-transform:uppercase;letter-spacing:.05em;padding:4px 6px;border-bottom:1px solid #ddd">'+deltaLabel+'</th>'+
+        '</tr>'+
+      '</thead>'+
+      '<tbody>'+
+        '<tr>'+
+          '<td style="font-size:9px;color:#888;text-transform:uppercase;padding:4px 6px">Low</td>'+
+          '<td style="text-align:right;padding:4px 6px;font-weight:600">'+fmt(woodLow)+'<div style="font-size:9px;color:#888;font-weight:400">'+fmtPSF(woodLowPSF)+'</div></td>'+
+          '<td style="text-align:right;padding:4px 6px;font-weight:600">'+fmt(cfsLow)+'<div style="font-size:9px;color:#888;font-weight:400">'+fmtPSF(cfsLowPSF)+'</div></td>'+
+          '<td style="text-align:right;padding:4px 6px;font-weight:600;color:'+(deltaLow < 0 ? '#2a7a2a' : '#c00')+'">'+fmtDelta(deltaLow)+'<div style="font-size:9px;color:#888;font-weight:400">'+fmtDeltaPct(deltaLow, woodLow)+'</div></td>'+
+        '</tr>'+
+        '<tr>'+
+          '<td style="font-size:9px;color:#888;text-transform:uppercase;padding:4px 6px">High</td>'+
+          '<td style="text-align:right;padding:4px 6px;font-weight:600">'+fmt(woodHigh)+'<div style="font-size:9px;color:#888;font-weight:400">'+fmtPSF(woodHighPSF)+'</div></td>'+
+          '<td style="text-align:right;padding:4px 6px;font-weight:600">'+fmt(cfsHigh)+'<div style="font-size:9px;color:#888;font-weight:400">'+fmtPSF(cfsHighPSF)+'</div></td>'+
+          '<td style="text-align:right;padding:4px 6px;font-weight:600;color:'+(deltaHigh < 0 ? '#2a7a2a' : '#c00')+'">'+fmtDelta(deltaHigh)+'<div style="font-size:9px;color:#888;font-weight:400">'+fmtDeltaPct(deltaHigh, woodHigh)+'</div></td>'+
+        '</tr>'+
+      '</tbody>'+
+    '</table>';
+
   cont.innerHTML =
-    '<div class="cgrid">'+
-      '<div class="ccell"><div class="ccell-lbl">Wood</div><div class="ccell-val">'+fmt(woodAvg)+'</div><div class="ccell-sub">'+fmtPSF(woodPSF)+'</div></div>'+
-      '<div class="ccell"><div class="ccell-lbl">CFS</div><div class="ccell-val">'+fmt(cfsAvg)+'</div><div class="ccell-sub">'+(cfsPSF?fmtPSF(cfsPSF):'—')+'</div></div>'+
-      '<div class="ccell delta '+deltaClass+'"><div class="ccell-lbl">'+deltaLabel+'</div><div class="ccell-val">'+dollarText+'</div><div class="ccell-sub">'+fmtPct(Math.abs(deltaPct))+'</div></div>'+
-    '</div>'+
-    '<div style="font-size:10px;color:#888;margin-top:8px;line-height:1.4">'+
+    table +
+    '<div style="font-size:10px;color:#888;margin-top:10px;line-height:1.4">'+
       '<strong>Same scope, two ways.</strong> Wood-frame hard cost on the framing scope only. Lifecycle savings (carry, insurance, schedule, maintenance) appear in the Soft Cost Savings, Trade Savings, and Pro Forma modules.'+
-    '</div>';
+    '</div>'+
+    '<div style="font-size:9px;color:#aaa;margin-top:6px;font-style:italic">'+attribution+'</div>';
 }
 
 // ─── LOCAL STORAGE ────────────────────────────────────────────────────────────
@@ -886,25 +948,69 @@ function doPrint() {
   } catch(e){}
 
   if (cfs && cfs.mL && cfs.mH) {
-    const woodAvg = (c.mL + c.mH) / 2;
-    const cfsAvg  = (parseFloat(cfs.mL) + parseFloat(cfs.mH)) / 2;
-    const delta   = cfsAvg - woodAvg;
-    const deltaPct = woodAvg > 0 ? (delta / woodAvg) * 100 : 0;
-    const deltaSign = delta >= 0 ? '+' : '−';
-    const dollarText = deltaSign + '$' + Math.abs(Math.round(delta)).toLocaleString();
-    const deltaLabel = delta > 0 ? 'CFS Premium' : 'CFS Savings';
-    const deltaColor = delta > 0 ? '#c00' : '#2a7a2a';
+    const cfsTSF = parseFloat(cfs.tSF) || 0;
+    const sfMismatch = !cfsTSF || Math.abs(cfsTSF - c.tSF) / c.tSF > 0.05;
 
-    document.getElementById('pCompBox').innerHTML =
-      '<div class="psec">Wood vs. CFS — Same Scope</div>'+
-      '<div class="pcompbox">'+
-        '<div class="pcompgrid">'+
-          '<div><div style="font-size:.65rem;color:#888;text-transform:uppercase">Wood</div><div style="font-size:1.05rem;font-weight:700;color:#111">'+fmt(woodAvg)+'</div></div>'+
-          '<div><div style="font-size:.65rem;color:#888;text-transform:uppercase">CFS</div><div style="font-size:1.05rem;font-weight:700;color:#111">'+fmt(cfsAvg)+'</div></div>'+
-          '<div><div style="font-size:.65rem;color:#888;text-transform:uppercase">'+deltaLabel+'</div><div style="font-size:1.05rem;font-weight:700;color:'+deltaColor+'">'+dollarText+'</div><div style="font-size:.7rem;color:#888;margin-top:1px">'+fmtPct(Math.abs(deltaPct))+'</div></div>'+
-        '</div>'+
-        '<div style="font-size:.7rem;color:#666;margin-top:.5rem;line-height:1.4">Same framing scope, two construction methods. Lifecycle savings (carry, insurance, schedule, maintenance) excluded — see Soft Cost Savings, Trade Savings, and Pro Forma.</div>'+
-      '</div>';
+    if (sfMismatch) {
+      document.getElementById('pCompBox').innerHTML =
+        '<div class="psec">Wood vs. CFS — Same Scope</div>'+
+        '<div style="border:1px solid #f0d080;background:#fffbf0;border-radius:6px;padding:8px 12px;font-size:9pt;color:#7a5a00;line-height:1.5">'+
+          '<strong>Dimensions don\'t match.</strong> '+
+          'CFS Budget Builder data is for '+Math.round(cfsTSF).toLocaleString()+' SF. '+
+          'This Wood scenario is '+Math.round(c.tSF).toLocaleString()+' SF. '+
+          'Re-run CFS Budget Builder to enable comparison.'+
+        '</div>';
+    } else {
+      const woodLow = c.mL, woodHigh = c.mH;
+      const cfsLow  = parseFloat(cfs.mL), cfsHigh = parseFloat(cfs.mH);
+      const deltaLow  = cfsLow  - woodLow;
+      const deltaHigh = cfsHigh - woodHigh;
+      const avgDelta = (deltaLow + deltaHigh) / 2;
+      const cfsIsCheaper = avgDelta < 0;
+      const deltaLabel = cfsIsCheaper ? 'CFS Savings' : 'CFS Premium';
+      const dColor = (d) => d < 0 ? '#2a7a2a' : '#c00';
+      const fmtAbs = n => '$' + Math.abs(Math.round(n)).toLocaleString();
+      const fmtAbsPct = (delta, base) => base > 0 ? (Math.abs(delta)/base*100).toFixed(1)+'%' : '';
+
+      let attribution = 'CFS data from CFS Budget Builder';
+      if (cfs._ts) {
+        try {
+          const ts = new Date(parseInt(cfs._ts));
+          attribution += ' · ' + ts.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+        } catch(e) {}
+      }
+
+      document.getElementById('pCompBox').innerHTML =
+        '<div class="psec">Wood vs. CFS — Same Scope</div>'+
+        '<div class="pcompbox">'+
+          '<table style="width:100%;border-collapse:collapse;font-size:9pt">'+
+            '<thead>'+
+              '<tr>'+
+                '<th style="text-align:left;font-size:7pt;color:#888;text-transform:uppercase;padding:3px 6px;border-bottom:1px solid #ddd"></th>'+
+                '<th style="text-align:right;font-size:7pt;color:#888;text-transform:uppercase;padding:3px 6px;border-bottom:1px solid #ddd">Wood</th>'+
+                '<th style="text-align:right;font-size:7pt;color:#888;text-transform:uppercase;padding:3px 6px;border-bottom:1px solid #ddd">CFS</th>'+
+                '<th style="text-align:right;font-size:7pt;color:#888;text-transform:uppercase;padding:3px 6px;border-bottom:1px solid #ddd">'+deltaLabel+'</th>'+
+              '</tr>'+
+            '</thead>'+
+            '<tbody>'+
+              '<tr>'+
+                '<td style="padding:4px 6px;font-size:7pt;color:#888;text-transform:uppercase">Low</td>'+
+                '<td style="text-align:right;padding:4px 6px;font-weight:700">'+fmt(woodLow)+'</td>'+
+                '<td style="text-align:right;padding:4px 6px;font-weight:700">'+fmt(cfsLow)+'</td>'+
+                '<td style="text-align:right;padding:4px 6px;font-weight:700;color:'+dColor(deltaLow)+'">'+fmtAbs(deltaLow)+' <span style="font-weight:400;color:#888;font-size:6.5pt">('+fmtAbsPct(deltaLow,woodLow)+')</span></td>'+
+              '</tr>'+
+              '<tr>'+
+                '<td style="padding:4px 6px;font-size:7pt;color:#888;text-transform:uppercase">High</td>'+
+                '<td style="text-align:right;padding:4px 6px;font-weight:700">'+fmt(woodHigh)+'</td>'+
+                '<td style="text-align:right;padding:4px 6px;font-weight:700">'+fmt(cfsHigh)+'</td>'+
+                '<td style="text-align:right;padding:4px 6px;font-weight:700;color:'+dColor(deltaHigh)+'">'+fmtAbs(deltaHigh)+' <span style="font-weight:400;color:#888;font-size:6.5pt">('+fmtAbsPct(deltaHigh,woodHigh)+')</span></td>'+
+              '</tr>'+
+            '</tbody>'+
+          '</table>'+
+          '<div style="font-size:7pt;color:#666;margin-top:.5rem;line-height:1.4">Same framing scope, two construction methods. Lifecycle savings (carry, insurance, schedule, maintenance) excluded — see Soft Cost Savings, Trade Savings, and Pro Forma.</div>'+
+          '<div style="font-size:6.5pt;color:#aaa;margin-top:.3rem;font-style:italic">'+attribution+'</div>'+
+        '</div>';
+    }
   } else {
     document.getElementById('pCompBox').innerHTML = '';
   }
