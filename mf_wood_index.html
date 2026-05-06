@@ -259,8 +259,8 @@
 
   <div class="sh"><span>Lumber &amp; Wood Materials</span></div>
   <div class="g2">
-    <div><label>Dimensional + Engineered Lumber</label><div class="pfx"><em>$</em><input id="lumber" type="number" value="11.00" step=".25" readonly oninput="calc();save()"><em style="border-left:none;border-right:1px solid #ddd;border-radius:0 6px 6px 0">/ SF</em></div></div>
-    <div><label>Wood Subfloor (3/4&quot; T&amp;G plywood)</label><div class="pfx"><em>$</em><input id="dkCost" type="number" value="3.00" step=".1" readonly oninput="calc();save()"><em style="border-left:none;border-right:1px solid #ddd;border-radius:0 6px 6px 0">/ SF</em></div></div>
+    <div><label>Dimensional + Engineered Lumber</label><div class="pfx"><em>$</em><input id="lumber" type="number" value="7.50" step=".25" readonly oninput="calc();save()"><em style="border-left:none;border-right:1px solid #ddd;border-radius:0 6px 6px 0">/ SF</em></div></div>
+    <div><label>Wood Subfloor (3/4&quot; T&amp;G plywood)</label><div class="pfx"><em>$</em><input id="dkCost" type="number" value="2.75" step=".1" readonly oninput="calc();save()"><em style="border-left:none;border-right:1px solid #ddd;border-radius:0 6px 6px 0">/ SF</em></div></div>
   </div>
   <div class="g2">
     <div><label>Sheathing Type</label>
@@ -278,17 +278,17 @@
   <div class="sh"><span>Other Costs</span></div>
   <div class="g4">
     <div><label>Lumber Delivery (lump)</label><div class="pfx"><em>$</em><input id="ship" type="number" value="25000" readonly oninput="calc();save()"></div></div>
-    <div><label>Equipment / SF</label><div class="pfx"><em>$</em><input id="equip" type="number" value="0.55" step=".05" readonly oninput="calc();save()"></div></div>
-    <div><label>Misc / SF</label><div class="pfx"><em>$</em><input id="misc" type="number" value="0.85" step=".05" readonly oninput="calc();save()"></div></div>
-    <div><label>Engineering / SF</label><div class="pfx"><em>$</em><input id="eng" type="number" value="0.40" step=".05" readonly oninput="calc();save()"></div></div>
+    <div><label>Equipment / SF</label><div class="pfx"><em>$</em><input id="equip" type="number" value="0.40" step=".05" readonly oninput="calc();save()"></div></div>
+    <div><label>Misc / SF</label><div class="pfx"><em>$</em><input id="misc" type="number" value="0.65" step=".05" readonly oninput="calc();save()"></div></div>
+    <div><label>Engineering / SF</label><div class="pfx"><em>$</em><input id="eng" type="number" value="0.30" step=".05" readonly oninput="calc();save()"></div></div>
   </div>
 
   <div class="sh"><span>Fabrication &amp; Field Framing</span></div>
   <div class="g4">
     <div><label>Fab Low / SF</label><div class="pfx"><em>$</em><input id="fabL" type="number" value="0" step=".5" readonly oninput="calc();save()"></div></div>
     <div><label>Fab High / SF</label><div class="pfx"><em>$</em><input id="fabH" type="number" value="0" step=".5" readonly oninput="calc();save()"></div></div>
-    <div><label>Field Framing Low / SF</label><div class="pfx"><em>$</em><input id="instL" type="number" value="6.50" step=".5" readonly oninput="calc();save()"></div></div>
-    <div><label>Field Framing High / SF</label><div class="pfx"><em>$</em><input id="instH" type="number" value="9.50" step=".5" readonly oninput="calc();save()"></div></div>
+    <div><label>Field Framing Low / SF</label><div class="pfx"><em>$</em><input id="instL" type="number" value="5.50" step=".5" readonly oninput="calc();save()"></div></div>
+    <div><label>Field Framing High / SF</label><div class="pfx"><em>$</em><input id="instH" type="number" value="7.50" step=".5" readonly oninput="calc();save()"></div></div>
   </div>
   <div class="source-note" id="methodNote">Stick-built default: zero fab cost, all labor in field. Panelized adds factory fab and reduces field labor.</div>
 
@@ -433,15 +433,15 @@ const CFS_PIS_KEY = 'mf-pis-budget';
 // Sources: RLB Q1 2026 regional indices, RSMeans, MF field history.
 const BENCHMARKS = {
   stick: {
-    lumber: 11.00, dkCost: 3.00, shCost: 1.20,
-    ship: 25000, equip: 0.55, misc: 0.85, eng: 0.40,
-    fabL: 0, fabH: 0, instL: 6.50, instH: 9.50,
+    lumber: 7.50, dkCost: 2.75, shCost: 1.20,
+    ship: 25000, equip: 0.40, misc: 0.65, eng: 0.30,
+    fabL: 0, fabH: 0, instL: 5.50, instH: 7.50,
     mkup: 22
   },
   panelized: {
-    lumber: 11.00, dkCost: 3.00, shCost: 1.20,
-    ship: 35000, equip: 0.65, misc: 0.85, eng: 0.55,
-    fabL: 2.50, fabH: 4.00, instL: 4.00, instH: 6.00,
+    lumber: 7.50, dkCost: 2.75, shCost: 1.20,
+    ship: 35000, equip: 0.50, misc: 0.65, eng: 0.45,
+    fabL: 2.00, fabH: 3.00, instL: 4.00, instH: 5.00,
     mkup: 22
   }
 };
