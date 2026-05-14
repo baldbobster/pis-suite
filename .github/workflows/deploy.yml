@@ -6,8 +6,8 @@ on:
       - main
     paths:
       - '**/*.html'
-      - '*.css'
-      - '*.js'
+      - '**/*.css'
+      - '**/*.js'
   workflow_dispatch:
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Upload HTML files to Azure Storage $web container
+      - name: Upload HTML files to GHV Azure Storage $web container
         uses: azure/cli@v2
         with:
           inlineScript: |
@@ -26,5 +26,23 @@ jobs:
               --destination '$web' \
               --pattern '**/*.html' \
               --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}" \
+              --overwrite \
+              --content-cache-control "no-cache, no-store, must-revalidate"
+
+  deploy-kenya:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Upload kenya/ files to Kenya Azure Storage $web container
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az storage blob upload-batch \
+              --source ./kenya \
+              --destination '$web' \
+              --pattern '*.html' \
+              --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION_STRING_KE }}" \
               --overwrite \
               --content-cache-control "no-cache, no-store, must-revalidate"
