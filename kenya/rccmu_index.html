@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prefab Consulting — CFS vs. RC+CMU Comparison (Kenya)</title>
+<style>
+  :root {
+    --pc: #22D3DB;
+    --pc-d: #0FA6AD;
+    --pc-t: #E6FBFC;
+    --pc-b: #B6EEF1;
+    --bg-dark: #0A0E1A;
+    --bg: #f5f5f5;
+    --txt: #111;
+    --bd: #ddd;
+    --gain: #2a7a2a;
+    --loss: #c00;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;background:var(--bg);color:var(--txt);min-height:100vh}
+  header{background:var(--bg-dark);padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
+  .logo{font-size:22px;font-weight:700;color:var(--pc);letter-spacing:.08em}
+  .logo .sub{color:#fff;font-size:12px;font-weight:400;margin-left:10px;opacity:.6;letter-spacing:.1em;text-transform:uppercase}
+  .hright{font-size:11px;color:#888}
+  .main{display:grid;grid-template-columns:1fr 340px;gap:20px;padding:20px;max-width:1280px;margin:0 auto}
+  .card{background:#fff;border-radius:10px;border:1px solid #e5e5e5;padding:20px}
+  label{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#888;display:block;margin-bottom:4px}
+  input,select,textarea{width:100%;height:34px;padding:0 10px;font-size:13px;border:1px solid var(--bd);border-radius:6px;background:#fff;color:var(--txt);outline:none;transition:border-color .15s}
+  input:focus,select:focus,textarea:focus{border-color:var(--pc)}
+  input[readonly]{background:#fafafa;color:#666;cursor:not-allowed}
+  textarea{height:56px;padding:8px 10px;resize:vertical}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+  .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px}
+  .g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-top:12px}
+  .g5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:12px}
+  .sh{border-bottom:2px solid var(--pc);padding-bottom:4px;margin:20px 0 10px;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#333;display:flex;justify-content:space-between;align-items:flex-end;gap:8px;flex-wrap:wrap}
+  .sh .shmeta{font-size:9px;font-weight:400;color:#999;text-transform:none;letter-spacing:0}
+  .pfx,.sfx{display:flex}
+  .pfx em,.sfx em{height:34px;display:flex;align-items:center;padding:0 8px;font-size:12px;font-style:normal;color:#666;background:#f9f9f9;border:1px solid var(--bd);min-width:38px;justify-content:center}
+  .pfx em{border-right:none;border-radius:6px 0 0 6px}
+  .pfx input{border-radius:0 6px 6px 0;flex:1}
+  .sfx input{border-radius:6px 0 0 6px;flex:1}
+  .sfx em{border-left:none;border-radius:0 6px 6px 0}
+  .un{font-size:9px;color:#999;margin-top:2px}
+  .dimbox{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;padding:12px;background:#f9f9f9;border-radius:8px;border:1px solid #eee;text-align:center}
+  .dv{font-size:15px;font-weight:600;color:var(--pc-d)}
+  .dl{font-size:10px;color:#999;margin-top:2px}
+  .tog{font-size:10px;padding:3px 10px;border-radius:6px;border:1px solid var(--bd);color:#888;background:transparent;cursor:pointer;margin-top:8px;margin-right:6px}
+  .tog.on{border-color:var(--pc);color:var(--pc-d);background:var(--pc-t)}
+  .rbtn{font-size:10px;padding:3px 8px;border-radius:6px;border:1px solid var(--bd);color:#888;background:transparent;cursor:pointer;margin-left:6px}
+  .rbtn:hover{border-color:#999;color:#555}
+  .badge{display:inline-block;font-size:9px;padding:2px 7px;border-radius:10px;background:#f5f5f5;border:1px solid #ddd;color:#777;font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-left:6px;vertical-align:middle}
+  .badge.validated{background:var(--pc-t);border-color:var(--pc-b);color:var(--pc-d)}
+  .ts{font-size:9px;color:#999;margin-left:6px;font-weight:400;text-transform:none;letter-spacing:0}
+  .curbar{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#fafafa;border:1px solid #eee;border-radius:8px;margin-bottom:8px;font-size:11px;flex-wrap:wrap}
+  .curbar .clbl{color:#888;text-transform:uppercase;font-size:10px;letter-spacing:.06em}
+  .ctog{display:inline-flex;border:1px solid var(--bd);border-radius:6px;overflow:hidden}
+  .ctog button{height:26px;padding:0 12px;border:none;background:#fff;color:#777;font-size:11px;font-weight:600;cursor:pointer;letter-spacing:.03em}
+  .ctog button.on{background:var(--pc);color:var(--bg-dark)}
+  .fxin{display:flex;align-items:center;gap:6px;margin-left:auto}
+  .fxin input{width:80px;height:26px;font-size:11px;padding:0 6px}
+  .fxin span{color:#888;font-size:10px}
+  .info{font-size:11px;color:#666;background:#fafafa;border-left:3px solid var(--pc);padding:8px 10px;margin:8px 0 10px;line-height:1.5}
+  .right{position:sticky;top:20px;align-self:start}
+  .rhead{border-bottom:3px solid var(--pc);padding-bottom:10px;margin-bottom:12px}
+  .rtag{font-size:10px;padding:2px 8px;border-radius:12px;background:var(--pc-t);border:1px solid var(--pc-b);color:var(--pc-d);margin-right:4px;margin-top:5px;display:inline-block}
+  .tblock{background:#f9f9f9;border-radius:8px;border:1px solid #eee;padding:10px 12px;margin-top:10px}
+  .mblock{border-radius:8px;border:2px solid var(--pc);padding:12px;margin-top:10px}
+  .pblock{border-radius:8px;border:2px solid var(--pc);background:var(--pc-t);padding:12px;margin-top:10px}
+  .sbtn{width:100%;height:38px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;margin-top:10px;border:none;transition:opacity .15s}
+  .sbtn:hover{opacity:.88}
+  .sn{background:var(--pc);color:var(--bg-dark)}
+  .sp{background:#fff;border:1px solid var(--bd)!important;color:#555;font-weight:500}
+  .snew{background:transparent;border:1px solid var(--bd)!important;color:#888;font-size:12px}
+  .msg{font-size:11px;margin-top:8px;text-align:center;padding:7px 10px;border-radius:6px;display:none}
+  .msok{background:var(--pc-t);border:1px solid var(--pc-b);color:var(--pc-d)}
+  .msw{background:#fffbf0;border:1px solid #f0d080;color:#7a5a00}
+  .mse{background:#fff0f0;border:1px solid #f0c8c8;color:#7a2a2a}
+  .foot{font-size:10px;color:#bbb;text-align:center;margin-top:12px;line-height:1.6}
+  #toast{position:fixed;bottom:24px;right:24px;background:var(--bg-dark);color:#fff;padding:12px 18px;border-radius:8px;font-size:12px;display:none;z-index:1000;border-left:4px solid var(--pc);max-width:300px}
+  #toast.err{border-color:#e05050}
+  #overlay,#gate{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;align-items:center;justify-content:center}
+  #overlay.show,#gate.show{display:flex}
+  .obox{background:#fff;border-radius:12px;padding:28px;max-width:340px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+  .obox h3{font-size:15px;margin-bottom:8px}
+  .obox p{font-size:12px;color:#777;margin-bottom:22px;line-height:1.5}
+  .orow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .ocancel{height:36px;border-radius:8px;border:1px solid var(--bd);background:transparent;color:#777;cursor:pointer;font-size:13px}
+  .oconfirm{height:36px;border-radius:8px;border:none;background:var(--pc);color:var(--bg-dark);cursor:pointer;font-size:13px;font-weight:700}
+  .gbox{background:#fff;border-radius:12px;padding:32px 28px;max-width:360px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3);border-top:4px solid var(--pc)}
+  .gbox .glogo{font-size:24px;font-weight:700;color:var(--pc-d);letter-spacing:.08em;margin-bottom:4px}
+  .gbox .gsub{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.1em;margin-bottom:18px}
+  .gbox h2{font-size:14px;font-weight:600;margin-bottom:6px}
+  .gbox .gdesc{font-size:12px;color:#777;margin-bottom:18px;line-height:1.5}
+  .gbox input{margin-bottom:10px;text-align:center;letter-spacing:.1em;font-size:14px}
+  .gbox button{width:100%;height:38px;border-radius:8px;border:none;background:var(--pc);color:var(--bg-dark);font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.04em}
+  .gbox .gerr{color:#c22;font-size:11px;margin-top:8px;display:none}
+  .ctable{width:100%;border-collapse:collapse;font-size:11px;margin-top:2px}
+  .ctable th{text-align:right;font-size:9px;color:#888;text-transform:uppercase;letter-spacing:.05em;padding:4px 6px;border-bottom:1px solid #ddd;font-weight:600}
+  .ctable th:first-child{text-align:left}
+  .ctable td{padding:5px 6px;border-bottom:1px solid #f0f0f0;text-align:right;font-weight:600}
+  .ctable td:first-child{text-align:left;font-weight:400;font-size:10px;color:#888;text-transform:uppercase}
+  .ctable td .sub{font-size:9px;color:#888;font-weight:400}
+  .ctable tr.totrow td{border-top:2px solid var(--pc);border-bottom:none;background:#f8f8f8;font-size:12px}
+  .ctable tr.totrow td:first-child{color:#333;font-weight:700;font-size:9px}
+  .schedrow{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:6px;padding:5px 6px;border-bottom:1px solid #f0f0f0;font-size:11px;align-items:center}
+  .schedrow.h{font-size:9px;color:#888;text-transform:uppercase;letter-spacing:.05em;font-weight:600;border-bottom:1px solid #ddd}
+  .schedrow.tot{font-weight:700;border-top:2px solid var(--pc);background:#f8f8f8;border-bottom:none;padding:7px 6px}
+  .schedrow .lbl{color:#444}
+  .schedrow .num{text-align:right}
+  .schedrow .gain{text-align:right;color:var(--gain);font-weight:700}
+  .empty{font-size:11px;color:#888;padding:14px;text-align:center;background:#fafafa;border:1px dashed #ddd;border-radius:6px}
+  .warn{background:#fffbf0;border:1px solid #f0d080;border-radius:6px;padding:10px;font-size:11px;color:#7a5a00;line-height:1.5}
+  @media print{
+    header,.right,#overlay,#gate,#toast,.curbar{display:none!important}
+    .main{grid-template-columns:1fr;padding:0}
+    .card{border:none;padding:0}
+    body{background:#fff}
+  }
+  #printDoc{display:none;font-family:Arial,sans-serif;color:#111;font-size:11pt;padding:.55in .65in}
+  @media print{
+    header,.main,#overlay,#gate,#toast{display:none!important}
+    #printDoc{display:block!important}
+    body{background:#fff;margin:0;padding:0}
+    @page{size:letter;margin:0}
+  }
+  #printDoc .phdr{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--pc);padding-bottom:8px;margin-bottom:12px}
+  #printDoc .plogo{font-size:24pt;font-weight:700;color:var(--pc-d);line-height:1;letter-spacing:.08em}
+  #printDoc .plogosub{font-size:7pt;color:#666;text-transform:uppercase;letter-spacing:.1em;margin-top:2px}
+  #printDoc .pright{text-align:right}
+  #printDoc .pproj{font-size:15pt;font-weight:700}
+  #printDoc .pdoclabel{font-size:8pt;color:#999;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px}
+  #printDoc .pclient{font-size:9pt;color:#555;margin-top:2px}
+  #printDoc .pbadge{font-size:8pt;padding:2px 8px;border:1px solid #ccc;border-radius:4px;color:#555;margin-left:3px;display:inline-block;margin-top:4px}
+  #printDoc .pdims{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:9px;background:#f8f8f8;border-radius:4px;border:1px solid #ddd;margin-bottom:12px;text-align:center}
+  #printDoc .pdval{font-size:12pt;font-weight:700;color:var(--pc-d)}
+  #printDoc .pdlbl{font-size:8pt;color:#888;margin-top:2px}
+  #printDoc .psec{font-size:8pt;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.1em;border-bottom:2px solid var(--pc);padding-bottom:3px;margin:11px 0 6px}
+  #printDoc table.ptable{width:100%;border-collapse:collapse;margin-bottom:8px;font-size:9.5pt}
+  #printDoc table.ptable th{font-size:7.5pt;text-transform:uppercase;letter-spacing:.05em;color:#555;border-bottom:1px solid #aaa;padding:4px 6px;text-align:right;font-weight:600}
+  #printDoc table.ptable th:first-child{text-align:left}
+  #printDoc table.ptable td{padding:3.5px 6px;border-bottom:1px solid #eee;text-align:right}
+  #printDoc table.ptable td:first-child{text-align:left;color:#666;font-size:9pt}
+  #printDoc table.ptable tr.ptot td{font-weight:700;border-top:2px solid var(--pc);border-bottom:none;background:#f8f8f8}
+  #printDoc .pheadline{border:2px solid var(--pc);background:var(--pc-t);border-radius:6px;padding:12px 14px;margin:10px 0;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;text-align:center}
+  #printDoc .phlabel{font-size:7.5pt;color:var(--pc-d);text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:4px}
+  #printDoc .phval{font-size:16pt;font-weight:700;color:#111;line-height:1.1}
+  #printDoc .phsub{font-size:8pt;color:#666;margin-top:2px}
+  #printDoc .pnote{font-size:8.5pt;color:#444;line-height:1.5;margin-top:8px;padding:8px 10px;background:#fafafa;border-left:3px solid var(--pc);border-radius:0 4px 4px 0}
+  #printDoc .pdisc{margin-top:10px;padding:7px 10px;border:1px solid var(--pc-b);border-left:3px solid var(--pc);background:#f9f9f9;font-size:8pt;color:#666;line-height:1.5}
+  #printDoc .pfoot{display:flex;justify-content:space-between;font-size:8pt;color:#aaa;margin-top:10px;padding-top:5px;border-top:1px solid #ddd}
+</style>
+</head>
+<body>
+
+<!-- ACCESS GATE -->
+<div id="gate">
+  <div class="gbox">
+    <div class="glogo">PREFAB</div>
+    <div class="gsub">Consulting Services · Kenya</div>
+    <h2>Access Required</h2>
+    <div class="gdesc">This system is owned by Prefab Consulting LLC and provided to validated engagement partners. Enter the access code to continue.</div>
+    <input id="gateIn" type="password" placeholder="Access code" autocomplete="off">
+    <button onclick="gateSubmit()">Continue</button>
+    <div class="gerr" id="gateErr">Incorrect access code.</div>
+  </div>
+</div>
+
+<!-- PRINT / PDF DOC (one-page comparison leave-behind) -->
+<div id="printDoc">
+  <div class="phdr">
+    <div>
+      <div class="plogo">PREFAB</div>
+      <div class="plogosub">Consulting Services</div>
+    </div>
+    <div class="pright">
+      <div class="pdoclabel">CFS vs. RC+CMU Comparison · Kenya</div>
+      <div class="pproj" id="prName">—</div>
+      <div class="pclient" id="prClient"></div>
+      <div id="prMeta"></div>
+    </div>
+  </div>
+  <div class="pdims">
+    <div><div class="pdval" id="prFloor">—</div><div class="pdlbl">Floor Area (sqm)</div></div>
+    <div><div class="pdval" id="prFlrs">—</div><div class="pdlbl">Floors</div></div>
+    <div><div class="pdval" id="prSqm">—</div><div class="pdlbl">Total Area (sqm)</div></div>
+    <div><div class="pdval" id="prCounty">—</div><div class="pdlbl">County</div></div>
+  </div>
+
+  <div class="psec">Hard Cost Comparison</div>
+  <table class="ptable" id="prCostTable">
+    <thead>
+      <tr><th></th><th>RC + CMU</th><th>CFS</th><th>Differential</th></tr>
+    </thead>
+    <tbody id="prCostBody"></tbody>
+  </table>
+
+  <div class="psec">Schedule Differential (per floor)</div>
+  <table class="ptable" id="prSchedTable">
+    <thead>
+      <tr><th>Activity</th><th>RC + CMU (days)</th><th>CFS (days)</th><th>Savings</th></tr>
+    </thead>
+    <tbody id="prSchedBody"></tbody>
+  </table>
+
+  <div class="pheadline">
+    <div>
+      <div class="phlabel">Schedule Saved</div>
+      <div class="phval" id="prSchedSaved">—</div>
+      <div class="phsub" id="prSchedSavedSub">across all floors</div>
+    </div>
+    <div>
+      <div class="phlabel">Carry Savings</div>
+      <div class="phval" id="prCarrySaved">—</div>
+      <div class="phsub" id="prCarrySavedSub">at Kenya commercial rate</div>
+    </div>
+    <div>
+      <div class="phlabel">Months Saved</div>
+      <div class="phval" id="prMonthsSaved">—</div>
+      <div class="phsub">project duration</div>
+    </div>
+  </div>
+
+  <div class="pnote" id="prNote">Hard cost is not where the Kenyan CFS argument wins. Cure cycles, formwork rotation, and masonry sequencing dominate the RC+CMU schedule. At Kenya commercial lending rates, those weeks translate directly into developer carry savings, debt service coverage relief, and earlier rent commencement. Validation against operator data shifts the hard-cost ranges; the schedule structure stays.</div>
+
+  <div class="pdisc"><strong>Preliminary Comparison — Best-Estimate Benchmarks.</strong> Hard cost ranges reflect Q2 2026 Kenyan market conditions for mid-rise multifamily / hospitality / student housing scopes. Schedule durations reflect typical Nairobi mid-rise pace under standard contracting practice. Specific projects vary with site conditions, design stage, financing structure, and contractor capacity. Validation against operator data improves accuracy — see Adjust Assumptions in the live tool.</div>
+
+  <div class="pfoot">
+    <div>Prefab Consulting LLC · Principal: Robert Johnson</div>
+    <div id="prDate"></div>
+  </div>
+</div>
+
+<header>
+  <div><span class="logo">PREFAB <span class="sub">Consulting Services</span></span></div>
+  <div class="hright">Kenya · CFS vs. RC+CMU Comparison · Preliminary Estimates Only</div>
+</header>
+
+<div class="main">
+<div class="card">
+  <div class="curbar">
+    <span class="clbl">Currency</span>
+    <span class="ctog">
+      <button id="curKes" class="on" onclick="setCurrency('KES')">KSh</button>
+      <button id="curUsd" onclick="setCurrency('USD')">USD</button>
+    </span>
+    <span class="fxin">
+      <span>FX rate (KSh per USD):</span>
+      <input id="fxRate" type="number" value="129" step="0.5" oninput="calc();save()">
+    </span>
+  </div>
+  <div class="info" style="margin-top:0">Compare a Reinforced Concrete + CMU mid-rise build against an equivalent CFS structural framing scope. CFS scenario auto-loads from the <strong>CFS Budget Builder</strong> if you have run it for the same project — otherwise the right rail will prompt you to run it first.</div>
+
+  <div class="sh"><span>Project Info</span><button class="tog" onclick="confirmNew()">+ New Comparison</button></div>
+  <div class="g2">
+    <div><label>Project Name *</label><input id="projName" placeholder="e.g. Kilimani Residences — Block A" oninput="calc();save()"></div>
+    <div><label>Client / Developer</label><input id="client" placeholder="Developer name" oninput="save()"></div>
+  </div>
+  <div class="g2">
+    <div><label>Contact Name</label><input id="cname" placeholder="Primary contact" oninput="save()"></div>
+    <div><label>Contact Email</label><input id="cemail" type="email" placeholder="email@company.co.ke" oninput="save()"></div>
+  </div>
+  <div class="g3">
+    <div><label>Project Type</label>
+      <select id="ptype" onchange="calc();save()">
+        <option>Multifamily</option><option>Affordable Housing (AHP)</option><option>Hospitality</option>
+        <option>Student Housing</option><option>Senior / Assisted Living</option><option>Mixed-Use</option>
+        <option>Commercial</option><option>Custom</option>
+      </select>
+    </div>
+    <div><label>County</label>
+      <select id="county" onchange="calc();save()">
+        <option>Nairobi</option><option>Mombasa</option><option>Kisumu</option><option>Nakuru</option>
+        <option>Kiambu</option><option>Machakos</option><option>Kajiado</option><option>Kilifi</option>
+        <option>Kwale</option><option>Uasin Gishu</option><option>Other</option>
+      </select>
+    </div>
+    <div><label># Buildings</label><div class="sfx"><input id="nBldgs" type="number" value="1" min="1" oninput="calc();save()"><em>bldgs</em></div></div>
+  </div>
+
+  <div class="sh"><span>Building Dimensions</span><span class="shmeta">Auto-loads from CFS Budget Builder if present</span></div>
+  <div class="g4">
+    <div><label>Length</label><div class="sfx"><input id="bL" type="number" value="60" step=".1" oninput="calc();save()"><em>m</em></div></div>
+    <div><label>Width</label><div class="sfx"><input id="bW" type="number" value="18" step=".1" oninput="calc();save()"><em>m</em></div></div>
+    <div><label>Total Height</label><div class="sfx"><input id="bH" type="number" value="12" step=".1" oninput="calc();save()"><em>m</em></div></div>
+    <div><label># Floors</label><input id="bF" type="number" value="4" oninput="calc();save()"></div>
+  </div>
+  <div class="dimbox">
+    <div><div class="dv" id="dFloor">—</div><div class="dl">Floor Area (sqm)</div></div>
+    <div><div class="dv" id="dTotal">—</div><div class="dl">Total Area (sqm)</div></div>
+    <div><div class="dv" id="dAvg">—</div><div class="dl">Avg Ht/Floor (m)</div></div>
+    <div><div class="dv" id="dFlrs">—</div><div class="dl">Floors</div></div>
+  </div>
+  <div id="dimSync" style="margin-top:8px"></div>
+
+  <div class="sh">
+    <span>RC+CMU Benchmarks <span class="badge" id="benchBadge">Best-Estimate Benchmark</span><span class="ts" id="benchTs"></span></span>
+    <span>
+      <button class="tog" id="btnAdj" onclick="toggleAdjust()">Adjust Assumptions</button>
+      <button class="rbtn" onclick="resetToBenchmarks()" title="Restore Prefab Consulting best-estimate defaults">↺ Reset</button>
+    </span>
+  </div>
+  <div class="info">Defaults are <strong>Prefab Consulting best-estimates</strong> for Kenyan mid-rise RC+CMU construction (Q2 2026). Click <strong>Adjust Assumptions</strong> to unlock and override with operator-validated values — the badge flips to <strong>Validated</strong> with a timestamp.</div>
+
+  <div class="sh"><span>RC+CMU Cost Components</span><span class="shmeta">per sqm of total floor area</span></div>
+  <div class="g4">
+    <div><label>Structural Frame (RC)</label><div class="pfx"><em class="cur">KSh</em><input id="rcFrame" type="number" value="9750" step="50" oninput="calc();save()" readonly></div><div class="un">columns + beams</div></div>
+    <div><label>Floor Slabs</label><div class="pfx"><em class="cur">KSh</em><input id="rcSlab" type="number" value="6500" step="50" oninput="calc();save()" readonly></div><div class="un">cast-in-place</div></div>
+    <div><label>CMU Wall Infill</label><div class="pfx"><em class="cur">KSh</em><input id="cmuInfill" type="number" value="5500" step="50" oninput="calc();save()" readonly></div><div class="un">block + mortar</div></div>
+    <div><label>Plaster + Finishes</label><div class="pfx"><em class="cur">KSh</em><input id="plaster" type="number" value="7500" step="50" oninput="calc();save()" readonly></div><div class="un">two-coat + paint</div></div>
+  </div>
+  <div class="g2">
+    <div><label>Other (formwork, MEP coord., misc.)</label><div class="pfx"><em class="cur">KSh</em><input id="rcOther" type="number" value="1500" step="50" oninput="calc();save()" readonly></div><div class="un">per sqm, lumped</div></div>
+    <div><label>Markup %</label><div class="sfx"><input id="mkup" type="number" value="20" oninput="calc();save()" readonly><em>%</em></div></div>
+  </div>
+
+  <div class="sh"><span>Schedule Parameters</span><span class="shmeta">days per floor — typical Nairobi pace</span></div>
+  <div class="info" style="margin:6px 0 10px">The schedule differential is where the Kenyan CFS argument actually lands. Concrete cure cycles, formwork rotation, and masonry sequencing dominate the RC+CMU schedule. Adjust per-activity values during the demo if the operator has different pace data.</div>
+
+  <div style="background:#fafafa;border-radius:8px;border:1px solid #eee;padding:10px 12px;margin-top:8px">
+    <div class="schedrow h"><span class="lbl">Activity</span><span class="num">RC + CMU</span><span class="num">CFS</span><span class="num">Savings</span></div>
+    <div class="schedrow"><span class="lbl">Columns + cure</span>
+      <span class="num"><input id="rcColumns" type="number" value="12" min="0" oninput="calc();save()" readonly style="height:26px;font-size:11px;text-align:right;padding:0 6px"></span>
+      <span class="num"><input id="cfsColumns" type="number" value="0" min="0" oninput="calc();save()" readonly style="height:26px;font-size:11px;text-align:right;padding:0 6px"></span>
+      <span class="gain" id="schDColumns">—</span>
+    </div>
+    <div class="schedrow"><span class="lbl">Slab pour + cure</span>
+      <span class="num"><input id="rcSlabDays" type="number" value="17" min="0" oninput="calc();save()" readonly style="height:26px;font-size:11px;text-align:right;padding:0 6px"></span>
+      <span class="num"><input id="cfsSlabDays" type="number" value="6" min="0" oninput="calc();save()" readonly style="height:26px;font-size:11px;text-align:right;padding:0 6px"></span>
+      <span class="gain" id="schDSlab">—</span>
+    </div>
+    <div class="schedrow"><span class="lbl">Formwork strip + cycle</span>
+      <span class="num"><input id="rcFormwork" type="number" value="8" min="0" oninput="calc();save()" readonly style="height:26px;font-size:11px;text-align:right;padding:0 6px"></span>
+      <span class="num"><input id="cfsFormwork" type="number" value="0" min="0" oninput="calc();save()" readonly style="height:26px;font-size:11px;text-align:right;padding:0 6px"></span>
+      <span class="gain" id="schDFormwork">—</span>
+    </div>
+    <div class="schedrow"><span class="lbl">CMU infill / panel install</span>
+      <span class="num"><input id="rcCmuDays" type="number" value="12" min="0" oninput="calc();save()" readonly style="height:26px;font-size:11px;text-align:right;padding:0 6px"></span>
+      <span class="num"><input id="cfsErectDays" type="number" value="4" min="0" oninput="calc();save()" readonly style="height:26px;font-size:11px;text-align:right;padding:0 6px"></span>
+      <span class="gain" id="schDInfill">—</span>
+    </div>
+    <div class="schedrow"><span class="lbl">Plaster + cure (drywall for CFS)</span>
+      <span class="num"><input id="rcPlasterDays" type="number" value="10" min="0" oninput="calc();save()" readonly style="height:26px;font-size:11px;text-align:right;padding:0 6px"></span>
+      <span class="num"><input id="cfsPlasterDays" type="number" value="2" min="0" oninput="calc();save()" readonly style="height:26px;font-size:11px;text-align:right;padding:0 6px"></span>
+      <span class="gain" id="schDPlaster">—</span>
+    </div>
+    <div class="schedrow tot"><span class="lbl">Per-floor total</span>
+      <span class="num" id="schRcTot">—</span>
+      <span class="num" id="schCfsTot">—</span>
+      <span class="gain" id="schSavedPerFloor">—</span>
+    </div>
+  </div>
+
+  <div style="margin-top:12px">
+    <label>Kenya Labor Zone</label>
+    <select id="labor" onchange="calc();save()">
+      <option value="0">Nairobi metro — Baseline (0%)</option>
+      <option value="-7">Highland rural — Nyeri, Eldoret, Nakuru (−7%)</option>
+      <option value="4">Kisumu lakeside (+4%)</option>
+      <option value="6">Mombasa coastal (+6%)</option>
+      <option value="13">Diani / coastal resort (+13%)</option>
+      <option value="27">Northern frontier — Turkana, Marsabit, Wajir (+27%)</option>
+    </select>
+    <div style="font-size:10px;color:#888;margin-top:3px">Labor adjustment applies to CMU infill and plaster lines — the labor-heavy components of the RC+CMU build.</div>
+  </div>
+
+  <div class="sh"><span>Carry Cost Translation</span><span class="shmeta">schedule savings → developer carry</span></div>
+  <div class="info" style="margin:6px 0 10px">The schedule differential matters because Kenya commercial lending rates are high. Every month of saved construction time is a month of interest the developer doesn't pay on the construction loan.</div>
+  <div class="g3">
+    <div><label>Construction Loan Size</label><div class="pfx"><em class="cur">KSh</em><input id="loanAmt" type="number" value="200000000" step="1000000" oninput="calc();save()"></div><div class="un">auto-fills from CFS scenario if available</div></div>
+    <div><label>Annual Interest Rate</label>
+      <select id="rateMarket" onchange="syncRate();calc();save()">
+        <option value="14">Kenya Commercial — 14% (default)</option>
+        <option value="12">Kenya Commercial — Low end (12%)</option>
+        <option value="16">Kenya Commercial — High end (16%)</option>
+        <option value="9.5">KMRC Refinance — 9.5%</option>
+        <option value="6.5">Concessional / Multilateral — 6.5%</option>
+        <option value="custom">Custom rate…</option>
+      </select>
+    </div>
+    <div><label>Rate (%)</label><div class="sfx"><input id="carryRate" type="number" value="14" step=".25" oninput="calc();save()"><em>%</em></div></div>
+  </div>
+
+  <div class="sh"><span>Notes</span></div>
+  <textarea id="notes" placeholder="Site conditions, design stage, exclusions, schedule assumptions, validation notes from operator conversation…" oninput="save()"></textarea>
+</div>
+
+<div class="right card">
+  <div class="rhead">
+    <div style="display:flex;justify-content:space-between;align-items:baseline">
+      <span style="font-size:22px;font-weight:700;color:var(--pc-d);letter-spacing:.08em">PREFAB</span>
+      <span style="font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.08em">Comparison</span>
+    </div>
+    <div id="rName" style="font-size:15px;font-weight:600;margin-top:4px">Untitled Project</div>
+    <div id="rClient" style="font-size:11px;color:#888;margin-top:2px"></div>
+    <div id="rTags" style="margin-top:6px"></div>
+  </div>
+
+  <div style="font-size:10px;font-weight:600;color:#555;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Hard Cost</div>
+  <div id="cCompare"><div class="empty">Run the <strong>CFS Budget Builder</strong> for this project to populate the comparison.</div></div>
+
+  <div style="font-size:10px;font-weight:600;color:#555;text-transform:uppercase;letter-spacing:.06em;margin:14px 0 6px">Schedule (per floor)</div>
+  <div class="tblock" style="margin-top:0">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;font-size:11px">
+      <div><div style="font-size:9px;color:#888;text-transform:uppercase;letter-spacing:.04em">RC+CMU</div><div style="font-weight:700" id="sRcFloor">—</div></div>
+      <div><div style="font-size:9px;color:#888;text-transform:uppercase;letter-spacing:.04em">CFS</div><div style="font-weight:700" id="sCfsFloor">—</div></div>
+      <div><div style="font-size:9px;color:var(--pc-d);text-transform:uppercase;letter-spacing:.04em">Saved</div><div style="font-weight:700;color:var(--gain)" id="sSavedFloor">—</div></div>
+    </div>
+  </div>
+
+  <div class="mblock">
+    <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Total Schedule Saved</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div><div style="font-size:10px;color:#888">Calendar days</div><div style="font-size:18px;font-weight:700;color:#111" id="sSavedDays">—</div></div>
+      <div><div style="font-size:10px;color:#888">Months</div><div style="font-size:18px;font-weight:700;color:var(--pc-d)" id="sSavedMonths">—</div></div>
+    </div>
+  </div>
+
+  <div class="pblock">
+    <div style="font-size:10px;color:var(--pc-d);text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin-bottom:6px">Carry Savings <span id="sRateLbl" style="font-weight:400;text-transform:none;letter-spacing:0">at 14%</span></div>
+    <div style="font-size:22px;font-weight:700;color:#111;line-height:1.1" id="sCarrySaved">—</div>
+    <div style="font-size:10px;color:#666;margin-top:4px" id="sCarryDetail">—</div>
+  </div>
+
+  <button class="sbtn sn" onclick="doSaveNotion()">↑ Save to Notion</button>
+  <button class="sbtn sp" onclick="doPrint()" style="margin-top:8px">⎙ Print / PDF</button>
+  <button class="sbtn snew" onclick="confirmNew()">+ New Comparison</button>
+  <div class="msg msok" id="msgOk"></div>
+  <div class="msg msw" id="msgW"></div>
+  <div class="msg mse" id="msgE"></div>
+  <div class="foot">Prefab Consulting LLC<br>Preliminary — Subject to Change<br><span style="font-size:10px;color:#bbb">© 2026 Prefab Consulting LLC. All rights reserved.<br>Unauthorized reproduction or distribution prohibited.</span></div>
+</div>
+</div>
+
+<div id="overlay">
+  <div class="obox">
+    <h3>Start a new comparison?</h3>
+    <p>Project info and dimensions will be cleared.<br>Benchmark defaults are kept.</p>
+    <div class="orow">
+      <button class="ocancel" onclick="cancelNew()">Cancel</button>
+      <button class="oconfirm" onclick="doNew()">Clear &amp; Start New</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// CONFIG ─────────────────────────────────────────────────────────────────────
+// SaveComparisonKE endpoint is a Phase 5 follow-up — until then Save to Notion
+// surfaces a friendly error and writes locally via pisSync.
+const STORAGE_KEY = 'pc-ke-rccmu-form-v1';
+const PIS_KEY     = 'pis-ke-rccmu';
+const CFS_PIS_KEY = 'pis-ke-budget';
+const GATE_KEY    = 'pc-ke-gate';
+const GATE_CODE   = 'PrefabKE1';
+
+// Best-estimate benchmarks for Kenyan mid-rise RC+CMU construction, Q2 2026.
+// All values KSh/sqm of total floor area (the calc applies them to tSqm).
+// Sources: Architecture Overview Section 4 midpoint of stated ranges.
+const BENCHMARKS = {
+  rcFrame: 9750, rcSlab: 6500, cmuInfill: 5500, plaster: 7500, rcOther: 1500, mkup: 20,
+  rcColumns: 12, rcSlabDays: 17, rcFormwork: 8, rcCmuDays: 12, rcPlasterDays: 10,
+  cfsColumns: 0, cfsSlabDays: 6, cfsFormwork: 0, cfsErectDays: 4, cfsPlasterDays: 2
+};
+const CURRENCY_FIELDS = ['rcFrame','rcSlab','cmuInfill','plaster','rcOther','loanAmt'];
+const BENCH_FIELDS    = Object.keys(BENCHMARKS);
+const VALIDATED_LABEL = 'Validated';
+
+// STATE ─────────────────────────────────────────────────────────────────────
+let currency = 'KES';
+let adjustOpen = false;
+let validatedAt = null;
+const dateStr = () => new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'});
+
+// HELPERS ───────────────────────────────────────────────────────────────────
+const gv = id => parseFloat((document.getElementById(id)||{}).value) || 0;
+const sv = id => (document.getElementById(id)||{}).value || '';
+function curSym(){ return currency === 'USD' ? '$' : 'KSh'; }
+function fmt(n){
+  if (!isFinite(n)) return '—';
+  const dec = currency === 'USD' ? 2 : 0;
+  return curSym() + ' ' + Math.round(n).toLocaleString(undefined, {maximumFractionDigits:dec});
+}
+function fmtCur(n, cur, fxAtSave){
+  // Format an amount that may be in a different currency context than the page
+  if (!isFinite(n)) return '—';
+  let v = n;
+  if (cur && cur !== currency){
+    if (cur === 'KES' && currency === 'USD') v = n / (fxAtSave || gv('fxRate') || 129);
+    else if (cur === 'USD' && currency === 'KES') v = n * (fxAtSave || gv('fxRate') || 129);
+  }
+  return fmt(v);
+}
+function fmtSqm(n){ return Math.round(n).toLocaleString() + ' sqm'; }
+function fmtPSqm(n){ return isFinite(n) && n > 0 ? curSym() + ' ' + Math.round(n).toLocaleString() + '/sqm' : '—'; }
+function fmtDays(n){ return Math.round(n).toLocaleString() + ' days'; }
+function fmtMonths(d){ return (d / 30).toFixed(1) + ' mo'; }
+function set(id, v){ const el = document.getElementById(id); if (el) el.textContent = v; }
+function toast(msg, err){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = err ? 'err' : '';
+  t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 3500);
+}
+function showMsg(type, msg){
+  ['Ok','W','E'].forEach(t => document.getElementById('msg'+t).style.display = 'none');
+  const el = document.getElementById('msg'+type);
+  el.textContent = msg; el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 4000);
+}
+
+// CURRENCY ──────────────────────────────────────────────────────────────────
+function setCurrency(c){
+  if (c === currency) return;
+  const fx = gv('fxRate') || 129;
+  // Convert all KSh/USD fields in the form to the new currency
+  CURRENCY_FIELDS.forEach(f => {
+    const el = document.getElementById(f); if (!el) return;
+    let v = parseFloat(el.value) || 0;
+    let nv = v;
+    if (c === 'USD' && currency === 'KES') nv = v / fx;
+    else if (c === 'KES' && currency === 'USD') nv = v * fx;
+    el.value = (c === 'USD') ? nv.toFixed(2) : Math.round(nv);
+  });
+  currency = c;
+  document.getElementById('curKes').className = currency === 'KES' ? 'on' : '';
+  document.getElementById('curUsd').className = currency === 'USD' ? 'on' : '';
+  document.querySelectorAll('.cur').forEach(s => s.textContent = curSym());
+  calc(); save();
+}
+
+// ADJUST ASSUMPTIONS ────────────────────────────────────────────────────────
+function toggleAdjust(){
+  adjustOpen = !adjustOpen;
+  BENCH_FIELDS.forEach(f => {
+    const el = document.getElementById(f); if (!el) return;
+    if (adjustOpen) el.removeAttribute('readonly'); else el.setAttribute('readonly','readonly');
+  });
+  document.getElementById('btnAdj').className = 'tog' + (adjustOpen ? ' on' : '');
+  document.getElementById('btnAdj').textContent = adjustOpen ? 'Lock to Benchmark' : 'Adjust Assumptions';
+  if (adjustOpen){
+    // Mark as validated the first time any benchmark gets edited
+    const badge = document.getElementById('benchBadge');
+    badge.textContent = 'Adjusting…'; badge.className = 'badge';
+  }
+}
+
+function resetToBenchmarks(){
+  const fx = gv('fxRate') || 129;
+  BENCH_FIELDS.forEach(f => {
+    const el = document.getElementById(f); if (!el) return;
+    let v = BENCHMARKS[f];
+    if (currency === 'USD' && CURRENCY_FIELDS.includes(f)) v = v / fx;
+    el.value = (currency === 'USD' && CURRENCY_FIELDS.includes(f)) ? v.toFixed(2) : v;
+  });
+  validatedAt = null;
+  const b = document.getElementById('benchBadge');
+  b.textContent = 'Best-Estimate Benchmark'; b.className = 'badge';
+  document.getElementById('benchTs').textContent = '';
+  calc(); save();
+}
+
+function bindBenchmarkEdit(){
+  // Stamp Validated when a benchmark field is edited away from default
+  BENCH_FIELDS.forEach(f => {
+    const el = document.getElementById(f); if (!el) return;
+    el.addEventListener('change', () => {
+      const fx = gv('fxRate') || 129;
+      let def = BENCHMARKS[f];
+      if (currency === 'USD' && CURRENCY_FIELDS.includes(f)) def = def / fx;
+      const cur = parseFloat(el.value) || 0;
+      if (Math.abs(cur - def) > 0.001){
+        validatedAt = Date.now();
+        const b = document.getElementById('benchBadge');
+        b.textContent = VALIDATED_LABEL; b.className = 'badge validated';
+        document.getElementById('benchTs').textContent = '· ' + new Date(validatedAt).toLocaleString();
+        save();
+      }
+    });
+  });
+}
+
+// RATE SYNC ─────────────────────────────────────────────────────────────────
+function syncRate(){
+  const v = sv('rateMarket');
+  if (v === 'custom') return;
+  document.getElementById('carryRate').value = v;
+}
+
+// CFS DATA AUTO-LOAD ────────────────────────────────────────────────────────
+function loadCfsScenario(){
+  try {
+    const raw = localStorage.getItem(CFS_PIS_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch(e){ return null; }
+}
+
+function autoSyncFromCfs(){
+  // On first load, if dimensions are still at defaults and CFS data exists, sync them
+  const cfs = loadCfsScenario();
+  if (!cfs) return;
+  const syncBox = document.getElementById('dimSync');
+  // Sync project info if blank
+  if (!sv('projName') && cfs.projName){ document.getElementById('projName').value = cfs.projName; }
+  if (!sv('client') && cfs.client){ document.getElementById('client').value = cfs.client; }
+  // Sync dimensions if user hasn't edited them
+  ['bL','bW','bH','bF'].forEach(id => {
+    if (cfs[id] !== undefined) document.getElementById(id).value = cfs[id];
+  });
+  if (cfs.ptype) document.getElementById('ptype').value = cfs.ptype;
+  if (cfs.county) document.getElementById('county').value = cfs.county;
+  if (cfs.labor !== undefined) document.getElementById('labor').value = cfs.labor;
+  // Auto-fill the loan amount from CFS scenario mid-point (mL + mH) / 2 × 1 building
+  if (cfs.mL && cfs.mH){
+    const mid = (parseFloat(cfs.mL) + parseFloat(cfs.mH)) / 2;
+    // Convert if currency contexts differ
+    let loanGuess = mid;
+    if (cfs.currency && cfs.currency !== currency){
+      const fx = cfs.fxRate || gv('fxRate') || 129;
+      if (cfs.currency === 'KES' && currency === 'USD') loanGuess = mid / fx;
+      else if (cfs.currency === 'USD' && currency === 'KES') loanGuess = mid * fx;
+    }
+    document.getElementById('loanAmt').value = (currency === 'USD') ? loanGuess.toFixed(2) : Math.round(loanGuess);
+  }
+  syncBox.innerHTML = '<div style="font-size:10px;color:var(--pc-d);background:var(--pc-t);border:1px solid var(--pc-b);border-radius:6px;padding:6px 8px"><strong>Synced from CFS Budget Builder:</strong> ' + (cfs.projName || 'project') + ' · ' + (cfs.bL||'?') + 'm × ' + (cfs.bW||'?') + 'm × ' + (cfs.bF||'?') + ' floors</div>';
+}
+
+// CALC ──────────────────────────────────────────────────────────────────────
+function calc(){
+  const L = gv('bL'), W = gv('bW'), H = gv('bH'), F = Math.max(1, gv('bF'));
+  const flSqm = L * W, tSqm = flSqm * F;
+  const la = gv('labor'), lm = 1 + la/100;
+  const nb = Math.max(1, Math.round(gv('nBldgs')));
+
+  // Per-sqm cost components
+  const rcFrameC = tSqm * gv('rcFrame');
+  const rcSlabC  = tSqm * gv('rcSlab');
+  const cmuC     = tSqm * gv('cmuInfill') * lm;  // labor adjustment applies
+  const plasterC = tSqm * gv('plaster') * lm;    // labor adjustment applies
+  const rcOtherC = tSqm * gv('rcOther');
+
+  const baseLow  = rcFrameC + rcSlabC + cmuC + plasterC + rcOtherC;
+  // RC+CMU low/high spread: ±12% to give a meaningful range, since per-line
+  // ranges are buried in the operator's typical experience. Operator validates
+  // the midpoint by adjusting components.
+  const totLow = baseLow * 0.92;
+  const totHigh = baseLow * 1.08;
+  const mk = gv('mkup');
+  const mL = totLow * (1 + mk/100), mH = totHigh * (1 + mk/100);
+
+  // Schedule per floor
+  const rcDays = gv('rcColumns') + gv('rcSlabDays') + gv('rcFormwork') + gv('rcCmuDays') + gv('rcPlasterDays');
+  const cfsDays = gv('cfsColumns') + gv('cfsSlabDays') + gv('cfsFormwork') + gv('cfsErectDays') + gv('cfsPlasterDays');
+  const savedPerFloor = Math.max(0, rcDays - cfsDays);
+  const totalDaysSaved = savedPerFloor * F;
+  const monthsSaved = totalDaysSaved / 30;
+
+  // Carry savings: loanAmt × (rate/12) × monthsSaved
+  const loan = gv('loanAmt');
+  const carryRate = gv('carryRate');
+  const monthlyCarry = loan * (carryRate / 100) / 12;
+  const carrySaved = monthlyCarry * monthsSaved;
+
+  // Dimension dimbox
+  set('dFloor', Math.round(flSqm).toLocaleString());
+  set('dTotal', Math.round(tSqm).toLocaleString());
+  set('dAvg', (F > 0 ? (H/F).toFixed(2) : '—') + ' m');
+  set('dFlrs', F);
+
+  // Schedule row deltas
+  set('schDColumns', fmtDays(Math.max(0, gv('rcColumns') - gv('cfsColumns'))));
+  set('schDSlab', fmtDays(Math.max(0, gv('rcSlabDays') - gv('cfsSlabDays'))));
+  set('schDFormwork', fmtDays(Math.max(0, gv('rcFormwork') - gv('cfsFormwork'))));
+  set('schDInfill', fmtDays(Math.max(0, gv('rcCmuDays') - gv('cfsErectDays'))));
+  set('schDPlaster', fmtDays(Math.max(0, gv('rcPlasterDays') - gv('cfsPlasterDays'))));
+  set('schRcTot', fmtDays(rcDays));
+  set('schCfsTot', fmtDays(cfsDays));
+  set('schSavedPerFloor', fmtDays(savedPerFloor));
+
+  // Right rail header
+  set('rName', sv('projName') || 'Untitled Project');
+  set('rClient', sv('client'));
+  document.getElementById('rTags').innerHTML =
+    '<span class="rtag">' + sv('ptype') + '</span>' +
+    '<span class="rtag">' + sv('county') + '</span>' +
+    '<span class="rtag">' + Math.round(tSqm).toLocaleString() + ' sqm</span>' +
+    '<span class="rtag">' + Math.round(F) + ' fl</span>';
+
+  // Schedule right rail
+  set('sRcFloor', fmtDays(rcDays));
+  set('sCfsFloor', fmtDays(cfsDays));
+  set('sSavedFloor', fmtDays(savedPerFloor));
+  set('sSavedDays', fmtDays(totalDaysSaved));
+  set('sSavedMonths', monthsSaved.toFixed(1) + ' mo');
+  set('sRateLbl', 'at ' + carryRate.toFixed(carryRate % 1 === 0 ? 0 : 1) + '%');
+  set('sCarrySaved', fmt(carrySaved));
+  set('sCarryDetail', 'on ' + fmt(loan) + ' construction loan · ' + monthsSaved.toFixed(1) + ' months saved');
+
+  // Stash for save/print and comparison render
+  window._c = {L,W,H,F,flSqm,tSqm,la,lm,nb,rcFrameC,rcSlabC,cmuC,plasterC,rcOtherC,baseLow,totLow,totHigh,mk,mL,mH,rcDays,cfsDays,savedPerFloor,totalDaysSaved,monthsSaved,loan,carryRate,monthlyCarry,carrySaved};
+
+  renderComparison();
+  pisSync();
+}
+
+// COMPARISON RENDERING ──────────────────────────────────────────────────────
+function renderComparison(){
+  const c = window._c; if (!c) return;
+  const cont = document.getElementById('cCompare');
+  const cfs = loadCfsScenario();
+
+  if (!cfs || !cfs.mL || !cfs.mH){
+    cont.innerHTML = '<div class="empty">Run the <strong>CFS Budget Builder</strong> for this project to populate the comparison.</div>';
+    return;
+  }
+
+  const cfsTSqm = parseFloat(cfs.tSqm) || 0;
+  const tol = 0.05;
+  if (!cfsTSqm || Math.abs(cfsTSqm - c.tSqm) / c.tSqm > tol){
+    cont.innerHTML = '<div class="warn"><strong>⚠ Dimensions don\'t match.</strong> CFS Budget Builder scenario is <strong>' + Math.round(cfsTSqm).toLocaleString() + ' sqm</strong>. This RC+CMU scenario is <strong>' + Math.round(c.tSqm).toLocaleString() + ' sqm</strong>. Re-run the CFS Budget Builder with matching dimensions to enable the cost comparison.</div>';
+    return;
+  }
+
+  // Convert CFS values to current display currency if they were saved in a different one
+  const cfsCur = cfs.currency || 'KES';
+  const cfsFx = parseFloat(cfs.fxRate) || gv('fxRate') || 129;
+  function conv(n){
+    let v = parseFloat(n); if (!isFinite(v)) return 0;
+    if (cfsCur === currency) return v;
+    if (cfsCur === 'KES' && currency === 'USD') return v / cfsFx;
+    if (cfsCur === 'USD' && currency === 'KES') return v * cfsFx;
+    return v;
+  }
+
+  const rcLow  = c.mL,  rcHigh = c.mH;
+  const cfsLow = conv(cfs.mL), cfsHigh = conv(cfs.mH);
+  const dLow   = cfsLow - rcLow;   // positive = CFS more expensive
+  const dHigh  = cfsHigh - rcHigh;
+  const avgD   = (dLow + dHigh) / 2;
+  const cfsCheaper = avgD < 0;
+  const deltaLabel = cfsCheaper ? 'CFS Savings' : 'CFS Premium';
+  const deltaColor = (v) => v < 0 ? 'color:var(--gain)' : 'color:var(--loss)';
+  const fmtAbs = (n) => fmt(Math.abs(n));
+  const fmtPct = (d, base) => base > 0 ? ((Math.abs(d) / base) * 100).toFixed(1) + '%' : '';
+
+  let attribution = 'CFS data from CFS Budget Builder';
+  if (cfs._ts){
+    try { attribution += ' · ' + new Date(parseInt(cfs._ts)).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}); } catch(e){}
+  }
+  if (cfsCur !== currency){
+    attribution += ' · converted from ' + cfsCur + ' @ ' + cfsFx.toFixed(1);
+  }
+
+  cont.innerHTML =
+    '<table class="ctable">' +
+      '<thead><tr><th></th><th>RC + CMU</th><th>CFS</th><th>' + deltaLabel + '</th></tr></thead>' +
+      '<tbody>' +
+        '<tr>' +
+          '<td>Low</td>' +
+          '<td>' + fmt(rcLow) + '<div class="sub">' + fmtPSqm(rcLow / c.tSqm) + '</div></td>' +
+          '<td>' + fmt(cfsLow) + '<div class="sub">' + fmtPSqm(cfsLow / c.tSqm) + '</div></td>' +
+          '<td style="' + deltaColor(dLow) + '">' + fmtAbs(dLow) + '<div class="sub">' + fmtPct(dLow, rcLow) + '</div></td>' +
+        '</tr>' +
+        '<tr>' +
+          '<td>High</td>' +
+          '<td>' + fmt(rcHigh) + '<div class="sub">' + fmtPSqm(rcHigh / c.tSqm) + '</div></td>' +
+          '<td>' + fmt(cfsHigh) + '<div class="sub">' + fmtPSqm(cfsHigh / c.tSqm) + '</div></td>' +
+          '<td style="' + deltaColor(dHigh) + '">' + fmtAbs(dHigh) + '<div class="sub">' + fmtPct(dHigh, rcHigh) + '</div></td>' +
+        '</tr>' +
+      '</tbody>' +
+    '</table>' +
+    '<div style="font-size:10px;color:#666;margin-top:8px;line-height:1.5"><strong>The argument that wins the project is below — schedule and carry.</strong> Hard cost ranges shift with operator-specific inputs; use <em>Adjust Assumptions</em> to align with the room\'s reality.</div>' +
+    '<div style="font-size:9px;color:#aaa;margin-top:6px;font-style:italic">' + attribution + '</div>';
+}
+
+// LOCAL STORAGE ─────────────────────────────────────────────────────────────
+const FIELDS = ['projName','client','cname','cemail','ptype','county','nBldgs','bL','bW','bH','bF',
+                'rcFrame','rcSlab','cmuInfill','plaster','rcOther','mkup',
+                'rcColumns','rcSlabDays','rcFormwork','rcCmuDays','rcPlasterDays',
+                'cfsColumns','cfsSlabDays','cfsFormwork','cfsErectDays','cfsPlasterDays',
+                'labor','loanAmt','rateMarket','carryRate','notes','fxRate'];
+
+function save(){
+  try {
+    const d = {};
+    FIELDS.forEach(f => { const e=document.getElementById(f); if(e) d[f] = e.value; });
+    d.adjustOpen = adjustOpen; d.currency = currency; d.validatedAt = validatedAt;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(d));
+  } catch(e){}
+}
+
+function restore(){
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    const d = JSON.parse(raw);
+    FIELDS.forEach(f => { const e=document.getElementById(f); if(e && d[f] !== undefined) e.value = d[f]; });
+    if (d.currency){
+      currency = d.currency;
+      document.getElementById('curKes').className = currency === 'KES' ? 'on' : '';
+      document.getElementById('curUsd').className = currency === 'USD' ? 'on' : '';
+      document.querySelectorAll('.cur').forEach(s => s.textContent = curSym());
+    }
+    if (d.validatedAt){
+      validatedAt = d.validatedAt;
+      const b = document.getElementById('benchBadge');
+      b.textContent = VALIDATED_LABEL; b.className = 'badge validated';
+      document.getElementById('benchTs').textContent = '· ' + new Date(validatedAt).toLocaleString();
+    }
+    if (d.adjustOpen){
+      adjustOpen = true;
+      BENCH_FIELDS.forEach(f => { const e=document.getElementById(f); if(e) e.removeAttribute('readonly'); });
+      document.getElementById('btnAdj').className = 'tog on';
+      document.getElementById('btnAdj').textContent = 'Lock to Benchmark';
+    }
+    return true;
+  } catch(e){ return false; }
+}
+
+// PIS CROSS-PAGE SYNC ───────────────────────────────────────────────────────
+function pisSync(){
+  try {
+    const c = window._c; if (!c) return;
+    const d = {_page:'rccmu', _ts:Date.now()};
+    ['projName','client','ptype','county','bL','bW','bH','bF','nBldgs'].forEach(id => {
+      const el = document.getElementById(id); if (el) d[id] = el.value;
+    });
+    d.currency = currency;
+    d.fxRate = gv('fxRate') || 129;
+    d.tSqm = c.tSqm; d.floors = c.F;
+    d.rcLow = c.mL; d.rcHigh = c.mH;
+    d.rcDays = c.rcDays; d.cfsDays = c.cfsDays;
+    d.savedPerFloor = c.savedPerFloor; d.totalDaysSaved = c.totalDaysSaved; d.monthsSaved = c.monthsSaved;
+    d.loanAmt = c.loan; d.carryRate = c.carryRate; d.carrySaved = c.carrySaved;
+    d.validatedAt = validatedAt;
+    localStorage.setItem(PIS_KEY, JSON.stringify(d));
+  } catch(e){ console.warn('pisSync error:', e); }
+}
+
+// SAVE TO NOTION (deferred to Phase 5 — SaveComparisonKE endpoint) ─────────
+function doSaveNotion(){
+  showMsg('W', 'Save to Notion comes online in Phase 5. Local state is preserved.');
+  pisSync();
+}
+
+// PRINT / PDF ──────────────────────────────────────────────────────────────
+function doPrint(){
+  const c = window._c; if (!c){ showMsg('E','Run a calculation first.'); return; }
+  const cfs = loadCfsScenario();
+  set('prName', sv('projName') || 'Untitled Project');
+  set('prClient', sv('client'));
+  document.getElementById('prMeta').innerHTML =
+    '<div class="pbadge">' + sv('ptype') + '</div>' +
+    '<div class="pbadge">' + sv('county') + '</div>' +
+    (validatedAt ? '<div class="pbadge" style="background:#e6fbfc;border-color:#b6eef1;color:#0fa6ad">Validated · ' + new Date(validatedAt).toLocaleDateString() + '</div>' : '');
+  set('prFloor', Math.round(c.flSqm).toLocaleString());
+  set('prFlrs', c.F);
+  set('prSqm', Math.round(c.tSqm).toLocaleString());
+  set('prCounty', sv('county'));
+  set('prDate', dateStr());
+
+  // Cost comparison table for the print doc
+  let costRows = '';
+  if (cfs && cfs.mL && cfs.mH){
+    const cfsCur = cfs.currency || 'KES';
+    const cfsFx = parseFloat(cfs.fxRate) || gv('fxRate') || 129;
+    const conv = (n) => {
+      let v = parseFloat(n); if (!isFinite(v)) return 0;
+      if (cfsCur === currency) return v;
+      if (cfsCur === 'KES' && currency === 'USD') return v / cfsFx;
+      if (cfsCur === 'USD' && currency === 'KES') return v * cfsFx;
+      return v;
+    };
+    const cfsLow = conv(cfs.mL), cfsHigh = conv(cfs.mH);
+    const dLow = cfsLow - c.mL, dHigh = cfsHigh - c.mH;
+    const fmtD = n => (n < 0 ? '−' : '+') + fmt(Math.abs(n));
+    costRows =
+      '<tr><td>Low</td><td>' + fmt(c.mL) + '</td><td>' + fmt(cfsLow) + '</td><td>' + fmtD(dLow) + '</td></tr>' +
+      '<tr><td>High</td><td>' + fmt(c.mH) + '</td><td>' + fmt(cfsHigh) + '</td><td>' + fmtD(dHigh) + '</td></tr>' +
+      '<tr class="ptot"><td>Per sqm (mid)</td><td>' + fmt(((c.mL+c.mH)/2)/c.tSqm) + '</td><td>' + fmt(((cfsLow+cfsHigh)/2)/c.tSqm) + '</td><td>' + fmtD(((cfsLow+cfsHigh)/2 - (c.mL+c.mH)/2) / c.tSqm) + '/sqm</td></tr>';
+  } else {
+    costRows = '<tr><td colspan="4" style="text-align:center;color:#888;padding:10px">CFS Budget Builder scenario not loaded — comparison unavailable.</td></tr>';
+  }
+  document.getElementById('prCostBody').innerHTML = costRows;
+
+  // Schedule comparison table for the print doc
+  const rows = [
+    ['Columns + cure', gv('rcColumns'), gv('cfsColumns')],
+    ['Slab pour + cure', gv('rcSlabDays'), gv('cfsSlabDays')],
+    ['Formwork strip + cycle', gv('rcFormwork'), gv('cfsFormwork')],
+    ['CMU infill / panel install', gv('rcCmuDays'), gv('cfsErectDays')],
+    ['Plaster + cure (drywall for CFS)', gv('rcPlasterDays'), gv('cfsPlasterDays')]
+  ];
+  let schedBody = rows.map(r => '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td><td>' + r[2] + '</td><td>' + Math.max(0, r[1]-r[2]) + '</td></tr>').join('');
+  schedBody += '<tr class="ptot"><td>Per-floor total</td><td>' + c.rcDays + '</td><td>' + c.cfsDays + '</td><td>' + c.savedPerFloor + '</td></tr>';
+  document.getElementById('prSchedBody').innerHTML = schedBody;
+
+  set('prSchedSaved', Math.round(c.totalDaysSaved).toLocaleString() + ' days');
+  set('prSchedSavedSub', 'across ' + c.F + ' floors');
+  set('prCarrySaved', fmt(c.carrySaved));
+  set('prCarrySavedSub', 'at ' + c.carryRate + '% on ' + fmt(c.loan));
+  set('prMonthsSaved', c.monthsSaved.toFixed(1) + ' mo');
+
+  setTimeout(() => window.print(), 100);
+}
+
+// NEW COMPARISON ────────────────────────────────────────────────────────────
+function confirmNew(){ document.getElementById('overlay').classList.add('show'); }
+function cancelNew(){ document.getElementById('overlay').classList.remove('show'); }
+function doNew(){
+  // Clear project info + dimensions, preserve benchmarks and currency
+  ['projName','client','cname','cemail','notes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('bL').value = 60;
+  document.getElementById('bW').value = 18;
+  document.getElementById('bH').value = 12;
+  document.getElementById('bF').value = 4;
+  document.getElementById('nBldgs').value = 1;
+  document.getElementById('dimSync').innerHTML = '';
+  cancelNew();
+  calc(); save();
+  toast('New comparison started');
+}
+
+// GATE ──────────────────────────────────────────────────────────────────────
+function showGate(){ document.getElementById('gate').classList.add('show'); setTimeout(()=>document.getElementById('gateIn').focus(),50); }
+function hideGate(){ document.getElementById('gate').classList.remove('show'); }
+function gateSubmit(){
+  const v = document.getElementById('gateIn').value.trim();
+  if (v === GATE_CODE){ localStorage.setItem(GATE_KEY,'1'); hideGate(); init(); }
+  else { document.getElementById('gateErr').style.display='block'; }
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('gate').classList.contains('show')) gateSubmit();
+});
+
+// INIT ──────────────────────────────────────────────────────────────────────
+function init(){
+  const hadSaved = restore();
+  if (!hadSaved) autoSyncFromCfs();
+  bindBenchmarkEdit();
+  calc();
+  document.querySelectorAll('input,select,textarea').forEach(el => el.addEventListener('change', calc));
+  // Refresh comparison view when window gets focus (CFS budget might have been updated in another tab)
+  window.addEventListener('focus', () => { renderComparison(); });
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  if (localStorage.getItem(GATE_KEY) === '1'){ init(); }
+  else {
+    showGate();
+    const gobs = setInterval(() => {
+      if (localStorage.getItem(GATE_KEY) === '1'){ clearInterval(gobs); init(); }
+    }, 200);
+  }
+});
+</script>
+</body>
+</html>
