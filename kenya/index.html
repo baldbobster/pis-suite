@@ -373,7 +373,7 @@
     <div><label>Est. Steel Weight</label><div id="tons" style="height:34px;display:flex;align-items:center;font-weight:600;color:var(--pc-d);font-size:13px">—</div></div>
   </div>
 
-  <div class="sh"><span>Decking &amp; Sheathing</span></div>
+  <div class="sh"><span>Floor System &amp; Sheathing</span></div>
   <div class="g4">
     <div><label>Deck Type</label>
       <select id="dkType" onchange="save()">
@@ -382,7 +382,9 @@
         <option>Custom</option>
       </select>
     </div>
-    <div><label>Deck Cost</label><div class="pfx"><em class="cur">KSh</em><input id="dkCost" type="number" value="390" step="5" oninput="calc();save()" readonly></div><div class="un">per sqm of floor</div></div>
+    <div><label>Metal Deck</label><div class="pfx"><em class="cur">KSh</em><input id="dkCost" type="number" value="525" step="5" oninput="calc();save()" readonly></div><div class="un">per sqm of floor</div></div>
+    <div><label>Concrete Topping</label><div class="pfx"><em class="cur">KSh</em><input id="tpCost" type="number" value="2250" step="25" oninput="calc();save()" readonly></div><div class="un">per sqm of floor</div></div>
+    <div><label>Reinforcement</label><div class="pfx"><em class="cur">KSh</em><input id="rfCost" type="number" value="975" step="25" oninput="calc();save()" readonly></div><div class="un">per sqm of floor</div></div>
     <div><label>Sheath Type</label>
       <select id="shType" onchange="save()">
         <option>Imported OSB 12mm</option><option>DensGlass / Glass Mat</option>
@@ -439,7 +441,9 @@
   </div>
   <div class="li lih"><span>Line Item</span><span class="tr">Low</span><span class="tr">High</span></div>
   <div class="li"><span>CFS Steel (landed)</span><span class="tr" id="rSteel">—</span><span class="tr" id="rSteelH">—</span></div>
-  <div class="li"><span>Decking</span><span class="tr" id="rDeck">—</span><span class="tr" id="rDeckH">—</span></div>
+  <div class="li"><span>Metal Deck</span><span class="tr" id="rDeck">—</span><span class="tr" id="rDeckH">—</span></div>
+  <div class="li"><span>Concrete Topping</span><span class="tr" id="rTopping">—</span><span class="tr" id="rToppingH">—</span></div>
+  <div class="li"><span>Reinforcement</span><span class="tr" id="rReinf">—</span><span class="tr" id="rReinfH">—</span></div>
   <div class="li"><span>Sheathing</span><span class="tr" id="rSheath">—</span><span class="tr" id="rSheathH">—</span></div>
   <div class="li"><span>Logistics</span><span class="tr" id="rShip">—</span><span class="tr" id="rShipH">—</span></div>
   <div class="li"><span>Equipment</span><span class="tr" id="rEquip">—</span><span class="tr" id="rEquipH">—</span></div>
@@ -505,7 +509,7 @@
 // SaveBudgetKE endpoint comes online in Bootstrap Runbook Phase 5.
 // Until then Save to Notion surfaces a friendly error.
 const AZURE_FUNCTION_URL = 'https://ghv-budget-api-g0hagac9ccbqcbcu.centralus-01.azurewebsites.net/api/SaveBudgetKE?code=2va4T5w72mFVXnV4yOPPM-NtULW1bafF5M6jWsLwT9V4AzFuMbkTjw==';
-const STORAGE_KEY = 'pc-ke-budget-v1';
+const STORAGE_KEY = 'pc-ke-budget-v2';
 const PIS_KEY     = 'pis-ke-budget';
 // Change to "Zenith-Validated" / "Builders Duka-Validated" before a prospect meeting.
 const VALIDATED_LABEL = 'Validated';
@@ -513,15 +517,17 @@ const GATE_CODE = 'PrefabKE1';
 const GATE_KEY  = 'pc_ke_auth_v1';
 
 // BENCHMARK DEFAULTS — KSh, Kenya Q2 2026 best-estimate (Architecture Overview v1 §4-§5)
+// Floor system split into deck + topping + reinforcement to align with the
+// 3,000–4,500 KSh/sqm "floor slabs" line in §4. Midpoint at 3,750 KSh/sqm.
 const BENCHMARKS = {
   kgPerSqm: 50, sprice: 190, impFac: 45,
-  dkCost: 390, shCost: 225,
+  dkCost: 525, tpCost: 2250, rfCost: 975, shCost: 225,
   ship: 3900000, equip: 65, misc: 95, eng: 65,
   fabL: 260, fabH: 390, instL: 195, instH: 325,
   mkup: 20
 };
-const BENCH_FIELDS = ['kgPerSqm','sprice','impFac','dkCost','shCost','ship','equip','misc','eng','fabL','fabH','instL','instH','mkup'];
-const CURRENCY_FIELDS = ['sprice','dkCost','shCost','ship','equip','misc','eng','fabL','fabH','instL','instH'];
+const BENCH_FIELDS = ['kgPerSqm','sprice','impFac','dkCost','tpCost','rfCost','shCost','ship','equip','misc','eng','fabL','fabH','instL','instH','mkup'];
+const CURRENCY_FIELDS = ['sprice','dkCost','tpCost','rfCost','shCost','ship','equip','misc','eng','fabL','fabH','instL','instH'];
 
 // STATE ──────────────────────────────────────────────────────────────────────
 let useOvr = false, useShMan = false, adjustOpen = false;
@@ -706,6 +712,8 @@ function calc(){
   const la = gv('labor'), lm = 1 + la/100;
   const stC  = tSqm * gv('kgPerSqm') * gv('sprice') * (1 + gv('impFac')/100);
   const dkC  = tSqm * gv('dkCost');
+  const tpC  = tSqm * gv('tpCost');
+  const rfC  = tSqm * gv('rfCost');
   const shC  = shSqm * gv('shCost');
   const shpC = gv('ship');
   const eqC  = tSqm * gv('equip');
@@ -715,8 +723,8 @@ function calc(){
   const fH   = tSqm * gv('fabH') * lm;
   const iL   = tSqm * gv('instL') * lm;
   const iH   = tSqm * gv('instH') * lm;
-  const totL = stC+dkC+shC+shpC+eqC+miC+enC+fL+iL;
-  const totH = stC+dkC+shC+shpC+eqC+miC+enC+fH+iH;
+  const totL = stC+dkC+tpC+rfC+shC+shpC+eqC+miC+enC+fL+iL;
+  const totH = stC+dkC+tpC+rfC+shC+shpC+eqC+miC+enC+fH+iH;
   const mk = gv('mkup');
   const mL = totL*(1+mk/100), mH = totH*(1+mk/100);
   const nb = Math.max(1, Math.round(gv('nBldgs')));
@@ -737,6 +745,8 @@ function calc(){
 
   set('rSteel',fmt(stC)); set('rSteelH',fmt(stC));
   set('rDeck', fmt(dkC)); set('rDeckH', fmt(dkC));
+  set('rTopping',fmt(tpC)); set('rToppingH',fmt(tpC));
+  set('rReinf', fmt(rfC)); set('rReinfH', fmt(rfC));
   set('rSheath',fmt(shC)); set('rSheathH',fmt(shC));
   set('rShip', fmt(shpC)); set('rShipH', fmt(shpC));
   set('rEquip',fmt(eqC)); set('rEquipH',fmt(eqC));
@@ -771,12 +781,12 @@ function calc(){
     pb.style.display = 'none';
   }
 
-  window._c = {L,W,H,F,op,tSqm,shSqm,gw,nw,stC,dkC,shC,shpC,eqC,miC,enC,fL,fH,iL,iH,totL,totH,mL,mH,mk,nb,la,lm,totalKg};
+  window._c = {L,W,H,F,op,tSqm,shSqm,gw,nw,stC,dkC,tpC,rfC,shC,shpC,eqC,miC,enC,fL,fH,iL,iH,totL,totH,mL,mH,mk,nb,la,lm,totalKg};
   pisSync();
 }
 
 // LOCAL STORAGE ──────────────────────────────────────────────────────────────
-const FIELDS = ['projName','client','cname','cemail','ptype','county','nBldgs','bLabel','bL','bW','bH','bF','oPct','manSF','shManSF','kgPerSqm','sprice','impFac','dkType','dkCost','shType','shCost','ship','equip','misc','eng','fabL','fabH','instL','instH','labor','mkup','notes','fxRate'];
+const FIELDS = ['projName','client','cname','cemail','ptype','county','nBldgs','bLabel','bL','bW','bH','bF','oPct','manSF','shManSF','kgPerSqm','sprice','impFac','dkType','dkCost','tpCost','rfCost','shType','shCost','ship','equip','misc','eng','fabL','fabH','instL','instH','labor','mkup','notes','fxRate'];
 
 function save(){
   try {
@@ -858,6 +868,10 @@ function buildPayload(){
     deckType:       sv('dkType'),
     deckCostPerSqm: gv('dkCost'),
     deckCost:       Math.round(c.dkC),
+    toppingCostPerSqm: gv('tpCost'),
+    toppingCost:    Math.round(c.tpC),
+    reinforcementCostPerSqm: gv('rfCost'),
+    reinforcementCost: Math.round(c.rfC),
     sheathType:     sv('shType'),
     sheathCostPerSqm:gv('shCost'),
     sheathCost:     Math.round(c.shC),
@@ -951,7 +965,9 @@ function doPrint(){
     '<div><div class="pdval">'+Math.round(c.shSqm).toLocaleString()+' sqm</div><div class="pdlbl">Net Sheathing</div></div>';
   const rows = [
     ['CFS Steel (landed)', fmt(c.stC), fmt(c.stC)],
-    ['Decking ('+sv('dkType')+')', fmt(c.dkC), fmt(c.dkC)],
+    ['Metal Deck ('+sv('dkType')+')', fmt(c.dkC), fmt(c.dkC)],
+    ['Concrete Topping', fmt(c.tpC), fmt(c.tpC)],
+    ['Reinforcement', fmt(c.rfC), fmt(c.rfC)],
     ['Sheathing ('+sv('shType')+')', fmt(c.shC), fmt(c.shC)],
     ['Local Logistics', fmt(c.shpC), fmt(c.shpC)],
     ['Equipment', fmt(c.eqC), fmt(c.eqC)],
@@ -1016,7 +1032,7 @@ function doProposal(){
     'Prefabricated cold-formed steel (CFS) structural framing system',
     'Factory-fabricated wall, floor, and roof panel assemblies',
     'CFS steel material, fabrication, and assembly (landed cost incl. import duty + freight)',
-    sv('dkType') + ' decking system',
+    sv('dkType') + ' floor system — metal deck, concrete topping, and reinforcement',
     sv('shType') + ' exterior sheathing',
     'Local logistics and site delivery',
     'Engineering coordination support with locally registered PE',
