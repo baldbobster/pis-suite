@@ -150,6 +150,15 @@
   #printDoc .pnote{font-size:8.5pt;color:#444;line-height:1.5;margin-top:8px;padding:8px 10px;background:#fafafa;border-left:3px solid var(--pc);border-radius:0 4px 4px 0}
   #printDoc .pdisc{margin-top:10px;padding:7px 10px;border:1px solid var(--pc-b);border-left:3px solid var(--pc);background:#f9f9f9;font-size:8pt;color:#666;line-height:1.5}
   #printDoc .pfoot{display:flex;justify-content:space-between;font-size:8pt;color:#aaa;margin-top:10px;padding-top:5px;border-top:1px solid #ddd}
+  .kenyanav{background:#0E1424;padding:6px 24px;display:flex;gap:4px;align-items:center;overflow-x:auto;border-bottom:1px solid rgba(34,211,219,.15);font-size:11px}
+  .kenyanav a,.kenyanav span.nvdis{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:6px;text-decoration:none;color:#9aa3b2;white-space:nowrap;transition:all .15s;font-weight:500}
+  .kenyanav a:hover{color:var(--pc);background:rgba(34,211,219,.08)}
+  .kenyanav a.current{color:var(--bg-dark);background:var(--pc);font-weight:600}
+  .kenyanav span.nvdis{color:#5a6378;cursor:not-allowed}
+  .kenyanav .nvnum{font-size:9px;color:rgba(255,255,255,.4);font-weight:400;letter-spacing:.05em}
+  .kenyanav a.current .nvnum{color:rgba(10,14,26,.55)}
+  .kenyanav .nvsoon{font-size:8px;text-transform:uppercase;letter-spacing:.08em;color:#5a6378;margin-left:3px;font-style:italic}
+  @media print{.kenyanav{display:none!important}}
 </style>
 </head>
 <body>
@@ -236,6 +245,16 @@
   <div><span class="logo">PREFAB <span class="sub">Consulting Services</span></span></div>
   <div class="hright">Kenya · CFS vs. RC+CMU Comparison · Preliminary Estimates Only</div>
 </header>
+
+<nav class="kenyanav">
+  <a href="index.html"><span class="nvnum">1</span> Budget Builder</a>
+  <a href="rccmu_index.html" class="current"><span class="nvnum">2</span> RC+CMU Comparison</a>
+  <span class="nvdis"><span class="nvnum">3</span> Soft Cost Savings<span class="nvsoon">soon</span></span>
+  <span class="nvdis"><span class="nvnum">4</span> Trade Savings<span class="nvsoon">soon</span></span>
+  <span class="nvdis"><span class="nvnum">5</span> Frame Elimination<span class="nvsoon">soon</span></span>
+  <span class="nvdis"><span class="nvnum">6</span> Summary<span class="nvsoon">soon</span></span>
+  <span class="nvdis"><span class="nvnum">7</span> Pro Forma<span class="nvsoon">soon</span></span>
+</nav>
 
 <div class="main">
 <div class="card">
