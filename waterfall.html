@@ -246,10 +246,30 @@ nav a:hover,nav a.active{border-color:#3DB832;color:#3DB832}
   <!-- SECTION 3 - Scenario Output  (built in Steps 4-5) -->
   <div class="sec-head"><div class="sec-num">3</div><div class="sec-title">Without CFS vs. With CFS &mdash; Sponsor Take-Home</div></div>
   <div class="input-card" id="outputCard">
-    <div class="card-title">Two-scenario output + amplification delta</div>
-    <p style="font-size:12px;color:#888;line-height:1.6;margin:4px 0">
-      Two side-by-side scenario cards (sponsor take-home, equity return, promote earned, LP IRR, GP IRR, exit tier) plus the delta panel with the amplification ratio. <em>Powered by the IRR solver + 3-tier waterfall engine in Steps 4-5.</em>
-    </p>
+    <div class="card-title">Sponsor Outcome &mdash; Without CFS vs. With CFS</div>
+    <div class="dscr-grid">
+      <div class="dscr-panel" style="border-top:3px solid #999">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#888;margin-bottom:8px">Without CFS &mdash; Wood <span id="oExitWo" style="float:right;font-weight:700;color:#999"></span></div>
+        <div class="noi-row"><span class="noi-lbl">Sponsor Take-Home</span><span class="noi-val" id="oSponWo">&mdash;</span></div>
+        <div class="noi-row"><span class="noi-lbl">Promote Earned</span><span class="noi-val" id="oPromWo">&mdash;</span></div>
+        <div class="noi-row"><span class="noi-lbl">GP Equity Multiple</span><span class="noi-val" id="oGpMultWo">&mdash;</span></div>
+        <div class="noi-row"><span class="noi-lbl">LP IRR</span><span class="noi-val" id="oLpIrrWo">&mdash;</span></div>
+        <div class="noi-row final"><span class="noi-lbl">GP IRR</span><span class="noi-val" id="oGpIrrWo" style="color:#999">&mdash;</span></div>
+      </div>
+      <div class="dscr-panel" style="border-top:3px solid #3DB832">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#3DB832;margin-bottom:8px">With CFS <span id="oExitCfs" style="float:right;font-weight:700"></span></div>
+        <div class="noi-row"><span class="noi-lbl">Sponsor Take-Home</span><span class="noi-val" id="oSponCfs">&mdash;</span></div>
+        <div class="noi-row"><span class="noi-lbl">Promote Earned</span><span class="noi-val" id="oPromCfs">&mdash;</span></div>
+        <div class="noi-row"><span class="noi-lbl">GP Equity Multiple</span><span class="noi-val" id="oGpMultCfs">&mdash;</span></div>
+        <div class="noi-row"><span class="noi-lbl">LP IRR</span><span class="noi-val" id="oLpIrrCfs">&mdash;</span></div>
+        <div class="noi-row final"><span class="noi-lbl">GP IRR</span><span class="noi-val" id="oGpIrrCfs">&mdash;</span></div>
+      </div>
+    </div>
+    <div id="ampHero" style="margin-top:14px;border:2px solid #3DB832;border-radius:10px;padding:16px;text-align:center;background:#f0faf0">
+      <div style="font-size:38px;font-weight:800;color:#3DB832;line-height:1" id="ampVal">&mdash;</div>
+      <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-top:6px">Return Amplification &mdash; % uplift in sponsor take-home per % uplift in asset value</div>
+      <div style="margin-top:10px;font-size:12px;color:#555" id="ampSub"></div>
+    </div>
   </div>
 
   <div style="text-align:center;margin:8px 0 4px;display:flex;justify-content:center;gap:12px">
@@ -284,10 +304,7 @@ function crRestore(){try{var raw=localStorage.getItem(SK_PER);if(raw){var d=JSON
 
 /* ---- calc(): engine lands in Step 4. Stub writes the output key so
         downstream modules never read undefined. ---- */
-function calc(){
-  try{localStorage.setItem(SK_WF,JSON.stringify({_page:'waterfall',_ts:Date.now()}));}catch(e){}
-  updatePrint();
-}
+function calc(){ renderOutputs(); try{localStorage.setItem(SK_WF,JSON.stringify(_wfPayload()));}catch(e){} }
 
 /* ---- Step 2: deal-structure pull (Option A counterfactual) ---- */
 function num(v){var n=parseFloat(v);return isNaN(n)?0:n;}
@@ -333,7 +350,7 @@ function loadFromPIS(force){
   }
   if(b) b.innerHTML='<span style="color:#3DB832">&#10003; Deal structure auto-pulled from Developer Pro Forma'+((wood&&bud)?' + Wood Comparison + Budget Builder':'')+'. Edit any field to override.</span>';
 }
-function onDealInput(){ crPersist(); updatePrint(); }
+function onDealInput(){ crPersist(); calc(); }
 function refreshData(){
   loadFromPIS(true); calc();
   var b=document.getElementById('pisBanner');
@@ -355,19 +372,77 @@ function setAdjust(open){
   else{ if(btn){btn.textContent='Adjust Assumptions';btn.style.background='#fff';btn.style.color=ACCENT;btn.style.borderColor='#ccc';}
     if(bd){bd.textContent='Standard Benchmark';bd.style.background='';bd.style.borderColor='';bd.style.color='';} }
 }
-function toggleAdjust(){ setAdjust(document.getElementById('advOpen').value!=='1'); crPersist(); }
+function toggleAdjust(){ setAdjust(document.getElementById('advOpen').value!=='1'); crPersist(); calc(); }
 function setTier3(on){
   var f=document.getElementById('t3on');if(f)f.value=on?'1':'0';
   var row=document.getElementById('tier3Row');if(row)row.style.opacity=on?'1':'.45';
   var btn=document.getElementById('btnT3');
   if(btn){btn.textContent=on?'Tier 3: ON':'Tier 3: OFF';btn.style.background=on?ACCENT:'#fff';btn.style.color=on?'#fff':'#888';btn.style.borderColor=on?ACCENT:'#ccc';}
 }
-function toggleTier3(){ setTier3(document.getElementById('t3on').value!=='1'); crPersist(); }
-function onBenchInput(){ updateSplits(); crPersist(); }
+function toggleTier3(){ setTier3(document.getElementById('t3on').value!=='1'); crPersist(); calc(); }
+function onBenchInput(){ updateSplits(); crPersist(); calc(); }
 function applyToggleUI(){
   var a=document.getElementById('advOpen'), t=document.getElementById('t3on');
   setAdjust(a && a.value==='1'); setTier3(t && t.value==='1'); updateSplits();
 }
+
+/* ---- Step 4: IRR solver + European multi-tier promote waterfall ---- */
+function npv(cf,r){var s=0;for(var t=0;t<cf.length;t++)s+=cf[t]/Math.pow(1+r,t);return s;}
+function irr(cf,guess){
+  var r=(guess==null?0.1:guess);
+  for(var i=0;i<100;i++){var f=0,df=0;for(var t=0;t<cf.length;t++){var d=Math.pow(1+r,t);f+=cf[t]/d;df+=-t*cf[t]/(d*(1+r));}
+    if(Math.abs(f)<1e-4)return r; if(df===0)break; var rn=r-f/df; if(!isFinite(rn))break; if(Math.abs(rn-r)<1e-7)return rn; r=rn; if(r<=-0.999)r=-0.9;}
+  var lo=-0.9,hi=10,flo=npv(cf,lo); if(flo===0)return lo;
+  for(var j=0;j<300;j++){var mid=(lo+hi)/2,fm=npv(cf,mid); if(Math.abs(fm)<1e-5)return mid; if((flo<0)!==(fm<0))hi=mid; else{lo=mid;flo=fm;}}
+  return (lo+hi)/2;
+}
+function computeWaterfall(s){
+  var E=s.equity, lp=s.lpPct/100, gp=1-lp, Clp=E*lp, Cgp=E*gp, N=Math.max(1,Math.round(s.hold));
+  var loan=Math.max(0,s.cost-E), netSale=s.dispo-loan, op=s.cumCF/N;
+  var dist=[]; for(var t=1;t<=N;t++) dist.push(op+(t===N?netSale:0));
+  var segs=[{rate:s.pref/100,lpShare:lp},{rate:s.t2h/100,lpShare:s.t1lp/100}], finalShare;
+  if(s.t3on){segs.push({rate:s.t3h/100,lpShare:s.t2lp/100}); finalShare=s.t3lp/100;} else finalShare=s.t2lp/100;
+  var bal=segs.map(function(){return Clp;}), LP=[], GP=[];
+  for(var y=0;y<N;y++){
+    for(var k=0;k<segs.length;k++) bal[k]*=(1+segs[k].rate);
+    var C=dist[y], lpY=0, gpY=0;
+    for(var k=0;k<segs.length && C>1e-6;k++){
+      if(bal[k]<=1e-6) continue;
+      var share=segs[k].lpShare, take=Math.min(C,bal[k]/share), lpPortion=take*share;
+      lpY+=lpPortion; gpY+=take*(1-share); for(var m=0;m<segs.length;m++) bal[m]-=lpPortion; C-=take;
+    }
+    if(C>1e-6){ lpY+=C*finalShare; gpY+=C*(1-finalShare); for(var m=0;m<segs.length;m++) bal[m]-=C*finalShare; C=0; }
+    LP.push(lpY); GP.push(gpY);
+  }
+  var lpCF=[-Clp].concat(LP), gpCF=[-Cgp].concat(GP);
+  var Dtot=dist.reduce(function(a,b){return a+b;},0), lpTot=LP.reduce(function(a,b){return a+b;},0), gpTot=GP.reduce(function(a,b){return a+b;},0);
+  var cleared=bal.map(function(b){return b<=1e-3;}), tier;
+  if(!cleared[0]) tier='Below Pref'; else if(!cleared[1]) tier='Tier 1';
+  else if(s.t3on && !cleared[2]) tier='Tier 2'; else tier=s.t3on?'Tier 3':'Tier 2';
+  return {Clp:Clp,Cgp:Cgp,loan:loan,netSale:netSale,Dtot:Dtot,lpProceeds:lpTot,gpProceeds:gpTot,
+    lpIRR:irr(lpCF,s.pref/100), gpIRR:irr(gpCF,s.pref/100), lpMult:lpTot/Clp, gpMult:gpTot/Cgp,
+    sponsorProfit:gpTot-Cgp, promote:gpTot-gp*Dtot, exitTier:tier};
+}
+/* ---- Step 5: two-scenario render + amplification ---- */
+function fmtPct(x){return (x*100).toFixed(1)+'%';}
+var _resCfs=null,_resWo=null,_amp=null;
+function scenarioFrom(p){return {equity:gv(p+'_equity'),cost:gv(p+'_cost'),dispo:gv(p+'_dispo'),cumCF:gv(p+'_cf'),
+  hold:gv('holdYrs')||1, lpPct:gv('lpSplit')||90, pref:gv('pref'), t1lp:gv('t1lp'), t2h:gv('t2h'), t2lp:gv('t2lp'),
+  t3h:gv('t3h'), t3lp:gv('t3lp'), t3on:(document.getElementById('t3on')&&document.getElementById('t3on').value==='1')};}
+function renderOutputs(){
+  var cfs=scenarioFrom('wc'), wo=scenarioFrom('wo');
+  if(!(cfs.equity>0 && cfs.dispo>0)){ _resCfs=_resWo=_amp=null; updatePrint(); return; }
+  var rc=computeWaterfall(cfs), rw=computeWaterfall(wo); _resCfs=rc; _resWo=rw;
+  ss('oSponWo',fmtM(rw.sponsorProfit)); ss('oPromWo',fmtM(rw.promote)); ss('oGpMultWo',rw.gpMult.toFixed(2)+'x'); ss('oLpIrrWo',fmtPct(rw.lpIRR)); ss('oGpIrrWo',fmtPct(rw.gpIRR)); ss('oExitWo',rw.exitTier);
+  ss('oSponCfs',fmtM(rc.sponsorProfit)); ss('oPromCfs',fmtM(rc.promote)); ss('oGpMultCfs',rc.gpMult.toFixed(2)+'x'); ss('oLpIrrCfs',fmtPct(rc.lpIRR)); ss('oGpIrrCfs',fmtPct(rc.gpIRR)); ss('oExitCfs',rc.exitTier);
+  var dSpon=rc.sponsorProfit-rw.sponsorProfit, dDispo=cfs.dispo-wo.dispo;
+  var amp=(rw.sponsorProfit>0 && wo.dispo>0 && dDispo!==0)?(dSpon/rw.sponsorProfit)/(dDispo/wo.dispo):null;
+  _amp={dSpon:dSpon,dDispo:dDispo,amp:amp};
+  ss('ampVal', amp!=null? amp.toFixed(2)+'×':'—');
+  ss('ampSub','Sponsor take-home '+(dSpon>=0?'+':'−')+fmtM(Math.abs(dSpon))+' on '+(dDispo>=0?'+':'−')+fmtM(Math.abs(dDispo))+' of asset value — GP IRR '+fmtPct(rw.gpIRR)+' → '+fmtPct(rc.gpIRR));
+  updatePrint();
+}
+function _wfPayload(){return {_page:'waterfall',_ts:Date.now(),amp:_amp?_amp.amp:null,sponCfs:_resCfs?_resCfs.sponsorProfit:null,sponWo:_resWo?_resWo.sponsorProfit:null,gpIrrCfs:_resCfs?_resCfs.gpIRR:null,exitCfs:_resCfs?_resCfs.exitTier:null};}
 
 /* ---- gate ---- */
 function checkPW(){
@@ -383,6 +458,14 @@ function updatePrint(){
     ss('pProjName', sv('projName')||'Waterfall & Promote Analysis');
     ss('pClient', sv('client'));
     ss('pYearP','(c) '+new Date().getFullYear()+' Global Haven Ventures / Prefab Consulting LLC');
+    var pc=document.getElementById('pCalloutP');
+    if(pc){
+      if(_resCfs&&_resWo&&_amp){
+        pc.innerHTML='<b>Without CFS:</b> sponsor take-home '+fmtM(_resWo.sponsorProfit)+', GP IRR '+fmtPct(_resWo.gpIRR)+', exit '+_resWo.exitTier+'. '
+          +'<b>With CFS:</b> sponsor take-home '+fmtM(_resCfs.sponsorProfit)+', GP IRR '+fmtPct(_resCfs.gpIRR)+', exit '+_resCfs.exitTier+'. '
+          +'<b>Return amplification: '+(_amp.amp!=null?_amp.amp.toFixed(2)+'×':'n/a')+'</b> — sponsor take-home '+(_amp.dSpon>=0?'+':'−')+fmtM(Math.abs(_amp.dSpon))+' on '+(_amp.dDispo>=0?'+':'−')+fmtM(Math.abs(_amp.dDispo))+' of asset value.';
+      } else { pc.innerHTML='Enter deal structure (auto-pulls from the Developer Pro Forma) to generate the waterfall.'; }
+    }
   }catch(e){}
 }
 function doPrint(){updatePrint();window.print();}
