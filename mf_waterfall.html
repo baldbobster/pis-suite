@@ -243,11 +243,33 @@ nav a:hover,nav a.active{border-color:#2D9CDB;color:#2D9CDB}
 
   <!-- SECTION 1 - Deal Structure  (built in Step 2) -->
   <div class="sec-head"><div class="sec-num">1</div><div class="sec-title">Deal Structure</div></div>
-  <div class="input-card" id="dealStructureCard">
-    <div class="card-title">Pulled from Developer Pro Forma &mdash; editable</div>
-    <p style="font-size:12px;color:#888;line-height:1.6;margin:4px 0">
-      Total project cost, equity requirement, hold period, disposition value (With CFS), and cumulative cash flow will auto-pull here from the Developer Pro Forma, with the &ldquo;Without CFS&rdquo; disposition auto-pulled from Wood Comparison (manual override). <em>Wiring lands in Step 2 after the counterfactual math is signed off.</em>
-    </p>
+  <div id="dealStructureCard">
+    <div class="input-card">
+      <div class="card-title">Deal Identity</div>
+      <div class="input-grid g4">
+        <div class="field"><label>Project Name</label><input id="projName" type="text" placeholder="Project name" oninput="onDealInput()"></div>
+        <div class="field"><label>Client / Sponsor</label><input id="client" type="text" placeholder="Sponsor" oninput="onDealInput()"></div>
+        <div class="field"><label>Hold Period (yrs) <span class="auto-tag" id="tag_hold" style="display:none">Pulled</span></label><input id="holdYrs" type="number" step="1" oninput="onDealInput()"></div>
+        <div class="field"><label>LP Loan-to-Cost (%)</label><input id="ltc" type="number" step="1" oninput="onDealInput()"></div>
+      </div>
+    </div>
+    <div class="input-grid g2" style="margin-top:12px">
+      <div class="input-card">
+        <div class="card-title">With CFS <span class="auto-tag" id="tag_wc" style="display:none">Pulled from Pro Forma</span></div>
+        <div class="field"><label>Total Project Cost ($)</label><input id="wc_cost" type="number" oninput="onDealInput()"></div>
+        <div class="field"><label>Equity Requirement ($)</label><input id="wc_equity" type="number" oninput="onDealInput()"></div>
+        <div class="field"><label>Disposition Value ($)</label><input id="wc_dispo" type="number" oninput="onDealInput()"></div>
+        <div class="field"><label>Cumulative Cash Flow over hold ($)</label><input id="wc_cf" type="number" oninput="onDealInput()"></div>
+      </div>
+      <div class="input-card">
+        <div class="card-title">Without CFS &mdash; Wood <span class="auto-tag" id="tag_wo" style="display:none">Counterfactual</span></div>
+        <div class="field"><label>Total Project Cost ($)</label><input id="wo_cost" type="number" oninput="onDealInput()"></div>
+        <div class="field"><label>Equity Requirement ($)</label><input id="wo_equity" type="number" oninput="onDealInput()"></div>
+        <div class="field"><label>Disposition Value ($)</label><input id="wo_dispo" type="number" oninput="onDealInput()"></div>
+        <div class="field"><label>Cumulative Cash Flow over hold ($)</label><input id="wo_cf" type="number" oninput="onDealInput()"></div>
+      </div>
+    </div>
+    <div id="dealNote" style="margin-top:10px;color:#888;font-size:11px;line-height:1.6"></div>
   </div>
 
   <!-- SECTION 2 - Waterfall Structure  (built in Step 3) -->
@@ -283,7 +305,7 @@ var ACCENT='#2D9CDB', AUTH='mf_auth', PW='MF2026';
 var SK_WF='mf-pis-waterfall';      // cross-module output this page writes
 var SK_PER='mf-waterfall-v1';       // this page's own form persistence
 /* ---- Upstream keys consumed in Step 2 ---- */
-var SK_CAP='mf-pis-proforma', SK_CAP_FORM='mf-proforma-v1', SK_WOOD='mf-pis-wood';
+var SK_CAP='mf-pis-proforma', SK_CAP_FORM='mf-proforma-v1', SK_WOOD='mf-pis-wood', SK_BUD='mf-pis-budget';
 
 /* ---- helpers (same signatures as caprate) ---- */
 function fmt(n){return '$'+Math.round(n).toLocaleString();}
@@ -295,7 +317,7 @@ function ss(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
 function si(id,v){var e=document.getElementById(id);if(e)e.innerHTML=v;}
 
 /* ---- CR_FIELDS placeholder (populated in Steps 2-3) ---- */
-var CR_FIELDS=[];
+var CR_FIELDS=['projName','client','holdYrs','ltc','wc_cost','wc_equity','wc_dispo','wc_cf','wo_cost','wo_equity','wo_dispo','wo_cf'];
 function crPersist(){try{var d={_ts:Date.now()};CR_FIELDS.forEach(function(f){var e=document.getElementById(f);if(e)d[f]=e.value;});localStorage.setItem(SK_PER,JSON.stringify(d));}catch(e){}}
 function crRestore(){try{var raw=localStorage.getItem(SK_PER);if(!raw)return;var d=JSON.parse(raw);CR_FIELDS.forEach(function(f){var e=document.getElementById(f);if(e&&d[f]!==undefined)e.value=d[f];});}catch(e){}}
 
@@ -306,18 +328,53 @@ function calc(){
   updatePrint();
 }
 
-/* ---- data pull: wired in Step 2 ---- */
-function loadFromPIS(){
+/* ---- Step 2: deal-structure pull (Option A counterfactual) ---- */
+function num(v){var n=parseFloat(v);return isNaN(n)?0:n;}
+function readJSON(k){try{var r=localStorage.getItem(k);return r?JSON.parse(r):null;}catch(e){return null;}}
+function setField(id,val,force){var el=document.getElementById(id);if(!el)return;var empty=(el.value===''||parseFloat(el.value)===0);if(force||empty){el.value=(typeof val==='number')?Math.round(val):(val||'');}}
+function showTag(id){var t=document.getElementById(id);if(t)t.style.display='inline-block';}
+function fmtSigned(n){return (n>=0?'+ ':'\u2212 ')+fmt(Math.abs(n));}
+
+function loadFromPIS(force){
+  var cap=readJSON(SK_CAP), wood=readJSON(SK_WOOD), bud=readJSON(SK_BUD);
   var b=document.getElementById('pisBanner');
-  var hasCap = !!localStorage.getItem(SK_CAP_FORM) || !!localStorage.getItem(SK_CAP);
-  if(b){
-    b.innerHTML = hasCap
-      ? '<span style="color:#2D9CDB">Developer Pro Forma detected - deal structure auto-pull wires in Step 2.</span>'
-      : '<span style="color:#aaa">Run the Developer Pro Forma first to auto-populate deal structure.</span>';
+  if(!cap){
+    if(b) b.innerHTML='<span style="color:#aaa">Run the Developer Pro Forma first to auto-populate deal structure. All fields below are editable.</span>';
+    return;
   }
+  var holdY=num(cap.holdYrs)||7, ltc=num(cap.ltc)||65;
+  setField('holdYrs',holdY,force); setField('ltc',ltc,force);
+  setField('projName',cap.projName||(wood&&wood.projName)||(bud&&bud.projName)||'',force);
+  setField('client',cap.client||(wood&&wood.client)||(bud&&bud.client)||'',force);
+  var costCFS=num(cap.totalCost), equityCFS=num(cap.equity), annDS=num(cap.annDS);
+  var dispoCFS=num(cap.dispoCfs), dispoWood=num(cap.dispoWood);
+  var cfCFS=(num(cap.cfsNoi)-annDS)*holdY;
+  setField('wc_cost',costCFS,force); setField('wc_equity',equityCFS,force);
+  setField('wc_dispo',dispoCFS,force); setField('wc_cf',cfCFS,force);
+  var woodMid=wood?((num(wood.mL)+num(wood.mH))/2):0;
+  var cfsMid =bud ?((num(bud.mL)+num(bud.mH))/2):0;
+  var framingDelta=(woodMid&&cfsMid)?(woodMid-cfsMid):0;
+  var costWood=costCFS+framingDelta;
+  var equityWood=costWood*(1-ltc/100);
+  var annDSWood=costCFS>0?annDS*(costWood/costCFS):annDS;
+  var cfWood=(num(cap.noi)-annDSWood)*holdY;
+  setField('wo_cost',costWood,force); setField('wo_equity',equityWood,force);
+  setField('wo_dispo',dispoWood,force); setField('wo_cf',cfWood,force);
+  showTag('tag_hold');showTag('tag_wc');showTag('tag_wo');
+  var note=document.getElementById('dealNote');
+  if(note){
+    var parts=['<b style="color:#2D9CDB">Auto-pulled from Developer Pro Forma.</b>'];
+    if(wood&&bud){parts.push('Without-CFS project cost = CFS cost '+fmtSigned(framingDelta)+' framing delta (wood '+fmt(woodMid)+' \u2212 CFS '+fmt(cfsMid)+', marked-up midpoints from Wood Comparison &amp; Budget Builder).');}
+    else{parts.push('Run <b>Wood Comparison</b> and <b>CFS Budget Builder</b> to auto-derive the Without-CFS project cost; until then it mirrors CFS cost \u2014 override manually.');}
+    parts.push('Dispositions use Option A: With-CFS = CFS NOI \u00f7 compressed cap; Without-CFS = base NOI \u00f7 wood cap.');
+    parts.push('Cumulative cash flow defaults to (NOI \u2212 annual debt service) \u00d7 hold. All fields editable \u2014 overrides stick.');
+    note.innerHTML=parts.join(' ');
+  }
+  if(b) b.innerHTML='<span style="color:#2D9CDB">&#10003; Deal structure auto-pulled from Developer Pro Forma'+((wood&&bud)?' + Wood Comparison + Budget Builder':'')+'. Edit any field to override.</span>';
 }
+function onDealInput(){ crPersist(); updatePrint(); }
 function refreshData(){
-  loadFromPIS();calc();
+  loadFromPIS(true); calc();
   var b=document.getElementById('pisBanner');
   if(b){var o=b.style.background;b.style.background='#F0F7FD';setTimeout(function(){b.style.background=o;},600);}
 }
@@ -344,7 +401,8 @@ function doPrint(){updatePrint();window.print();}
 function resetForm(){
   if(!confirm('Reset all form inputs to defaults? This will clear your saved entries.'))return;
   try{localStorage.removeItem(SK_PER);}catch(e){}
-  loadFromPIS();calc();
+  CR_FIELDS.forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  loadFromPIS(true);calc();
 }
 
 /* ---- init (mirrors caprate load flow) ---- */

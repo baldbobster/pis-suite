@@ -880,7 +880,7 @@ function calc(){
     banner.style.display = 'none';
   }
 
-  try{localStorage.setItem(SK_CAP,JSON.stringify({_page:'proforma',_ts:Date.now(),noi:noi,cfsNoi:cfsNoi,dscrWood:dW,dscrCfs:dC,totalAdv:totalAdv}));}catch(e){}
+  try{localStorage.setItem(SK_CAP,JSON.stringify({_page:'proforma',_ts:Date.now(),noi:noi,cfsNoi:cfsNoi,dscrWood:dW,dscrCfs:dC,totalAdv:totalAdv,projName:sv('projName'),client:sv('client'),totalCost:totalCost,equity:equity,loanAmt:loanAmt,ltc:gv('ltc'),holdYrs:holdYrs,annDS:annDS,woodCap:gv('woodCap'),cfsCap:+(cfsCapPct*100).toFixed(2),dispoWood:woodAssetVal,dispoCfs:cfsAssetVal}));}catch(e){}
   crPersist();updatePrint();
 }
 
