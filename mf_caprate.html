@@ -343,7 +343,7 @@ nav a:hover,nav a.active{border-color:#2D9CDB;color:#2D9CDB}
 <div class="field"><label>Project Name</label><input type="text" id="projName" placeholder="Project name"></div>
 <div class="field"><label>Client / Developer</label><input type="text" id="client" placeholder="Developer name"></div>
 <div class="field"><label>Product Type</label>
-<select id="ptype" onchange="applyTypeDefaults();applyMarketBenchmarks();calc()">
+<select id="ptype" onchange="applyTypeDefaults(true);applyMarketBenchmarks();calc()">
 <option value="multifamily">Multifamily</option>
 <option value="hospitality">Hospitality</option>
 <option value="senior">Senior Living</option>
@@ -744,15 +744,15 @@ senior:{unitLabel:'Number of Units',unitShort:'units',rateLabel:'Avg Monthly Rat
 student:{unitLabel:'Number of Beds',unitShort:'beds',rateLabel:'Avg Monthly Rent / Bed ($)',rateHint:'Revenue = beds \u00d7 rent \u00d7 12 months',isDaily:false,expRatio:40,expHint:'Suggested 36-42% for purpose-built student housing.',occDefault:95,unitsDefault:200,rateDefault:900,constrMo:16,woodCap:6.25,bps:20,occLabel:'Occupancy Rate (%)'}
 };
 
-function applyTypeDefaults(){
+function applyTypeDefaults(force){
 var d=TD[sv('ptype')]||TD.multifamily,el;
 function se(id,v){el=document.getElementById(id);if(el)el.textContent=v;}
 se('unitsLabel',d.unitLabel);se('rateLabel',d.rateLabel);se('rateHint',d.rateHint);
 se('expHint',d.expHint);se('occLabel',d.occLabel||'Occupancy Rate (%)');
-el=document.getElementById('expRatio');if(el)el.value=d.expRatio;
-el=document.getElementById('constrMo');if(el)el.value=d.constrMo;
-el=document.getElementById('woodCap');if(el)el.value=d.woodCap.toFixed(2);
-el=document.getElementById('bps');if(el)el.value=d.bps;
+el=document.getElementById('expRatio');if(el&&(force||!el.value))el.value=d.expRatio;
+el=document.getElementById('constrMo');if(el&&(force||!el.value))el.value=d.constrMo;
+el=document.getElementById('woodCap');if(el&&(force||!el.value))el.value=d.woodCap.toFixed(2);
+el=document.getElementById('bps');if(el&&(force||!el.value))el.value=d.bps;
 }
 
 
@@ -764,7 +764,7 @@ if(bRaw){var b=JSON.parse(bRaw);
 // mH (framing high estimate) is NOT used for Total Project Cost — cost is driven by Hard Cost/SF x Gross SF
 if(b.projName){var pn=document.getElementById('projName');if(pn&&!pn.value)pn.value=b.projName;}
 if(b.client){var cl=document.getElementById('client');if(cl&&!cl.value)cl.value=b.client;}
-if(b.ptype){var pt=document.getElementById('ptype');if(pt){pt.value=b.ptype;applyTypeDefaults();}}
+if(b.ptype){var pt=document.getElementById('ptype');if(pt){if(!localStorage.getItem(SK_PER)){pt.value=b.ptype;applyTypeDefaults(true);}else{applyTypeDefaults();}}}
 loaded.push('Budget Builder'); // data exists in localStorage
 }
 var sRaw=localStorage.getItem(SK_SAV);
