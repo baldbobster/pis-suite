@@ -275,11 +275,38 @@ nav a:hover,nav a.active{border-color:#2D9CDB;color:#2D9CDB}
   <!-- SECTION 2 - Waterfall Structure  (built in Step 3) -->
   <div class="sec-head"><div class="sec-num">2</div><div class="sec-title">Waterfall Structure</div></div>
   <div class="input-card" id="waterfallStructureCard">
-    <div class="card-title">Benchmark assumptions <span class="auto-tag" id="benchBadge">Standard Benchmark</span></div>
-    <p style="font-size:12px;color:#888;line-height:1.6;margin:4px 0">
-      LP/GP split, preferred return, and the three promote tiers (hurdles + splits) will live here behind the <strong>Adjust Assumptions</strong> toggle &mdash; read-only by default, per the Wood Comparison pattern. <em>Built in Step 3.</em>
-    </p>
-    <button class="print-btn" id="btnAdj" style="opacity:.4;pointer-events:none" disabled>Adjust Assumptions</button>
+    <input type="hidden" id="advOpen" value="0"><input type="hidden" id="t3on" value="0">
+    <div class="card-title" style="display:flex;align-items:center;justify-content:space-between">
+      <span>Benchmark Assumptions <span class="auto-tag" id="benchBadge">Standard Benchmark</span></span>
+      <button id="btnAdj" onclick="toggleAdjust()" style="height:28px;padding:0 14px;background:#fff;border:1px solid #ccc;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer">Adjust Assumptions</button>
+    </div>
+    <p style="font-size:11px;color:#999;margin:2px 0 12px">Institutional-standard LP/GP promote structure. Read-only by default &mdash; click <b>Adjust Assumptions</b> to tailor to a specific partnership; the badge flips to <b>User-Adjusted</b>.</p>
+
+    <div class="input-grid g3">
+      <div class="field"><label>LP Equity Split (%)</label><input id="lpSplit" type="number" value="90" step="1" readonly oninput="onBenchInput()"><div class="hint">GP: <span id="gpSplitV">10%</span></div></div>
+      <div class="field"><label>Preferred Return (% IRR)</label><input id="pref" type="number" value="8" step="0.5" readonly oninput="onBenchInput()"><div class="hint">Return of capital + pref paid before any promote</div></div>
+      <div class="field"><label>Catch-Up Provision</label><input type="text" value="Off (v2)" readonly style="background:#f5f5f5;color:#aaa"><div class="hint">Deferred to v2</div></div>
+    </div>
+
+    <div style="margin-top:12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#888">Promote Tiers</div>
+    <div class="input-grid g2" style="margin-top:6px">
+      <div class="field"><label>Tier 1 Hurdle (% IRR)</label><input id="t1h" type="number" value="8" step="0.5" readonly oninput="onBenchInput()"><div class="hint">Typically equals the preferred return</div></div>
+      <div class="field"><label>Tier 1 LP Split (%)</label><input id="t1lp" type="number" value="70" step="1" readonly oninput="onBenchInput()"><div class="hint">GP promote: <span id="t1gpV">30%</span></div></div>
+      <div class="field"><label>Tier 2 Hurdle (% IRR)</label><input id="t2h" type="number" value="15" step="0.5" readonly oninput="onBenchInput()"></div>
+      <div class="field"><label>Tier 2 LP Split (%)</label><input id="t2lp" type="number" value="50" step="1" readonly oninput="onBenchInput()"><div class="hint">GP promote: <span id="t2gpV">50%</span></div></div>
+    </div>
+
+    <div id="tier3Row" style="margin-top:12px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap">
+        <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#888">Tier 3 (optional)</span>
+        <button id="btnT3" onclick="toggleTier3()" style="height:24px;padding:0 12px;background:#fff;border:1px solid #ccc;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer">Tier 3: OFF</button>
+        <span style="font-size:10px;color:#aaa">Enable for 3-tier deals; leave off for 2-tier</span>
+      </div>
+      <div class="input-grid g2">
+        <div class="field"><label>Tier 3 Hurdle (% IRR)</label><input id="t3h" type="number" value="20" step="0.5" readonly oninput="onBenchInput()"></div>
+        <div class="field"><label>Tier 3 LP Split (%)</label><input id="t3lp" type="number" value="40" step="1" readonly oninput="onBenchInput()"><div class="hint">GP promote: <span id="t3gpV">60%</span></div></div>
+      </div>
+    </div>
   </div>
 
   <!-- SECTION 3 - Scenario Output  (built in Steps 4-5) -->
@@ -317,9 +344,9 @@ function ss(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
 function si(id,v){var e=document.getElementById(id);if(e)e.innerHTML=v;}
 
 /* ---- CR_FIELDS placeholder (populated in Steps 2-3) ---- */
-var CR_FIELDS=['projName','client','holdYrs','ltc','wc_cost','wc_equity','wc_dispo','wc_cf','wo_cost','wo_equity','wo_dispo','wo_cf'];
+var CR_FIELDS=['projName','client','holdYrs','ltc','wc_cost','wc_equity','wc_dispo','wc_cf','wo_cost','wo_equity','wo_dispo','wo_cf','lpSplit','pref','t1h','t1lp','t2h','t2lp','t3h','t3lp','advOpen','t3on'];
 function crPersist(){try{var d={_ts:Date.now()};CR_FIELDS.forEach(function(f){var e=document.getElementById(f);if(e)d[f]=e.value;});localStorage.setItem(SK_PER,JSON.stringify(d));}catch(e){}}
-function crRestore(){try{var raw=localStorage.getItem(SK_PER);if(!raw)return;var d=JSON.parse(raw);CR_FIELDS.forEach(function(f){var e=document.getElementById(f);if(e&&d[f]!==undefined)e.value=d[f];});}catch(e){}}
+function crRestore(){try{var raw=localStorage.getItem(SK_PER);if(raw){var d=JSON.parse(raw);CR_FIELDS.forEach(function(f){var e=document.getElementById(f);if(e&&d[f]!==undefined)e.value=d[f];});}}catch(e){} try{applyToggleUI();}catch(e){} }
 
 /* ---- calc(): engine lands in Step 4. Stub writes the output key so
         downstream modules never read undefined. ---- */
@@ -377,6 +404,35 @@ function refreshData(){
   loadFromPIS(true); calc();
   var b=document.getElementById('pisBanner');
   if(b){var o=b.style.background;b.style.background='#F0F7FD';setTimeout(function(){b.style.background=o;},600);}
+}
+
+/* ---- Step 3: Waterfall Structure benchmarks + Adjust Assumptions ---- */
+var DEFAULT_FIELDS=['lpSplit','pref','t1h','t1lp','t2h','t2lp','t3h','t3lp'];
+function updateSplits(){
+  function gp(lpId,span){var el=document.getElementById(span);if(el)el.textContent=(100-gv(lpId))+'%';}
+  gp('lpSplit','gpSplitV');gp('t1lp','t1gpV');gp('t2lp','t2gpV');gp('t3lp','t3gpV');
+}
+function setAdjust(open){
+  var f=document.getElementById('advOpen');if(f)f.value=open?'1':'0';
+  DEFAULT_FIELDS.forEach(function(id){var el=document.getElementById(id);if(el){if(open)el.removeAttribute('readonly');else el.setAttribute('readonly','readonly');}});
+  var btn=document.getElementById('btnAdj'), bd=document.getElementById('benchBadge');
+  if(open){ if(btn){btn.textContent='Lock to Benchmark';btn.style.background=ACCENT;btn.style.color='#fff';btn.style.borderColor=ACCENT;}
+    if(bd){bd.textContent='User-Adjusted';bd.style.background='#fff5e6';bd.style.borderColor='#ffd699';bd.style.color='#cc7700';} }
+  else{ if(btn){btn.textContent='Adjust Assumptions';btn.style.background='#fff';btn.style.color=ACCENT;btn.style.borderColor='#ccc';}
+    if(bd){bd.textContent='Standard Benchmark';bd.style.background='';bd.style.borderColor='';bd.style.color='';} }
+}
+function toggleAdjust(){ setAdjust(document.getElementById('advOpen').value!=='1'); crPersist(); }
+function setTier3(on){
+  var f=document.getElementById('t3on');if(f)f.value=on?'1':'0';
+  var row=document.getElementById('tier3Row');if(row)row.style.opacity=on?'1':'.45';
+  var btn=document.getElementById('btnT3');
+  if(btn){btn.textContent=on?'Tier 3: ON':'Tier 3: OFF';btn.style.background=on?ACCENT:'#fff';btn.style.color=on?'#fff':'#888';btn.style.borderColor=on?ACCENT:'#ccc';}
+}
+function toggleTier3(){ setTier3(document.getElementById('t3on').value!=='1'); crPersist(); }
+function onBenchInput(){ updateSplits(); crPersist(); }
+function applyToggleUI(){
+  var a=document.getElementById('advOpen'), t=document.getElementById('t3on');
+  setAdjust(a && a.value==='1'); setTier3(t && t.value==='1'); updateSplits();
 }
 
 /* ---- gate ---- */
