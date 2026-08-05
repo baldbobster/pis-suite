@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mainefactured Framing — Waterfall &amp; Promote Analysis</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;background:#f5f5f5;color:#111;min-height:100vh}
+header{background:#111;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.logo{font-size:22px;font-weight:700;color:#2D9CDB}
+.logo span{color:#fff;font-size:12px;font-weight:400;margin-left:10px;opacity:.6;text-transform:uppercase;letter-spacing:.1em}
+nav{display:flex;flex-wrap:wrap;gap:6px}
+nav a{padding:5px 14px;border-radius:6px;border:0.5px solid #444;color:#aaa;font-size:11px;text-decoration:none;transition:all .2s}
+nav a:hover,nav a.active{border-color:#2D9CDB;color:#2D9CDB}
+.main{max-width:1160px;margin:0 auto;padding:20px}
+.banner-row{display:flex;gap:8px;align-items:stretch;margin-bottom:14px}
+#pisBanner{flex:1;background:#f5f5f5;border:1px solid #e0e0e0;border-radius:8px;padding:10px 14px;font-size:11px;line-height:1.8;min-height:38px;transition:all .3s}
+.sec-head{background:#111;border-radius:8px;padding:10px 18px;margin-bottom:12px;display:flex;align-items:center;gap:12px}
+.sec-num{width:28px;height:28px;border-radius:50%;background:#2D9CDB;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sec-title{font-size:15px;font-weight:700;color:#fff}
+.input-grid{display:grid;gap:12px;margin-bottom:12px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.input-card{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:16px}
+.card-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#555;border-bottom:2px solid #2D9CDB;padding-bottom:5px;margin-bottom:12px}
+.field{margin-bottom:10px}.field:last-child{margin-bottom:0}
+.field label{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.field input,.field select{width:100%;height:34px;padding:0 10px;font-size:13px;border:1px solid #ddd;border-radius:6px;outline:none;background:#fff;color:#111;transition:border .2s}
+.field input:focus,.field select:focus{border-color:#2D9CDB}
+.field input[readonly]{background:#f5f5f5;color:#555}
+.field .hint{font-size:10px;color:#aaa;margin-top:3px;line-height:1.4}
+.auto-tag{display:inline-block;background:#F0F7FD;border:1px solid #b8dcf0;color:#2D9CDB;font-size:9px;font-weight:700;padding:1px 6px;border-radius:3px;text-transform:uppercase}
+.noi-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f5f5f5;font-size:12px}
+.noi-row.final{border-bottom:none;font-weight:700;font-size:14px;padding-top:8px;border-top:2px solid #2D9CDB;margin-top:4px}
+.noi-row .noi-lbl{color:#555}.noi-row .noi-val{font-weight:600}
+.noi-row.final .noi-val{color:#2D9CDB;font-size:16px}
+.dscr-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.dscr-panel{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:16px}
+.dscr-panel.construction{border-top:3px solid #C47F00}
+.dscr-panel.stabilized{border-top:3px solid #2589b0}
+.dscr-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.carry-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}
+.carry-cell{background:#fff8f0;border:1px solid #ffe0b0;border-radius:6px;padding:10px;text-align:center}
+.carry-cell.savings{background:#F0F7FD;border-color:#b8dcf0}
+.carry-lbl{font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.carry-val{font-size:16px;font-weight:700;color:#C47F00}
+.carry-val.green{color:#2D9CDB}
+.dscr-table{width:100%;border-collapse:collapse;font-size:12px}
+.dscr-table th{padding:6px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;text-align:center}
+.dscr-table th.lbl{background:#f5f5f5;color:#555;text-align:left}
+.dscr-table th.wood{background:#fff3f3;color:#c00}
+.dscr-table th.cfs{background:#F0F7FD;color:#2D9CDB}
+.dscr-table td{padding:6px 10px;border-bottom:1px solid #f0f0f0;text-align:center}
+.dscr-table td:first-child{text-align:left;font-weight:500;color:#555;font-size:11px}
+.dscr-table tr.final-row td{font-weight:700;font-size:14px;padding-top:8px;border-top:2px solid #e0e0e0}
+.pass-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700}
+.pass-badge.pass{background:#F0F7FD;color:#2D9CDB;border:1px solid #b8dcf0}
+.pass-badge.fail{background:#fff3f3;color:#c00;border:1px solid #ffc0c0}
+.pass-badge.warn{background:#fff8f0;color:#C47F00;border:1px solid #ffe0b0}
+.tight-note{background:#fff8f0;border:1px solid #ffe0b0;border-left:3px solid #C47F00;border-radius:0 6px 6px 0;padding:10px 14px;font-size:11px;color:#555;line-height:1.6;margin-top:10px;display:none}
+.narr{font-size:11px;color:#555;line-height:1.6;margin-top:10px}
+.hero{background:#111;border-radius:10px;padding:24px;text-align:center;margin-bottom:12px}
+.hero-eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:#2D9CDB;margin-bottom:8px;font-weight:600}
+.hero-val{font-size:48px;font-weight:700;color:#2D9CDB;line-height:1}
+.hero-sub{font-size:11px;color:#666;margin-top:8px}
+.hero-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#222;border-radius:8px;overflow:hidden;margin-top:16px}
+.hero-cell{background:#1a1a1a;padding:12px;text-align:center}
+.hc-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:#555;margin-bottom:5px}
+.hc-val{font-size:18px;font-weight:700;color:#2D9CDB}.hc-sub{font-size:9px;color:#444;margin-top:3px}
+.output-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
+.out-panel{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:16px}
+.out-panel.n{border-top:3px solid #2589b0}.out-panel.c{border-top:3px solid #7b3db8}.out-panel.g{border-top:3px solid #2D9CDB}
+.out-name{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:12px}
+.out-lbl{font-size:9px;color:#aaa;margin-top:8px;margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em}
+.out-lbl:first-of-type{margin-top:0}
+.out-val{font-size:20px;font-weight:700}
+.out-val.b{color:#2589b0}.out-val.p{color:#7b3db8}.out-val.gr{color:#2D9CDB}
+.out-divider{border:none;border-top:1px solid #f0f0f0;margin:10px 0}
+.out-sub{font-size:10px;color:#aaa;margin-top:3px;line-height:1.4}
+.sens-card{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:16px;margin-bottom:12px}
+.sens-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+.sens-table th{background:#111;color:#2D9CDB;font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:7px 10px;text-align:center;font-weight:700}
+.sens-table th:first-child{text-align:left}
+.sens-table td{padding:6px 10px;border-bottom:1px solid #f0f0f0;text-align:center}
+.sens-table td:first-child{text-align:left;font-weight:600;color:#333}
+.sens-table tr.hl td{background:#F0F7FD;font-weight:700;color:#2D9CDB}
+.callout{background:#F0F7FD;border:1px solid #b8dcf0;border-left:4px solid #2D9CDB;border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:12px;font-size:12px;color:#333;line-height:1.7}
+.callout-title{font-size:12px;font-weight:700;color:#2D9CDB;margin-bottom:6px}
+.print-btn{height:38px;padding:0 32px;background:#2D9CDB;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;letter-spacing:.04em}
+.print-btn:hover{background:#35a82b}
+.disc{font-size:10px;color:#aaa;text-align:center;line-height:1.5;padding:0 20px;margin-top:6px}
+.divider{border:none;border-top:2px solid #e5e5e5;margin:20px 0}
+#printDoc{display:none}
+@media print{header,.main,#gate{display:none!important}#printDoc{display:block!important}body{background:#fff;margin:0}@page{size:letter;margin:0}}
+#printDoc{font-family:Arial,sans-serif;font-size:8pt;color:#111;padding:.35in .55in .25in .55in}
+.ph{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #2D9CDB;padding-bottom:5px;margin-bottom:7px}
+.plogo{font-size:18pt;font-weight:700;color:#2D9CDB}
+.plogosub{font-size:5.5pt;color:#666;text-transform:uppercase;letter-spacing:.1em}
+.psec{font-size:6pt;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.1em;border-bottom:1.5px solid #2D9CDB;padding-bottom:2px;margin:6px 0 4px}
+.p4col{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:5px}
+.p3col{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:5px}
+.p2col{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;margin-bottom:5px}
+.pcol{border:1px solid #e0e0e0;border-radius:3px;padding:4px 6px}
+.pcol-name{font-size:5.5pt;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#888;margin-bottom:2px}
+.pcol-lbl{font-size:5pt;color:#aaa;margin-top:3px;margin-bottom:1px}
+.pcol-val{font-size:9.5pt;font-weight:700}
+.phero{border:2px solid #2D9CDB;border-radius:4px;padding:5px 10px;text-align:center;margin-bottom:5px}
+.phero-val{font-size:17pt;font-weight:700;color:#2D9CDB}
+.phero-lbl,.phero-sub{font-size:5.5pt;color:#888}
+.ptable{width:100%;border-collapse:collapse;font-size:6pt;margin-bottom:4px}
+.ptable th{background:#111;color:#2D9CDB;padding:3px 4px;font-size:5.5pt;font-weight:700;text-transform:uppercase;text-align:center}
+.ptable th:first-child{text-align:left}
+.ptable td{padding:2px 4px;border-bottom:1px solid #f0f0f0;text-align:center}
+.ptable td:first-child{text-align:left;font-weight:600}
+.ptable tr.hl td{background:#F0F7FD;color:#2D9CDB;font-weight:700}
+.pcallout{border:1px solid #b8dcf0;border-left:2.5px solid #2D9CDB;padding:4px 6px;font-size:6pt;color:#333;line-height:1.4;margin-bottom:4px}
+.pdisc{font-size:5pt;color:#999;line-height:1.3;border-top:1px solid #e0e0e0;padding-top:3px}
+.pfoot{display:flex;justify-content:space-between;font-size:5pt;color:#aaa;margin-top:2px}
+#gate{display:none;position:fixed;inset:0;background:#111;z-index:9999;align-items:center;justify-content:center;flex-direction:column}
+</style>
+</head>
+<body>
+
+<!-- ===================================================================
+     Module 8 — Waterfall & Promote Analysis  (mf_waterfall.html)
+     STEP 1 SKELETON: branding, module nav, storage keys, Print/PDF plumbing.
+     Storage keys (v1, per localStorage versioning rule):
+       SK_WF  = 'mf-pis-waterfall'   -> cross-module output payload (this module writes)
+       SK_PER = 'mf-waterfall-v1'     -> this module's own form-state persistence
+     Consumes (added in Step 2): 'mf-pis-proforma' + 'mf-proforma-v1' (caprate),
+       'mf-pis-wood' (Module 2 counterfactual). Engine + outputs land Steps 4-5.
+==================================================================== -->
+<div id="printDoc">
+<div class="ph">
+  <div><div class="plogo">MF</div><div class="plogosub">Mainefactured Framing &middot; Waterfall &amp; Promote Analysis</div></div>
+  <div style="text-align:right">
+    <div style="font-size:10pt;font-weight:700" id="pProjName">Waterfall &amp; Promote Analysis</div>
+    <div style="font-size:6pt;color:#555" id="pClient"></div>
+    <div style="font-size:6pt;color:#555" id="pMeta"></div>
+  </div>
+</div>
+<div class="psec">Sponsor Take-Home &mdash; Without CFS vs. With CFS</div>
+<div class="pcallout" id="pCalloutP">Full waterfall output renders here once the engine ships (Steps 4-5).</div>
+<div class="pdisc">Preliminary investor-waterfall illustration. Promote structure, hurdles, and splits are user-confirmed assumptions, not a representation of any specific partnership agreement. For discussion purposes only.</div>
+<div class="pfoot"><span id="pYearP"></span><span>Waterfall &amp; Promote Analysis</span></div>
+</div>
+
+<div id="gate">
+  <div style="margin-bottom:8px"><svg width="160" height="27" viewBox="0 0 200 34" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M191.132 1.16555C197.975 1.16555 200 6.36844 200 10.1104C200 13.9549 197.975 19.1065 191.132 19.1065H185.324V16.5435H191.132C196.54 16.5435 197.309 11.8276 197.309 10.1104C197.309 8.3932 196.548 3.72854 191.14 3.72854H185.324V1.16555H191.132Z" fill="white"/>
+<path d="M173.1 3.92569V1.16555H183.549V3.92569H173.1Z" fill="white"/>
+<path d="M173.1 11.6147V8.85451H182.169V11.6147H173.1Z" fill="white"/>
+<path d="M173.1 19.3036V16.5435H183.549V19.3036H173.1Z" fill="white"/>
+<path d="M164.558 1.16555C169.059 1.55985 170.439 4.60192 170.439 6.88298C170.439 9.84028 168.467 12.2061 166.2 12.699L170.734 19.1065H167.777L163.341 12.9947H160.508V19.1065H157.92V10.3332H164.788C167.531 10.2819 167.876 7.93381 167.876 6.88298C167.876 5.72965 167.383 4.02429 164.686 3.82711H157.92V1.16555H164.558Z" fill="white"/>
+<path d="M147.088 16.8392C150.574 16.8392 151.419 13.5448 151.419 12.2889V1.16555H154.085V12.2889C154.085 15.262 152.265 19.4022 147.088 19.4022C141.911 19.4022 140.117 15.262 140.117 12.2889V1.16555H142.731V12.2889C142.731 13.5448 143.602 16.8392 147.088 16.8392Z" fill="white"/>
+<path d="M132.881 19.3036H130.121V5.10861H132.881V19.3036Z" fill="white"/>
+<path d="M137.613 3.92569V1.16555H125.586V3.92569H137.613Z" fill="white"/>
+<path d="M123.714 3.24157L122.578 5.47137C121.604 4.34365 119.656 3.24157 117.657 3.24157C112.249 3.24157 111.455 8.39318 111.455 10.1104C111.455 11.8276 112.249 16.9536 117.657 16.9536C119.733 16.9536 121.578 15.8515 122.732 14.8006L123.714 17.1349C122.099 18.7496 120.579 19.3371 117.657 19.3371C110.814 19.3371 108.789 13.9549 108.789 10.1104C108.789 6.36842 110.814 0.90925 117.657 0.90925C120.733 0.90925 122.124 1.47311 123.714 3.24157Z" fill="white"/>
+<path d="M99.0694 0.77124L90.4932 19.1065H93.2533L99.0694 6.48868L104.787 19.1065H107.646L99.0694 0.77124Z" fill="white"/>
+<path d="M80.4384 19.3036V8.85451H89.5075V11.6147H83.1986V19.3036H80.4384Z" fill="white"/>
+<path d="M80.4384 3.92569V1.16555H90.8876V3.92569H80.4384Z" fill="white"/>
+<path d="M67.6235 3.92569V1.16555H78.0726V3.92569H67.6235Z" fill="white"/>
+<path d="M67.6235 11.6147V8.85451H76.6925V11.6147H67.6235Z" fill="white"/>
+<path d="M67.6235 19.3036V16.5435H78.0726V19.3036H67.6235Z" fill="white"/>
+<path d="M49.4854 6.48868V19.1065H51.8513V8.85451L49.4854 6.48868Z" fill="white"/>
+<path d="M49.4854 0.77124V4.51715L64.2719 19.5008V1.16555H61.7089V13.2905L49.4854 0.77124Z" fill="white"/>
+<path d="M44.5566 19.1065H41.9936V1.16555H44.5566V19.1065Z" fill="white"/>
+<path d="M30.4601 0.77124L21.884 19.1065H24.6441L30.4601 6.48868L36.1776 19.1065H39.0363L30.4601 0.77124Z" fill="white"/>
+<path d="M2.95729 0.771243L2.36584 4.91146L9.95623 19.5008L17.5466 4.91146L16.9552 0.771243L9.95623 14.1776L2.95729 0.771243Z" fill="white"/>
+<path d="M0 19.1065H2.56299L3.84448 10.7275L1.87295 7.27729L0 19.1065Z" fill="white"/>
+<path d="M20.011 19.1065H17.448L16.1665 10.7275L18.1381 7.27729L20.011 19.1065Z" fill="white"/>
+<path d="M123.139 26.4011C123.553 26.4011 123.948 26.4691 124.325 26.605C124.702 26.7409 125.038 26.9385 125.335 27.1978C125.631 27.4572 125.863 27.7753 126.03 28.152L125.224 28.4485C124.989 28.01 124.69 27.692 124.325 27.4943C123.967 27.2967 123.575 27.1978 123.149 27.1978C122.716 27.1978 122.321 27.3028 121.963 27.5128C121.605 27.7228 121.32 28.0162 121.11 28.3929C120.907 28.7634 120.805 29.202 120.805 29.7084C120.805 30.2087 120.907 30.6473 121.11 31.024C121.314 31.4007 121.592 31.6941 121.944 31.9041C122.302 32.1141 122.701 32.219 123.139 32.2191C123.454 32.2191 123.751 32.1635 124.029 32.0523C124.307 31.9412 124.547 31.7867 124.751 31.5891C124.961 31.3915 125.125 31.1567 125.242 30.885V30.7385H126.178V30.9312C126.03 31.3265 125.807 31.6817 125.511 31.9967C125.221 32.3117 124.872 32.5617 124.464 32.747C124.063 32.9261 123.621 33.0158 123.139 33.0158C122.682 33.0158 122.253 32.9355 121.852 32.7749C121.456 32.6143 121.11 32.3888 120.814 32.0985C120.518 31.8021 120.286 31.4532 120.119 31.0517C119.952 30.6441 119.869 30.1963 119.869 29.7084C119.869 29.2267 119.952 28.7851 120.119 28.3836C120.286 27.976 120.518 27.624 120.814 27.3276C121.11 27.0311 121.456 26.8026 121.852 26.642C122.253 26.4814 122.682 26.4011 123.139 26.4011Z" fill="white"/>
+<path d="M126.178 30.3442H122.826V29.3584H126.178V30.3442Z" fill="white"/>
+<path d="M111.194 28.3385V33.0491H112.078V29.2217L111.194 28.3385Z" fill="white"/>
+<path d="M111.194 26.204V27.6024L116.715 33.1963V26.3512H115.758V30.8778L111.194 26.204Z" fill="white"/>
+<path d="M107.646 33.1043H106.66V26.4011H107.646V33.1043Z" fill="white"/>
+<path d="M97.2888 26.4011L97.0732 27.9104L99.8401 33.2286L102.607 27.9104L102.391 26.4011L99.8401 31.2882L97.2888 26.4011Z" fill="white"/>
+<path d="M96.2107 33.0849H97.145L97.6122 30.0305L96.8935 28.7728L96.2107 33.0849Z" fill="white"/>
+<path d="M103.505 33.0849H102.571L102.104 30.0305L102.823 28.7728L103.505 33.0849Z" fill="white"/>
+<path d="M90.5918 26.204L87.3388 33.1587H88.3858L90.5918 28.3727L92.7605 33.1587H93.8449L90.5918 26.204Z" fill="white"/>
+<path d="M82.6923 26.4011C84.3542 26.5467 84.8638 27.6699 84.8638 28.5122C84.8638 29.6041 84.1359 30.4776 83.2987 30.6596L84.973 33.0255H83.8811L82.2432 30.7688H81.1971V33.0255H80.2413V29.7861H82.7775C83.7901 29.7672 83.9175 28.9002 83.9175 28.5122C83.9175 28.0863 83.7355 27.4567 82.7397 27.3839H80.2413V26.4011H82.6923Z" fill="white"/>
+<path d="M73.5381 33.0485V29.1055H76.9604V30.147H74.5797V33.0485H73.5381Z" fill="white"/>
+<path d="M73.5381 27.4427V26.4011H77.4812V27.4427H73.5381Z" fill="white"/></svg></div>
+  <div style="color:#aaa;font-size:12px;margin-bottom:24px;letter-spacing:.1em;text-transform:uppercase">Waterfall &amp; Promote Analysis</div>
+  <input id="pwInput" type="password" placeholder="Enter access password" style="width:260px;height:42px;padding:0 16px;background:#1a1a1a;border:1px solid #333;color:#fff;border-radius:8px;font-size:14px;outline:none;text-align:center" onkeydown="if(event.key==='Enter')checkPW()">
+  <button onclick="checkPW()" style="margin-top:12px;padding:10px 32px;background:#2D9CDB;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">Enter</button>
+  <div id="pwErr" style="color:#e05050;font-size:12px;margin-top:10px;display:none">Incorrect password.</div>
+</div>
+
+<header>
+<div><svg width="160" height="27" viewBox="0 0 200 34" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M191.132 1.16555C197.975 1.16555 200 6.36844 200 10.1104C200 13.9549 197.975 19.1065 191.132 19.1065H185.324V16.5435H191.132C196.54 16.5435 197.309 11.8276 197.309 10.1104C197.309 8.3932 196.548 3.72854 191.14 3.72854H185.324V1.16555H191.132Z" fill="white"/>
+<path d="M173.1 3.92569V1.16555H183.549V3.92569H173.1Z" fill="white"/>
+<path d="M173.1 11.6147V8.85451H182.169V11.6147H173.1Z" fill="white"/>
+<path d="M173.1 19.3036V16.5435H183.549V19.3036H173.1Z" fill="white"/>
+<path d="M164.558 1.16555C169.059 1.55985 170.439 4.60192 170.439 6.88298C170.439 9.84028 168.467 12.2061 166.2 12.699L170.734 19.1065H167.777L163.341 12.9947H160.508V19.1065H157.92V10.3332H164.788C167.531 10.2819 167.876 7.93381 167.876 6.88298C167.876 5.72965 167.383 4.02429 164.686 3.82711H157.92V1.16555H164.558Z" fill="white"/>
+<path d="M147.088 16.8392C150.574 16.8392 151.419 13.5448 151.419 12.2889V1.16555H154.085V12.2889C154.085 15.262 152.265 19.4022 147.088 19.4022C141.911 19.4022 140.117 15.262 140.117 12.2889V1.16555H142.731V12.2889C142.731 13.5448 143.602 16.8392 147.088 16.8392Z" fill="white"/>
+<path d="M132.881 19.3036H130.121V5.10861H132.881V19.3036Z" fill="white"/>
+<path d="M137.613 3.92569V1.16555H125.586V3.92569H137.613Z" fill="white"/>
+<path d="M123.714 3.24157L122.578 5.47137C121.604 4.34365 119.656 3.24157 117.657 3.24157C112.249 3.24157 111.455 8.39318 111.455 10.1104C111.455 11.8276 112.249 16.9536 117.657 16.9536C119.733 16.9536 121.578 15.8515 122.732 14.8006L123.714 17.1349C122.099 18.7496 120.579 19.3371 117.657 19.3371C110.814 19.3371 108.789 13.9549 108.789 10.1104C108.789 6.36842 110.814 0.90925 117.657 0.90925C120.733 0.90925 122.124 1.47311 123.714 3.24157Z" fill="white"/>
+<path d="M99.0694 0.77124L90.4932 19.1065H93.2533L99.0694 6.48868L104.787 19.1065H107.646L99.0694 0.77124Z" fill="white"/>
+<path d="M80.4384 19.3036V8.85451H89.5075V11.6147H83.1986V19.3036H80.4384Z" fill="white"/>
+<path d="M80.4384 3.92569V1.16555H90.8876V3.92569H80.4384Z" fill="white"/>
+<path d="M67.6235 3.92569V1.16555H78.0726V3.92569H67.6235Z" fill="white"/>
+<path d="M67.6235 11.6147V8.85451H76.6925V11.6147H67.6235Z" fill="white"/>
+<path d="M67.6235 19.3036V16.5435H78.0726V19.3036H67.6235Z" fill="white"/>
+<path d="M49.4854 6.48868V19.1065H51.8513V8.85451L49.4854 6.48868Z" fill="white"/>
+<path d="M49.4854 0.77124V4.51715L64.2719 19.5008V1.16555H61.7089V13.2905L49.4854 0.77124Z" fill="white"/>
+<path d="M44.5566 19.1065H41.9936V1.16555H44.5566V19.1065Z" fill="white"/>
+<path d="M30.4601 0.77124L21.884 19.1065H24.6441L30.4601 6.48868L36.1776 19.1065H39.0363L30.4601 0.77124Z" fill="white"/>
+<path d="M2.95729 0.771243L2.36584 4.91146L9.95623 19.5008L17.5466 4.91146L16.9552 0.771243L9.95623 14.1776L2.95729 0.771243Z" fill="white"/>
+<path d="M0 19.1065H2.56299L3.84448 10.7275L1.87295 7.27729L0 19.1065Z" fill="white"/>
+<path d="M20.011 19.1065H17.448L16.1665 10.7275L18.1381 7.27729L20.011 19.1065Z" fill="white"/>
+<path d="M123.139 26.4011C123.553 26.4011 123.948 26.4691 124.325 26.605C124.702 26.7409 125.038 26.9385 125.335 27.1978C125.631 27.4572 125.863 27.7753 126.03 28.152L125.224 28.4485C124.989 28.01 124.69 27.692 124.325 27.4943C123.967 27.2967 123.575 27.1978 123.149 27.1978C122.716 27.1978 122.321 27.3028 121.963 27.5128C121.605 27.7228 121.32 28.0162 121.11 28.3929C120.907 28.7634 120.805 29.202 120.805 29.7084C120.805 30.2087 120.907 30.6473 121.11 31.024C121.314 31.4007 121.592 31.6941 121.944 31.9041C122.302 32.1141 122.701 32.219 123.139 32.2191C123.454 32.2191 123.751 32.1635 124.029 32.0523C124.307 31.9412 124.547 31.7867 124.751 31.5891C124.961 31.3915 125.125 31.1567 125.242 30.885V30.7385H126.178V30.9312C126.03 31.3265 125.807 31.6817 125.511 31.9967C125.221 32.3117 124.872 32.5617 124.464 32.747C124.063 32.9261 123.621 33.0158 123.139 33.0158C122.682 33.0158 122.253 32.9355 121.852 32.7749C121.456 32.6143 121.11 32.3888 120.814 32.0985C120.518 31.8021 120.286 31.4532 120.119 31.0517C119.952 30.6441 119.869 30.1963 119.869 29.7084C119.869 29.2267 119.952 28.7851 120.119 28.3836C120.286 27.976 120.518 27.624 120.814 27.3276C121.11 27.0311 121.456 26.8026 121.852 26.642C122.253 26.4814 122.682 26.4011 123.139 26.4011Z" fill="white"/>
+<path d="M126.178 30.3442H122.826V29.3584H126.178V30.3442Z" fill="white"/>
+<path d="M111.194 28.3385V33.0491H112.078V29.2217L111.194 28.3385Z" fill="white"/>
+<path d="M111.194 26.204V27.6024L116.715 33.1963V26.3512H115.758V30.8778L111.194 26.204Z" fill="white"/>
+<path d="M107.646 33.1043H106.66V26.4011H107.646V33.1043Z" fill="white"/>
+<path d="M97.2888 26.4011L97.0732 27.9104L99.8401 33.2286L102.607 27.9104L102.391 26.4011L99.8401 31.2882L97.2888 26.4011Z" fill="white"/>
+<path d="M96.2107 33.0849H97.145L97.6122 30.0305L96.8935 28.7728L96.2107 33.0849Z" fill="white"/>
+<path d="M103.505 33.0849H102.571L102.104 30.0305L102.823 28.7728L103.505 33.0849Z" fill="white"/>
+<path d="M90.5918 26.204L87.3388 33.1587H88.3858L90.5918 28.3727L92.7605 33.1587H93.8449L90.5918 26.204Z" fill="white"/>
+<path d="M82.6923 26.4011C84.3542 26.5467 84.8638 27.6699 84.8638 28.5122C84.8638 29.6041 84.1359 30.4776 83.2987 30.6596L84.973 33.0255H83.8811L82.2432 30.7688H81.1971V33.0255H80.2413V29.7861H82.7775C83.7901 29.7672 83.9175 28.9002 83.9175 28.5122C83.9175 28.0863 83.7355 27.4567 82.7397 27.3839H80.2413V26.4011H82.6923Z" fill="white"/>
+<path d="M73.5381 33.0485V29.1055H76.9604V30.147H74.5797V33.0485H73.5381Z" fill="white"/>
+<path d="M73.5381 27.4427V26.4011H77.4812V27.4427H73.5381Z" fill="white"/></svg><span class="logo"><span>Waterfall &amp; Promote</span></span></div>
+<nav>
+<a href="/mf_index.html">CFS Budget Builder</a>
+<a href="/mf_wood_index.html">Wood Comparison</a>
+<a href="/mf_savings.html">Soft Cost Savings</a>
+<a href="/mf_trades.html">Trade Savings</a>
+<a href="/mf_podium.html">Podium Analysis</a>
+<a href="/mf_summary.html">System Summary</a>
+<a href="/mf_caprate.html">Developer Pro Forma</a>
+<a href="/mf_waterfall.html" class="active">Waterfall &amp; Promote</a>
+</nav>
+</header>
+
+<div class="main">
+  <div class="banner-row">
+    <div id="pisBanner"><span style="color:#aaa">Loading deal structure from Developer Pro Forma&hellip;</span></div>
+    <button onclick="refreshData()" style="flex-shrink:0;height:38px;padding:0 18px;background:#fff;border:1px solid #2D9CDB;color:#2D9CDB;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap" title="Re-load deal structure from Developer Pro Forma and Wood Comparison">&#8635; Refresh Data</button>
+  </div>
+
+  <!-- SECTION 1 - Deal Structure  (built in Step 2) -->
+  <div class="sec-head"><div class="sec-num">1</div><div class="sec-title">Deal Structure</div></div>
+  <div class="input-card" id="dealStructureCard">
+    <div class="card-title">Pulled from Developer Pro Forma &mdash; editable</div>
+    <p style="font-size:12px;color:#888;line-height:1.6;margin:4px 0">
+      Total project cost, equity requirement, hold period, disposition value (With CFS), and cumulative cash flow will auto-pull here from the Developer Pro Forma, with the &ldquo;Without CFS&rdquo; disposition auto-pulled from Wood Comparison (manual override). <em>Wiring lands in Step 2 after the counterfactual math is signed off.</em>
+    </p>
+  </div>
+
+  <!-- SECTION 2 - Waterfall Structure  (built in Step 3) -->
+  <div class="sec-head"><div class="sec-num">2</div><div class="sec-title">Waterfall Structure</div></div>
+  <div class="input-card" id="waterfallStructureCard">
+    <div class="card-title">Benchmark assumptions <span class="auto-tag" id="benchBadge">Standard Benchmark</span></div>
+    <p style="font-size:12px;color:#888;line-height:1.6;margin:4px 0">
+      LP/GP split, preferred return, and the three promote tiers (hurdles + splits) will live here behind the <strong>Adjust Assumptions</strong> toggle &mdash; read-only by default, per the Wood Comparison pattern. <em>Built in Step 3.</em>
+    </p>
+    <button class="print-btn" id="btnAdj" style="opacity:.4;pointer-events:none" disabled>Adjust Assumptions</button>
+  </div>
+
+  <!-- SECTION 3 - Scenario Output  (built in Steps 4-5) -->
+  <div class="sec-head"><div class="sec-num">3</div><div class="sec-title">Without CFS vs. With CFS &mdash; Sponsor Take-Home</div></div>
+  <div class="input-card" id="outputCard">
+    <div class="card-title">Two-scenario output + amplification delta</div>
+    <p style="font-size:12px;color:#888;line-height:1.6;margin:4px 0">
+      Two side-by-side scenario cards (sponsor take-home, equity return, promote earned, LP IRR, GP IRR, exit tier) plus the delta panel with the amplification ratio. <em>Powered by the IRR solver + 3-tier waterfall engine in Steps 4-5.</em>
+    </p>
+  </div>
+
+  <div style="text-align:center;margin:8px 0 4px;display:flex;justify-content:center;gap:12px">
+    <button class="print-btn" onclick="doPrint()">Print Waterfall Analysis</button>
+    <button onclick="resetForm()" style="height:38px;padding:0 24px;background:#fff;color:#c00;border:1px solid #c00;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">&#8635; Reset Form</button>
+  </div>
+  <div class="disc">Preliminary investor-waterfall illustration for discussion. Promote structure and hurdles are user-confirmed assumptions, not a representation of any specific partnership agreement.</div>
+</div>
+
+<script>
+/* ---- Brand + auth constants (mirrors mf_caprate.html) ---- */
+var ACCENT='#2D9CDB', AUTH='mf_auth', PW='MF2026';
+/* ---- Storage keys (v1 - bump on any future benchmark change) ---- */
+var SK_WF='mf-pis-waterfall';      // cross-module output this page writes
+var SK_PER='mf-waterfall-v1';       // this page's own form persistence
+/* ---- Upstream keys consumed in Step 2 ---- */
+var SK_CAP='mf-pis-proforma', SK_CAP_FORM='mf-proforma-v1', SK_WOOD='mf-pis-wood';
+
+/* ---- helpers (same signatures as caprate) ---- */
+function fmt(n){return '$'+Math.round(n).toLocaleString();}
+function fmtM(n){return Math.abs(n)>=1e6?'$'+(n/1e6).toFixed(2)+'M':fmt(n);}
+function fmtX(n){return n.toFixed(2)+'x';}
+function gv(id){var e=document.getElementById(id);return e?(parseFloat(e.value)||0):0;}
+function sv(id){var e=document.getElementById(id);return e?(e.value||''):'';}
+function ss(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+function si(id,v){var e=document.getElementById(id);if(e)e.innerHTML=v;}
+
+/* ---- CR_FIELDS placeholder (populated in Steps 2-3) ---- */
+var CR_FIELDS=[];
+function crPersist(){try{var d={_ts:Date.now()};CR_FIELDS.forEach(function(f){var e=document.getElementById(f);if(e)d[f]=e.value;});localStorage.setItem(SK_PER,JSON.stringify(d));}catch(e){}}
+function crRestore(){try{var raw=localStorage.getItem(SK_PER);if(!raw)return;var d=JSON.parse(raw);CR_FIELDS.forEach(function(f){var e=document.getElementById(f);if(e&&d[f]!==undefined)e.value=d[f];});}catch(e){}}
+
+/* ---- calc(): engine lands in Step 4. Stub writes the output key so
+        downstream modules never read undefined. ---- */
+function calc(){
+  try{localStorage.setItem(SK_WF,JSON.stringify({_page:'waterfall',_ts:Date.now()}));}catch(e){}
+  updatePrint();
+}
+
+/* ---- data pull: wired in Step 2 ---- */
+function loadFromPIS(){
+  var b=document.getElementById('pisBanner');
+  var hasCap = !!localStorage.getItem(SK_CAP_FORM) || !!localStorage.getItem(SK_CAP);
+  if(b){
+    b.innerHTML = hasCap
+      ? '<span style="color:#2D9CDB">Developer Pro Forma detected - deal structure auto-pull wires in Step 2.</span>'
+      : '<span style="color:#aaa">Run the Developer Pro Forma first to auto-populate deal structure.</span>';
+  }
+}
+function refreshData(){
+  loadFromPIS();calc();
+  var b=document.getElementById('pisBanner');
+  if(b){var o=b.style.background;b.style.background='#F0F7FD';setTimeout(function(){b.style.background=o;},600);}
+}
+
+/* ---- gate ---- */
+function checkPW(){
+  var gate=document.getElementById('gate'),pw=document.getElementById('pwInput'),err=document.getElementById('pwErr');
+  if(!pw)return;
+  if(pw.value===PW){localStorage.setItem(AUTH,'1');gate.style.display='none';document.body.style.overflow='';crRestore();loadFromPIS();calc();}
+  else{if(err){err.style.display='block';setTimeout(function(){err.style.display='none';},3000);}pw.value='';}
+}
+
+/* ---- Print/PDF (structure mirrors caprate; fields fill in Steps 4-5) ---- */
+function updatePrint(){
+  try{
+    ss('pProjName', sv('projName')||'Waterfall & Promote Analysis');
+    ss('pClient', sv('client'));
+    ss('pYearP','(c) '+new Date().getFullYear()+' Mainefactured Framing / Prefab Consulting LLC');
+  }catch(e){}
+}
+function doPrint(){updatePrint();window.print();}
+
+/* ---- reset ---- */
+function resetForm(){
+  if(!confirm('Reset all form inputs to defaults? This will clear your saved entries.'))return;
+  try{localStorage.removeItem(SK_PER);}catch(e){}
+  loadFromPIS();calc();
+}
+
+/* ---- init (mirrors caprate load flow) ---- */
+window.addEventListener('load',function(){
+  var gate=document.getElementById('gate');
+  if(localStorage.getItem(AUTH)==='1'){if(gate)gate.style.display='none';document.body.style.overflow='';crRestore();loadFromPIS();calc();}
+  else{if(gate)gate.style.display='flex';document.body.style.overflow='hidden';setTimeout(function(){var p=document.getElementById('pwInput');if(p)p.focus();},100);}
+  updatePrint();
+});
+</script>
+</body>
+</html>
