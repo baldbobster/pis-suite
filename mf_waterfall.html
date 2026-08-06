@@ -332,10 +332,13 @@ nav a:hover,nav a.active{border-color:#2D9CDB;color:#2D9CDB}
       </div>
     </div>
     <div id="ampHero" style="margin-top:14px;border:2px solid #2D9CDB;border-radius:10px;padding:16px;text-align:center;background:#F0F7FD">
-      <div style="font-size:38px;font-weight:800;color:#2D9CDB;line-height:1" id="ampVal">&mdash;</div>
-      <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-top:6px">Return Amplification &mdash; % uplift in sponsor take-home per % uplift in asset value</div>
-      <div style="margin-top:10px;font-size:12px;color:#555" id="ampSub"></div>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:28px">
+        <div><div style="font-size:34px;font-weight:800;color:#2D9CDB;line-height:1" id="ampTakeHome">&mdash;</div><div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-top:6px">Additional Sponsor Take-Home &mdash; With CFS</div></div>
+        <div><div style="font-size:34px;font-weight:800;color:#2D9CDB;line-height:1" id="ampIrrUplift">&mdash;</div><div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-top:6px">Sponsor (GP) IRR Uplift</div></div>
+      </div>
+      <div style="margin-top:12px;font-size:11px;color:#777" id="ampFoot"></div>
     </div>
+    <div style="margin-top:8px;font-size:10px;color:#999;text-align:center;line-height:1.5">Soft cost savings are not shown as a lower build cost &mdash; they raise With-CFS NOI, which is why the With-CFS disposition value, cash flow, and sponsor take-home are higher. Trade Savings are the hard-cost item that makes the CFS build cheaper than wood.</div>
   </div>
 
   <div style="text-align:center;margin:8px 0 4px;display:flex;justify-content:center;gap:12px">
@@ -352,7 +355,7 @@ var ACCENT='#2D9CDB', AUTH='mf_auth', PW='MF2026';
 var SK_WF='mf-pis-waterfall';      // cross-module output this page writes
 var SK_PER='mf-waterfall-v1';       // this page's own form persistence
 /* ---- Upstream keys consumed in Step 2 ---- */
-var SK_CAP='mf-pis-proforma', SK_CAP_FORM='mf-proforma-v1', SK_WOOD='mf-pis-wood', SK_BUD='mf-pis-budget';
+var SK_CAP='mf-pis-proforma', SK_CAP_FORM='mf-proforma-v1', SK_WOOD='mf-pis-wood', SK_BUD='mf-pis-budget', SK_TRD='mf-pis-trades';
 
 /* ---- helpers (same signatures as caprate) ---- */
 function fmt(n){return '$'+Math.round(n).toLocaleString();}
@@ -395,10 +398,9 @@ function loadFromPIS(force){
   var cfCFS=(num(cap.cfsNoi)-annDS)*holdY;
   setField('wc_cost',costCFS,force); setField('wc_equity',equityCFS,force);
   setField('wc_dispo',dispoCFS,force); setField('wc_cf',cfCFS,force);
-  var woodMid=wood?((num(wood.mL)+num(wood.mH))/2):0;
-  var cfsMid =bud ?((num(bud.mL)+num(bud.mH))/2):0;
-  var framingDelta=(woodMid&&cfsMid)?(woodMid-cfsMid):0;
-  var costWood=costCFS+framingDelta;
+  var trades=readJSON(SK_TRD);
+  var tradeSav=trades?num(trades.grandTotNum):0;
+  var costWood=costCFS+tradeSav;
   var equityWood=costWood*(1-ltc/100);
   var annDSWood=costCFS>0?annDS*(costWood/costCFS):annDS;
   var cfWood=(num(cap.noi)-annDSWood)*holdY;
@@ -408,9 +410,9 @@ function loadFromPIS(force){
   var note=document.getElementById('dealNote');
   if(note){
     var parts=['<b style="color:#2D9CDB">Auto-pulled from Developer Pro Forma.</b>'];
-    if(wood&&bud){parts.push('Without-CFS project cost = CFS cost '+fmtSigned(framingDelta)+' framing delta (wood '+fmt(woodMid)+' \u2212 CFS '+fmt(cfsMid)+', marked-up midpoints from Wood Comparison &amp; Budget Builder).');}
-    else{parts.push('Run <b>Wood Comparison</b> and <b>CFS Budget Builder</b> to auto-derive the Without-CFS project cost; until then it mirrors CFS cost \u2014 override manually.');}
-    parts.push('Dispositions use Option A: With-CFS = CFS NOI \u00f7 compressed cap; Without-CFS = base NOI \u00f7 wood cap.');
+    if(tradeSav>0){parts.push('Without-CFS project cost = With-CFS cost + '+fmt(tradeSav)+' in Trade Savings \u2014 a wood build forgoes the trade-level savings (MEP, drywall, foundation, framing labor, etc.) that CFS delivers, so it costs that much more to build.');}
+    else{parts.push('Run <b>Trade Savings</b> to net its hard-cost savings into the Without-CFS build cost; until then Without-CFS mirrors the CFS cost \u2014 override manually.');}
+    parts.push('<b>Soft cost savings are not a build-cost line</b> \u2014 they raise With-CFS NOI, which is why the With-CFS disposition value and cash flow above are higher (set them in the Developer Pro Forma). Dispositions use Option A: With-CFS = CFS NOI \u00f7 compressed cap; Without-CFS = base NOI \u00f7 wood cap.');
     parts.push('Cumulative cash flow defaults to (NOI \u2212 annual debt service) \u00d7 hold. All fields editable \u2014 overrides stick.');
     note.innerHTML=parts.join(' ');
   }
@@ -504,8 +506,10 @@ function renderOutputs(){
   var dSpon=rc.sponsorProfit-rw.sponsorProfit, dDispo=cfs.dispo-wo.dispo;
   var amp=(rw.sponsorProfit>0 && wo.dispo>0 && dDispo!==0)?(dSpon/rw.sponsorProfit)/(dDispo/wo.dispo):null;
   _amp={dSpon:dSpon,dDispo:dDispo,amp:amp};
-  ss('ampVal', amp!=null? amp.toFixed(2)+'×':'—');
-  ss('ampSub','Sponsor take-home '+(dSpon>=0?'+':'−')+fmtM(Math.abs(dSpon))+' on '+(dDispo>=0?'+':'−')+fmtM(Math.abs(dDispo))+' of asset value — GP IRR '+fmtPct(rw.gpIRR)+' → '+fmtPct(rc.gpIRR));
+  var dGpIrr=rc.gpIRR-rw.gpIRR;
+  ss('ampTakeHome',(dSpon>=0?'+':'−')+fmtM(Math.abs(dSpon)));
+  ss('ampIrrUplift',(dGpIrr>=0?'+':'−')+(Math.abs(dGpIrr)*100).toFixed(1)+' pts');
+  ss('ampFoot','Sponsor take-home '+fmtM(rw.sponsorProfit)+' → '+fmtM(rc.sponsorProfit)+'  ·  GP IRR '+fmtPct(rw.gpIRR)+' → '+fmtPct(rc.gpIRR)+'  ·  return amplification '+(amp!=null?amp.toFixed(1)+'×':'n/a')+' (take-home vs. disposition, %-for-%)');
   updatePrint();
 }
 function _wfPayload(){return {_page:'waterfall',_ts:Date.now(),amp:_amp?_amp.amp:null,sponCfs:_resCfs?_resCfs.sponsorProfit:null,sponWo:_resWo?_resWo.sponsorProfit:null,gpIrrCfs:_resCfs?_resCfs.gpIRR:null,exitCfs:_resCfs?_resCfs.exitTier:null};}
